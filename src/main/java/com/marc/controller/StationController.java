@@ -1,6 +1,5 @@
 package com.marc.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +24,10 @@ public class StationController {
 	public List<Station> insert(@RequestParam("name")String name){
 		sDao.save(new Station(name));
 		return sDao.findAll();
+	}
+	
+	@GetMapping(value="/findByName")
+	public List<Station> findByUsingName(@RequestParam("name")String name){
+		return sDao.findByName(name);
 	}
 }

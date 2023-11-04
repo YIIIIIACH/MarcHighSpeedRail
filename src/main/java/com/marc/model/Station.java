@@ -1,5 +1,6 @@
 package com.marc.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,32 +12,35 @@ import jakarta.persistence.Table;
 public class Station {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer station_id;
+	@Column(name="station_id")
+	private Integer stationId;
+	@Column(name="station_name")
+	private String stationName;
 	
-	private String station_name;
 	public Station() {
 		;
 	}
 
 	public Station( String station_name) {
 		
-		this.station_name = station_name;
+		this.stationName = station_name;
 	}
 
-	public Integer getStation_id() {
-		return station_id;
+	public Integer getStationId() {
+		return stationId;
 	}
 
-	public void setStation_id(Integer station_id) {
-		this.station_id = station_id;
+	public void setStationId(Integer stationId) {
+		this.stationId = stationId;
 	}
 
-	public String getStation_name() {
-		return station_name;
+	public String getStationName() {
+		return stationName;
 	}
 
-	public void setStation_name(String station_name) {
-		this.station_name = station_name;
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
 	}
+
 	
 }
