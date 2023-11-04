@@ -9,21 +9,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="rail_route")
-public class RailRoute {
+public class RailRoute{
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="rail_route_id")
 	private Integer railRouteId;
 	
 	@ManyToOne(fetch= FetchType.LAZY)
+	@JsonIgnore  // will fix Lazy loading on many to one problem
+	@JsonManagedReference  /// will avoid inifinition Loop for reference .
 	@JoinColumn(name= "depart_station_id_fk")
 	private Station departStation;
 	
 	@ManyToOne(fetch= FetchType.LAZY)
+	@JsonIgnore
+	@JsonManagedReference
 	@JoinColumn(name= "destinate_station_id_fk")
 	private Station destinateStation;
 	

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.marc.model.RailRoute;
 import com.marc.model.RailRouteRepository;
 import com.marc.model.StationRepository;
@@ -23,7 +25,9 @@ public class RailRouteController {
 	
 	@GetMapping(value="/getAllRoute")
 	public @ResponseBody List<RailRoute> getAll(){
-		return rrDao.findAll();
+		List<RailRoute> rrl = rrDao.findAll();
+		rrDao.flush();
+		return rrl;
 	}
 	
 	@PostMapping(value="/insertRoute")
