@@ -12,11 +12,11 @@ import jakarta.persistence.Table;
 public class Train {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name="train_id")
+	@Column(name="train_id",nullable=false)
 	public Integer trainId;
-	@Column(name="train_type")
+	@Column(name="train_type",nullable=false)
 	public String trainType;
-	@Column(name="train_description")
+	@Column(name="train_description",nullable=false)
 	public String trainDescription;
 	public Integer getTrainId() {
 		return trainId;

@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+//import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,9 +16,9 @@ import jakarta.persistence.Table;
 public class Station{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="station_id")
+	@Column(name="station_id",nullable=false)
 	private Integer stationId;
-	@Column(name="station_name")
+	@Column(name="station_name",nullable=false)
 	private String stationName;
 	
 //	@OneToMany

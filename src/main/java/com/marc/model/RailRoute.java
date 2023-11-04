@@ -23,22 +23,22 @@ public class RailRoute{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="rail_route_id")
+	@Column(name="rail_route_id",nullable=false)
 	private Integer railRouteId;
 	
 	@ManyToOne(fetch= FetchType.LAZY)
 	@JsonIgnore  // will fix Lazy loading on many to one problem
 	@JsonManagedReference  /// will avoid inifinition Loop for reference .
-	@JoinColumn(name= "depart_station_id_fk")
+	@JoinColumn(name= "depart_station_id_fk",nullable=false)
 	private Station departStation;
 	
 	@ManyToOne(fetch= FetchType.LAZY)
 	@JsonIgnore
 	@JsonManagedReference
-	@JoinColumn(name= "destinate_station_id_fk")
+	@JoinColumn(name= "destinate_station_id_fk",nullable= false)
 	private Station destinateStation;
 	
-	@Column(name="stop_station_count")
+	@Column(name="stop_station_count", nullable=false)
 	private Integer stopStationCount;
 	public RailRoute() {;}
 	public RailRoute(Station s1, Station s2, Integer cnt) {
