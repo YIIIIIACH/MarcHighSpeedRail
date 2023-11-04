@@ -1,6 +1,7 @@
 package com.marc.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,5 +30,9 @@ public class StationController {
 	@GetMapping(value="/findByName")
 	public List<Station> findByUsingName(@RequestParam("name")String name){
 		return sDao.findByName(name);
+	}
+	
+	public Optional<Station> findById(Integer id){
+		return sDao.findById(id);
 	}
 }
