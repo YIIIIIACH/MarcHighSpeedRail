@@ -30,6 +30,8 @@ com.myHighSpeedRail
   -model
   -repository
   -service
+  ![1699166367969](https://github.com/YIIIIIACH/MarcHighSpeedRail/assets/42449396/0cf6cf9c-daa9-45e7-8722-90b52b4730a7)
+
   
 二、如果你要使用到別人系統下的Dao請在你的serivce下用@Autowired獲取他人的service進行操作，！！不要直接使用他人的Dao！！
 ![image](https://github.com/YIIIIIACH/MarcHighSpeedRail/assets/42449396/fee8af52-45b5-40a7-877c-8821ca936e04)
