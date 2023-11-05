@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.marc.model.RailRoute;
-import com.marc.model.RailRouteRepository;
-import com.marc.model.StationRepository;
+import com.marc.repository.RailRouteRepository;
+import com.marc.repository.StationRepository;
 
 @Controller
 public class RailRouteController {

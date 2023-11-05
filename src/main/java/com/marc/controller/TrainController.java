@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marc.model.Train;
-import com.marc.model.TrainRepository;
+import com.marc.repository.TrainRepository;
 
 @RestController
 public class TrainController {

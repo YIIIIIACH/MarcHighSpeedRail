@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.marc.model.RailRoute;
-import com.marc.model.RailRouteRepository;
 import com.marc.model.RailRouteStopStation;
-import com.marc.model.RailRouteStopStationRepository;
 import com.marc.model.Station;
-import com.marc.model.StationRepository;
+import com.marc.repository.RailRouteRepository;
+import com.marc.repository.RailRouteStopStationRepository;
+import com.marc.repository.StationRepository;
 
 @Controller
 public class RailRouteStopStationController {
