@@ -47,6 +47,19 @@ public class myService{
   }
 
 三、命名規範 存在資料庫了都用蛇行命名 ex:xxx_ooo_aaa  以java程式存在的都以駱駝式命名 ex aaAaaAaaAaa.java
+資料表欄位如果是foreign key 一律後面結尾加上 "_fk" 
+example
+xxxxModel.java
+@Entity
+@Table(name="xxx_xxxx_xxx")
+public class xxxXxxxXxx{
+	@Id
+ 	@Column(name="oo_oo_oo")
+  	private Integer ooOoOo;
+
+    	@Column(name="tt_tt_tt_fk")// 資料表欄位是參照鍵一律加底線fk
+     	private String ttTtTt; // model的field名稱不用因為是參照鍵就加上fk [[不用加fk]]
+}
 
 
 4th Nov 張益齊 Log [ hibernate Many to one lazy loading]
