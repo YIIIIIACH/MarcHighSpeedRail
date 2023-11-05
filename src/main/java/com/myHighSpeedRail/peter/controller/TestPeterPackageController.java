@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.repository.StationRepository;
+import com.myHighSpeedRail.peter.service.TestPeterPackageService;
 
 @Controller
-public class TestPeterPackage {
+public class TestPeterPackageController {
 	
 	@Autowired
-	private StationRepository sDao;
+	private TestPeterPackageService sService;
 	
 	@GetMapping("/testPeterPackage")
 	public @ResponseBody List<Station> doTest(){
-		return sDao.findAll();
+		return sService.findAllStation();
 	}
 }
