@@ -1,4 +1,4 @@
-package com.marc.model;
+package com.myHighSpeedRail.marc.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

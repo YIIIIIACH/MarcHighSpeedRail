@@ -1,4 +1,4 @@
-package com.marc.controller;
+package com.myHighSpeedRail.marc.controller;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.marc.model.RailRoute;
-import com.marc.repository.RailRouteRepository;
-import com.marc.repository.StationRepository;
+import com.myHighSpeedRail.marc.model.RailRoute;
+import com.myHighSpeedRail.marc.repository.RailRouteRepository;
+import com.myHighSpeedRail.marc.repository.StationRepository;
 
 @Controller
 public class RailRouteController {

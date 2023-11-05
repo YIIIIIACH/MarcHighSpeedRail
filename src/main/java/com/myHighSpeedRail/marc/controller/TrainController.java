@@ -1,4 +1,4 @@
-package com.marc.controller;
+package com.myHighSpeedRail.marc.controller;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.marc.model.Train;
-import com.marc.repository.TrainRepository;
+import com.myHighSpeedRail.marc.model.Train;
+import com.myHighSpeedRail.marc.repository.TrainRepository;
 
 @RestController
 public class TrainController {

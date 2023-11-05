@@ -1,4 +1,4 @@
-package com.marc.controller;
+package com.myHighSpeedRail.marc.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.marc.model.RailRoute;
-import com.marc.model.RailRouteStopStation;
-import com.marc.model.Station;
-import com.marc.repository.RailRouteRepository;
-import com.marc.repository.RailRouteStopStationRepository;
-import com.marc.repository.StationRepository;
+import com.myHighSpeedRail.marc.model.RailRoute;
+import com.myHighSpeedRail.marc.model.RailRouteStopStation;
+import com.myHighSpeedRail.marc.model.Station;
+import com.myHighSpeedRail.marc.repository.RailRouteRepository;
+import com.myHighSpeedRail.marc.repository.RailRouteStopStationRepository;
+import com.myHighSpeedRail.marc.repository.StationRepository;
 
 @Controller
 public class RailRouteStopStationController {

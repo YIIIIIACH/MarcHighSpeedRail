@@ -1,4 +1,4 @@
-package com.marc.model;
+package com.myHighSpeedRail.marc.model;
 
 import java.io.Serializable;
 
