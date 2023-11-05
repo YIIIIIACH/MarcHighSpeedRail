@@ -5,36 +5,32 @@ EEIT172_Group3_Final_Project
 一、專案package結構  [ 每人一個package群集，該群集下面有controller, model, service, repository] !!
 
 com.myHighSpeedRail
-
-	- Marc
- 	----controller
-  	----model
-   	----repository
-    	----service
-     
-     	- peter
-      	----controller
-       	----model
-	----service
- 	----repository
-  	
-  	- yuhsin
-   	----controller
-  	----model
-   	----repository
-    	----service
-     
-     	- johnny
-      	----controller
-  	----model
-   	----repository
-    	----service
-     
-     	- derekwu
-      	----controller
-  	----model
-   	----repository
-    	----service
+- Marc
+  -controller
+  -model
+  -repository
+  -service
+- peter
+  -controller
+  -model
+  -repository
+  -service
+- yuhsin
+  -controller
+  -model
+  -repository
+  -service
+- johnny
+  -controller
+  -model
+  -repository
+  -service
+- derekwu
+  -controller
+  -model
+  -repository
+  -service
+  
 二、如果你要使用到別人系統下的Dao請在你的serivce下用@Autowired獲取他人的service進行操作，！！不要直接使用他人的Dao！！
 ![image](https://github.com/YIIIIIACH/MarcHighSpeedRail/assets/42449396/fee8af52-45b5-40a7-877c-8821ca936e04)
 這樣後面程式會比較好維護
