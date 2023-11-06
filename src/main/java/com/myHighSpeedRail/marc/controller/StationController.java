@@ -11,28 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.repository.StationRepository;
+import com.myHighSpeedRail.marc.service.StationService;
 
 @RestController
 public class StationController {
+	
 	@Autowired
-	private StationRepository sDao;
+	private StationService sSer;
+	
 	@GetMapping(value="/getAllStation")
 	public List<Station> getAllStation() {
-		return sDao.findAll();
+		return sSer.getAllStation();
 	}
 	
 	@PostMapping(value="/insertStation")
 	public List<Station> insert(@RequestParam("name")String name){
-		sDao.save(new Station(name));
-		return sDao.findAll();
+		sSer.save(new Station(name));
+		return sSer.getAllStation();
 	}
 	
 	@GetMapping(value="/findByName")
 	public List<Station> findByUsingName(@RequestParam("name")String name){
-		return sDao.findByName(name);
+		return sSer.findByUsingName(name);
 	}
 	
 	public Optional<Station> findById(Integer id){
-		return sDao.findById(id);
+		return sSer.findById(id);
 	}
 }

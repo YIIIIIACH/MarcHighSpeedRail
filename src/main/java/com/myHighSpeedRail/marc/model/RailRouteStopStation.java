@@ -33,7 +33,6 @@ public class RailRouteStopStation implements Serializable {
 	
 	@Id
 	@ManyToOne(fetch= FetchType.LAZY)
-	@JsonIgnore
 	@JsonManagedReference
 	@JoinColumn(name="stop_station_id_fk",nullable=false)
 	private Station stopStation;
@@ -63,7 +62,7 @@ public class RailRouteStopStation implements Serializable {
 	}
 
 	public Station getStopStation() {
-		return stopStation;
+		return this.stopStation;
 	}
 
 	public void setStopStation(Station stopStation) {
