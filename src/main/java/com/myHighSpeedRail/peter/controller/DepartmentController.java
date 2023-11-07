@@ -1,4 +1,4 @@
-package com.marc.controller;
+package com.myHighSpeedRail.peter.controller;
 
 import org.springframework.stereotype.Controller;
 

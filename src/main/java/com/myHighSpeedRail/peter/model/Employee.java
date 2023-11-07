@@ -1,4 +1,4 @@
-package com.peter.model;
+package com.myHighSpeedRail.peter.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
