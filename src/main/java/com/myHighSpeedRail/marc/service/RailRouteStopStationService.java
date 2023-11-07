@@ -20,11 +20,11 @@ public class RailRouteStopStationService {
 	private RailRouteService rrS;
 	@Autowired
 	private StationService sSer;
-	public List<RailRouteStopStation> insertStopStation(Integer rid,String sname,Integer seq){
+	public List<RailRouteStopStation> insertStopStation(Integer rid,String sname,Integer seq,Integer costTime){
 		Optional<RailRoute> rr = rrS.rrFindById(rid);
 		List<Station> ssl = sSer.findByUsingName(sname);
 		if ( rr.isPresent() && ssl !=null && ssl.get(0)!=null) {			
-			rrssDao.save( new RailRouteStopStation( rr.get(), seq, ssl.get(0)));
+			rrssDao.save( new RailRouteStopStation( rr.get(), seq, ssl.get(0),costTime)) ;
 		}else {
 			System.err.println("station Name not found or route not found");
 		}
