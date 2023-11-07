@@ -20,9 +20,9 @@ import jakarta.persistence.Table;
 public class RailRouteStopStation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+//	@JsonIgnore
 	@Id
 	@ManyToOne(fetch= FetchType.LAZY)
-	@JsonIgnore
 	@JsonManagedReference
 	@JoinColumn(name="rail_route_id_fk",nullable=false)
 	private RailRoute railRoute;
@@ -37,12 +37,24 @@ public class RailRouteStopStation implements Serializable {
 	@JoinColumn(name="stop_station_id_fk",nullable=false)
 	private Station stopStation;
 	
+	@Column(name="cost_time_minute")
+	private Integer costTimeMinute;
+	
+	public Integer getCostTimeMinute() {
+		return costTimeMinute;
+	}
+
+	public void setCostTimeMinute(Integer costTimeMinute) {
+		this.costTimeMinute = costTimeMinute;
+	}
+
 	public RailRouteStopStation() {;}
 	
-	public RailRouteStopStation(RailRoute rr, Integer rrsss, Station ss) {
+	public RailRouteStopStation(RailRoute rr, Integer rrsss, Station ss,Integer costTime) {
 		this.railRoute = rr;
 		this.railRouteStopStationSequence= rrsss;
 		this.stopStation = ss;
+		this.costTimeMinute=costTime;
 	}
 
 	public RailRoute getRailRoute() {

@@ -41,4 +41,8 @@ public class RailRouteService {
 	public Optional<RailRoute> rrFindById( Integer rid) {
 		return rrDao.findById(rid);
 	}
+	
+	public List<RailRoute>getAllByHQL(){
+		return rrDao.getAllRailRouteByHQL();
+	}
 }

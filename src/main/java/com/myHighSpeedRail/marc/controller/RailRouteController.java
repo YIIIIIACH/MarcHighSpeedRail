@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.dto.RailRouteDto;
+import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.service.RailRouteService;
 
 @Controller
@@ -33,5 +34,10 @@ public class RailRouteController {
 			){
 		
 		return rrsss.insertRoute(depStationId, desStationid, stopStationCnt);
+	}
+	
+	@GetMapping(value="/getAllRouteByHQL")
+	public @ResponseBody List<RailRoute> getAllByHQL(){
+		return rrsss.getAllByHQL();
 	}
 }

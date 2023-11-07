@@ -27,13 +27,11 @@ public class RailRoute{
 	private Integer railRouteId;
 	
 	
-	//@JsonIgnore  // will fix Lazy loading on many to one problem
 	@ManyToOne(fetch= FetchType.LAZY)
 	@JsonManagedReference  /// will avoid inifinition Loop for reference .
 	@JoinColumn(name= "depart_station_id_fk",nullable=false)
 	private Station departStation;
 	
-//	@JsonIgnore
 	@ManyToOne(fetch= FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name= "destinate_station_id_fk",nullable= false)
@@ -47,6 +45,7 @@ public class RailRoute{
 		this.destinateStation=s2;
 		this.stopStationCount=cnt;
 	}
+	
 	public Integer getRailRouteId() {
 		return railRouteId;
 	}
