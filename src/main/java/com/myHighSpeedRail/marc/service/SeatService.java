@@ -21,6 +21,10 @@ public class SeatService {
 		return seatDao.findAll();
 	}
 	
+	public List<Seat> findByTrainId(Integer trainId){
+		return seatDao.findByTrainId(trainId);
+	}
+	
 	public void  setupSeats()throws Exception {
 		// get all train;
 		// if that train alreay have seats will not create seat for that train

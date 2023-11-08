@@ -51,4 +51,7 @@ public class RailRouteSegmentService {
 	public Optional<RailRouteSegment> findByStopStationId(Integer railRouteId , Integer startStationId ,Integer stopStationId){
 		return rrsDao.findByStopStationId(railRouteId,startStationId ,stopStationId);
 	}
+	public List<RailRouteSegment> findByRailRouteId(Integer rrid){
+		return rrsDao.findByRailRouteId(rrid);
+	}
 }

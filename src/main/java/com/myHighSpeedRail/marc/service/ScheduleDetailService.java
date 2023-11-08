@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.marc.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +24,9 @@ public class ScheduleDetailService {
 		Schedule sch = schServ.findById(scheduleId);
 		schdDao.save(new ScheduleDetail(sch, tickDisServ.findById(12) ,1, 400));
 		schdDao.save(new ScheduleDetail(sch, tickDisServ.findById(26) ,401, 455));
+	}
+	
+	public List<ScheduleDetail> findByScheduleId(Integer schId){
+		return schdDao.findByScheduleId(schId);
 	}
 }

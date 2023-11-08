@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.marc.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,7 @@ import com.myHighSpeedRail.marc.model.RailRouteSegment;
 public interface RailRouteSegmentRepository extends JpaRepository<RailRouteSegment,Integer>{
 	@Query("from RailRouteSegment rrs where rrs.endStation.stationId=:eid and rrs.startStation.stationId=:sid and rrs.railRoute.railRouteId=:rid")
 	public Optional<RailRouteSegment> findByStopStationId(Integer rid, Integer sid, Integer eid);
+	
+	@Query("from RailRouteSegment where railRoute.railRouteId=:rrid")
+	public List<RailRouteSegment> findByRailRouteId(Integer rrid);
 }
