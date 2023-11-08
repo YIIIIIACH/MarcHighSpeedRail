@@ -28,24 +28,19 @@ public class ScheduleTemplateController {
 	public ResponseEntity<String> insertScheduleTemplate(
 			@RequestParam(value="tid")Integer trainId,
 			@RequestParam(value="rrid")Integer railRouteId,
-			@RequestParam(value="deptime")String depTime,
-			@RequestParam(value="destime")String desTime
+			@RequestParam(value="deptime")String depTime
 			) {
 		// depTime format HH:MM...
 		// desTime format HH:MM
 		
 		Date st = new Date();
+		st.setTime(0);
 		st.setHours( Integer.valueOf( depTime.split(":")[0]));
 		st.setMinutes(Integer.valueOf( depTime.split(":")[1]));
-		st.setSeconds(0);
-		Date dt = new Date();
-		dt.setHours( Integer.valueOf( desTime.split(":")[0]));
-		dt.setMinutes(Integer.valueOf( desTime.split(":")[1]));
-		dt.setSeconds(0);
-		Integer costTime = Long.valueOf((dt.getTime()-st.getTime())/(1000*60)).intValue();
 		try {
-			stServ.insertScheduleTempalte(trainId, railRouteId, st, dt ,costTime );
+			stServ.insertScheduleTempalte(trainId, railRouteId, st );
 		}catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("train is not found or rail route not found");
 		}
 		return ResponseEntity.ok("insert was successful");

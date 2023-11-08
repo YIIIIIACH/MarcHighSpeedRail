@@ -28,10 +28,13 @@ public class RailRouteService {
 		}
 		return rrdl;
 	}
-	
+	public RailRoute getById(Integer id) throws Exception{
+		return rrDao.findById(id).get();
+	}
 	public List<RailRouteDto> insertRoute(Integer depStationId,Integer desStationid,Integer stopStationCnt
 			){
 		try {
+			
 			rrDao.save(new RailRoute( sDao.findById(depStationId).get(), sDao.findById(desStationid).get(), stopStationCnt));
 		}catch(Exception e){
 			System.err.println("[Error] occur in RailRouteController or Failed of Find Station by Id");

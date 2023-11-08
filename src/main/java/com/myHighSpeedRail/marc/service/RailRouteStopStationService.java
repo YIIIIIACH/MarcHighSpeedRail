@@ -59,4 +59,7 @@ public class RailRouteStopStationService {
 	public List<RailRouteStopStation> findAll(){
 		return rrssDao.findAll();
 	}
+	public List<RailRouteStopStation> findByRouteIdStationId(Integer rid, Integer sid){
+		return rrssDao.findbyRouteIdStationId(rid, sid);
+	}
 }

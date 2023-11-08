@@ -1,12 +1,14 @@
 package com.myHighSpeedRail.marc.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
+import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.repository.RailRouteSegmentRepository;
 
 @Service
@@ -27,12 +29,14 @@ public class RailRouteSegmentService {
 		if( rrssl.size()<2)return;
 		for(; s1 <rrssl.size()-1; s1++) {
 			for( int s2=s1+1; s2<rrssl.size(); s2++) {
+				Station st1 = rrssl.get(s1).getStopStation();
+				Station st2 = rrssl.get(s2).getStopStation();
 				rrsDao.save( new RailRouteSegment(
 							rrs.rrFindById(rId).get(),
-							rrssl.get(s1).getStopStation(),
-							rrssl.get(s2).getStopStation(),
+							st1,
+							st2,
 							100,
-							100
+							rrsss.findByRouteIdStationId(rId, st2.getStationId()).get(0).getCostTimeMinute() -rrsss.findByRouteIdStationId(rId, st1.getStationId()).get(0).getCostTimeMinute()
 						)
 					);
 				
@@ -43,5 +47,8 @@ public class RailRouteSegmentService {
 	
 	public List<RailRouteSegment> findAll(){
 		return rrsDao.findAll();
+	}
+	public Optional<RailRouteSegment> findByStopStationId(Integer railRouteId , Integer startStationId ,Integer stopStationId){
+		return rrsDao.findByStopStationId(railRouteId,startStationId ,stopStationId);
 	}
 }
