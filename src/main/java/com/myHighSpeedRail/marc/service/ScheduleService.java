@@ -36,5 +36,11 @@ public class ScheduleService {
 			Schedule sch = new Schedule(st.getRailRoute(), st.getTrain(),depTime,desTime,st.getCostMinute());
 			schDao.save(sch);
 		}
+		
+		
+	}
+	
+	public Schedule findById(Integer schId) {
+		return schDao.findById(schId).get();
 	}
 }

@@ -34,4 +34,8 @@ public class TicketDiscountSerivce {
 	public void save(TicketDiscount td) {
 		tdDao.save(td);
 	}
+	
+	public TicketDiscount findById( Integer tid) {
+		return tdDao.findById(tid).get();
+	}
 }

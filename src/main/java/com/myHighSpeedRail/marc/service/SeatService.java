@@ -33,7 +33,7 @@ public class SeatService {
 				//
 				int seq=1;
 				for(int car=1; car<=5; car++) {
-					if(car==4)
+					if(car!=3) {
 					for( int row=1; row<=20; row++) {
 //						/public Seat(Train train, Integer carriage, Integer trainSeatSequenece, String seatCode, String seatDescirption) {
 						allSeat.add( new Seat(train,car,seq++,String.valueOf(row)+"-A","靠窗"));
@@ -41,6 +41,7 @@ public class SeatService {
 						allSeat.add( new Seat(train,car,seq++,String.valueOf(row)+"-C","靠走道"));
 						allSeat.add( new Seat(train,car,seq++,String.valueOf(row)+"-D","靠走道"));
 						allSeat.add(new Seat(train,car,seq++,String.valueOf(row)+"-E","靠窗"));
+					}
 					}
 				}
 				for( int row=1; row<=11; row++) {
