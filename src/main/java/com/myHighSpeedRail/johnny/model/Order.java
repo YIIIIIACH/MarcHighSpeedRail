@@ -13,7 +13,6 @@ public class Order {
 	@Column(name = "order_id")
 	private Integer orderId;
 	
-
 }
 
 /*
