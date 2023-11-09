@@ -15,22 +15,22 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="employee_historical_base_salary")
-public class EmployeeHistoricalBaseSalary {
+@Table(name = "emergency_contact_person")
+public class EmergencyContactPerson {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="historical_base_salary_id")
-	private Integer historicalBaseSalaryId;
+	@Column(name="emergency_contact_person_id")
+	private Integer emergencyContactPersonId;
 	
-	@Column(name="historical_base_salary_amount")
-	private Integer historicalBaseSalaryAmount;
+	@Column(name="emergency_contact_person_name")
+	private String emergencyContactPersonName;
 	
-	@Column(name="historical_base_salary_kind")
-	private String idhistoricalBaseSalaryKind;
+	@Column(name="emergency_contact_person_relationship")
+	private String emergencyContactPersonRelationship;
 	
-	@Column(name="salary_effective_date")
-	private Date salaryEffectiveDate;
+	@Column(name="emergency_contact_person_phone_number")
+	private String emergencyContactPersonPhoneNumber;
 	
 	@JsonBackReference
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -38,7 +38,7 @@ public class EmployeeHistoricalBaseSalary {
 	private Employee employee;
 	
 	
-	public EmployeeHistoricalBaseSalary() {
+	public EmergencyContactPerson() {
 	}
 
 }

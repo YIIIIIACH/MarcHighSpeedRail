@@ -15,30 +15,35 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="employee_historical_base_salary")
-public class EmployeeHistoricalBaseSalary {
-
+@Table(name="educational_qualifications")
+public class EmployeeEducationalQualification {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="historical_base_salary_id")
-	private Integer historicalBaseSalaryId;
+	@Column(name="educational_qualifications_id")
+	private Integer educationalQualificationsId;
 	
-	@Column(name="historical_base_salary_amount")
-	private Integer historicalBaseSalaryAmount;
+	@Column(name="school_name")
+	private String schoolName;
 	
-	@Column(name="historical_base_salary_kind")
-	private String idhistoricalBaseSalaryKind;
+	@Column(name="school_department")
+	private String schoolDepartment;
 	
-	@Column(name="salary_effective_date")
-	private Date salaryEffectiveDate;
+	@Column(name="admission_date")
+	private Date admissionDate;
+	
+	@Column(name="date_of_leaving_school")
+	private Date dateOfLeavingSchool;
+	
+	@Column(name="academic_status")
+	private String academicStatus;
 	
 	@JsonBackReference
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="employee_id_fk")
 	private Employee employee;
-	
-	
-	public EmployeeHistoricalBaseSalary() {
+
+	public EmployeeEducationalQualification() {
 	}
 
 }
