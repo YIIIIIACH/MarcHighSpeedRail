@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.marc.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.marc.model.Schedule;
+import com.myHighSpeedRail.marc.model.ScheduleDetail;
+import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.ScheduleTemplate;
 import com.myHighSpeedRail.marc.repository.ScheduleRepository;
 
@@ -17,9 +20,10 @@ public class ScheduleService {
 	@Autowired
 	private SchduleTemplateService stServ;
 	
-	public void impScheduleTemplate(Date tarDate ) {
+	public List<Schedule> impScheduleTemplate(Date tarDate ) throws Exception {
 		// will create schedules on everything in schedule template
 		List<ScheduleTemplate> stList = stServ.getAllScheduleTemplate();
+		List<Schedule> res= new ArrayList<Schedule>();
 		for( ScheduleTemplate st : stList) {
 			System.out.println("here");
 			
@@ -34,9 +38,10 @@ public class ScheduleService {
 			desTime.setMinutes(tmp2.getMinutes());
 			System.out.println( desTime);
 			Schedule sch = new Schedule(st.getRailRoute(), st.getTrain(),depTime,desTime,st.getCostMinute());
-			schDao.save(sch);
+			res.add(schDao.save(sch));
+			// schedule_detail  schedule_arrive schedule_rest_seat schedule_seat_status
 		}
-		
+		return res;
 		
 	}
 	
