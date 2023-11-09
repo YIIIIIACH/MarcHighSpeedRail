@@ -8,18 +8,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="department")
-public class Department {
-
+@Table(name="title")
+public class Title {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="department_id")
-	private Integer departmentId;
+	@Column(name="title_id")
+	private Integer titleId;
 	
-	@Column(name="department_name")
-	private String departmentName;
+	@Column(name="title_name")	
+	private String titleName;
+	
 
-	public Department() {
+	public Title() {
 	}
 
 }

@@ -8,18 +8,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="department")
-public class Department {
+@Table(name="leave")
+public class Leave {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="department_id")
-	private Integer departmentId;
+	@Column(name="leave_id")
+	private Integer leaveId;
 	
-	@Column(name="department_name")
-	private String departmentName;
-
-	public Department() {
+	@Column(name="leave_name")
+	private String leaveName;
+	
+	@Column(name="available_leave_days_description")
+	private String availableLeaveDaysDescription;
+	
+	public Leave() {
 	}
 
 }
