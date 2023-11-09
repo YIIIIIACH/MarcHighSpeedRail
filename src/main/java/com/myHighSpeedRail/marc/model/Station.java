@@ -28,9 +28,10 @@ public class Station{
 	private String stationName;
 	
 //	@OneToMany(mappedBy="stopStation" ,cascade=CascadeType.ALL, orphanRemoval=true)
+//	@JsonBackReference
 //	List<RailRoute> railRoutes;
 //	@OneToMany(mappedBy="stopStation" ,cascade=CascadeType.ALL, orphanRemoval=true)
-//	@JsonIgnore
+//	@JsonBackReference	
 //	List<RailRouteStopStation> railRouteStopStations;
 	
 	

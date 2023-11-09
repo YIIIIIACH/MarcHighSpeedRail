@@ -10,26 +10,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myHighSpeedRail.marc.model.Train;
-import com.myHighSpeedRail.marc.repository.TrainRepository;
+import com.myHighSpeedRail.marc.service.TrainService;
 
 @RestController
 public class TrainController {
 	@Autowired
-	private TrainRepository tDao;
+	private TrainService tServ;
 	
 	@PostMapping(value="/insertTrain")
 	public List<Train> insertTrain(@RequestBody Train t){
-		tDao.save(t);
+		tServ.save(t);
 		return getAllTrain();
 	}
 	
 	@GetMapping(value="/getAllTrain")
 	public List<Train> getAllTrain(){
-		return tDao.findAll();
+		return tServ.findAll();
 	}
 	
 	@GetMapping(value="/getTrainById")
 	public Train getTrainById(@RequestParam(name="tid")Integer tid) {
-		return tDao.findById(tid).get();
+		return tServ.findById(tid);
 	}
 }

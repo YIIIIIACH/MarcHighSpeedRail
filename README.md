@@ -33,7 +33,7 @@ com.myHighSpeedRail
   ![1699166367969](https://github.com/YIIIIIACH/MarcHighSpeedRail/assets/42449396/0cf6cf9c-daa9-45e7-8722-90b52b4730a7)
 
   
-二、如果你要使用到別人系統下的Dao請在你的serivce下用@Autowired獲取他人的service進行操作，！！不要直接使用他人的Dao！！
+二、如果你要使用到別人系統下的Dao請在你的controller下用@Autowired獲取他人的service進行操作，！！不要直接使用他人的Dao！！
 ![image](https://github.com/YIIIIIACH/MarcHighSpeedRail/assets/42449396/fee8af52-45b5-40a7-877c-8821ca936e04)
 這樣後面程式會比較好維護
 
@@ -58,7 +58,17 @@ public class xxxXxxxXxx{
     	@Column(name="tt_tt_tt_fk")// 資料表欄位是參照鍵一律加底線fk
      	private String ttTtTt; // model的field名稱不用因為是參照鍵就加上fk [[不用加fk]]
 }
+四、Model @Entity 時間格式規範
+@Column(name="xx") //含有日期而已
+@Temporal(TemporalType.DATE)   可以對應到SQL裡面的資料型態date
 
+@Column(name="xx") //含有時間而已  可以對應到SQL裡面的資料型態time
+@Temporal(TemporalType.TIME)
+private java.util.Date utilTime;
+
+@Column(name="xx")  // 含有日期與時間  可以對應到SQL裡面的資料型態datetime, timestamp 
+@Temporal(TemporalType.TIMESTAMP)
+private java.util.Date utilTimestamp;
 
 4th Nov 張益齊 Log [ hibernate Many to one lazy loading]
 Entity 的ManyToOne field 要加上
