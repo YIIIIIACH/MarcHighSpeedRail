@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-<<<<<<< HEAD
 @Entity
 @Table(name = "employee_data")
 public class Employee {
@@ -68,11 +67,4 @@ public class Employee {
 	}
 	
 	
-
-=======
-//@Entity
-//@Table(name="employee_data")
-public class Employee {
-	private Integer employee_id;
->>>>>>> origin/MarcMain
 }
