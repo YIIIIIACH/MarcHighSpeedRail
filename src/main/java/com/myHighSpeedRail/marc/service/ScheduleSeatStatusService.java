@@ -10,13 +10,13 @@ import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.Seat;
 import com.myHighSpeedRail.marc.repository.ScheduleRepository;
-import com.myHighSpeedRail.marc.repository.ScheduleSeatRepository;
+import com.myHighSpeedRail.marc.repository.ScheduleSeatStatusRepository;
 import com.myHighSpeedRail.marc.repository.SeatRepository;
 
 @Service
 public class ScheduleSeatStatusService {
 	@Autowired
-	private ScheduleSeatRepository schSeatDao;
+	private ScheduleSeatStatusRepository schSeatDao;
 	@Autowired
 	private ScheduleRepository schServ;
 	@Autowired

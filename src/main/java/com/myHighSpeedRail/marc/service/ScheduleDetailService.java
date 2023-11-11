@@ -29,4 +29,8 @@ public class ScheduleDetailService {
 	public List<ScheduleDetail> findByScheduleId(Integer schId){
 		return schdDao.findByScheduleId(schId);
 	}
+	
+	public List<String> getScheduleAllDiscountType( Integer schId){
+		return schdDao.getScheduleAllDiscountType( schId);
+	}
 }

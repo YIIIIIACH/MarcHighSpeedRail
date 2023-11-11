@@ -3,6 +3,7 @@ package com.myHighSpeedRail.marc.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -29,6 +30,7 @@ public class ScheduleArrive implements Serializable{
 	@JoinColumn(name="schedule_id_fk",nullable=false)
 	private Schedule schedule;
 	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Column(name="arrive_time", nullable=false)
 	private Date arriveTime;
 	public ScheduleArrive() {;}

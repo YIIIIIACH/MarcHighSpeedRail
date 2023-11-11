@@ -26,7 +26,6 @@ public class TicketDiscountSerivce {
 //		return new ArrayList<TicketDiscount>();
 		return findAll();
 	}
-	@GetMapping(value="/getAllTicketDiscountType")
 	public List<String> getAllType(){
 		return tdDao.getAllDiscountType();
 	}
@@ -37,5 +36,9 @@ public class TicketDiscountSerivce {
 	
 	public TicketDiscount findById( Integer tid) {
 		return tdDao.findById(tid).get();
+	}
+	
+	public List<TicketDiscount> findByDiscountType(String discountType){
+		return tdDao.findByDiscountType(discountType);
 	}
 }

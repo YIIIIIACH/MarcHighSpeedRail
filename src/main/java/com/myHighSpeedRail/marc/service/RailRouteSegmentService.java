@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
+import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.repository.RailRouteSegmentRepository;
 
@@ -53,5 +55,12 @@ public class RailRouteSegmentService {
 	}
 	public List<RailRouteSegment> findByRailRouteId(Integer rrid){
 		return rrsDao.findByRailRouteId(rrid);
+	}
+	
+	public List<RailRoute> findScheduleByStartStationEndStation(Integer stStId,Integer edStId){
+		return rrsDao.findByStartStationEndStation(stStId, edStId);
+	}
+	public List<RailRouteSegment> findByRailRouteIdStartStationEndStation(Integer rrId, Integer stStId, Integer edStId){
+		return rrsDao.findByRailRouteIdStartStationEndStation(rrId, stStId, edStId);
 	}
 }

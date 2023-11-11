@@ -40,4 +40,21 @@ public class ScheduleArriveService {
 	public List<ScheduleArrive> findAll(){
 		return saDao.findAll();
 	}
+	//step1 List<Schedule> schList = select schArr.schedule scheduleArrive as schArr 
+	//where schArr.station.stationId=:onStationId and  schArr.arriveTime between :priximateTime-offset and :proximateTime+offset;
+	public List<Schedule> getScheduleByArriveStationTimeRange(Integer onStationId, Date proximateTime,Long offsetTime ){
+		Date minTime = Date.from( proximateTime.toInstant().minusSeconds(offsetTime*60));
+		Date maxTime = Date.from( proximateTime.toInstant().plusSeconds(offsetTime*60));
+		System.out.println(minTime);
+		System.out.println( maxTime);
+		return saDao.getScheduleByArriveStationTimeRange(onStationId, minTime, maxTime);
+	}
+	
+	public ScheduleArrive findByScheduleIdStationId( Integer schId, Integer stationId) {
+		List<ScheduleArrive> res = saDao.findByScheduleIdStationid(schId, stationId);
+		if( res==null || res.size()==0 ) return null;
+		return res.get(0);
+		
+		
+	}
 }
