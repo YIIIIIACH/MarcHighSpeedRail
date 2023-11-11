@@ -14,6 +14,8 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository pDao;
+	@Autowired
+	private ProductBuyingMethodService pbmServ;
 	
 	public Product addProduct(Product product) {
 		return pDao.save(product);
@@ -31,9 +33,7 @@ public class ProductService {
 	}
 	
 	public List<Product> findAllProduct(){
-		
-		List<Product> products = pDao.findAll();
-		return products;
+		return pDao.findAll();
 	}
 	
 	public void deleteById(Integer id) {
@@ -51,5 +51,17 @@ public class ProductService {
 			return "成功修改";
 		}
 		return "查無此物件";
+	}
+	
+	public List<Product> findProductByNameLike(String productName) {
+		return pDao.findProductByNameLike(productName);	
+	}
+	
+	public List<Product> findProductByProductType(String productType){
+		return pDao.findProductByProductType(productType);
+	}
+	
+	public List<Product> findProductByProductPrice(Integer firstPrice, Integer secondPrice){
+		return pDao.findProductByPrice(firstPrice, secondPrice);
 	}
 }

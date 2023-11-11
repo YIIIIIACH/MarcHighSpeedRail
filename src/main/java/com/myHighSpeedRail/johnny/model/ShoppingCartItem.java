@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "shopping_cart")
-public class ShoppingCart {
+public class ShoppingCartItem {
 	
 	@Id
 	@Column(name = "shopping_cart_id")
