@@ -83,7 +83,7 @@ public class RailRoute{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RailRoute other = (RailRoute) obj;
-		return Objects.equals(railRouteId, other.railRouteId);
+		RailRoute rr = (RailRoute)obj;
+		return (rr.getRailRouteId()==this.railRouteId)&&(rr.getDepartStation()==this.departStation)&&(rr.getDestinateStation()==this.destinateStation);
 	}
 }

@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.marc.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -78,5 +80,20 @@ public class ScheduleDetail {
 
 	public void setSeatRangeEnd(Integer seatRangeEnd) {
 		this.seatRangeEnd = seatRangeEnd;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(scheduleDetailId);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ScheduleDetail other = (ScheduleDetail) obj;
+		return Objects.equals(scheduleDetailId, other.scheduleDetailId);
 	}
 }

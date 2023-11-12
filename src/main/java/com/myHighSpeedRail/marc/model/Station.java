@@ -1,6 +1,8 @@
 package com.myHighSpeedRail.marc.model;
 
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 //import java.util.List;
@@ -63,5 +65,22 @@ public class Station{
 		this.stationName = stationName;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(stationId, stationName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Station other = (Station) obj;
+		return this.stationId==other.getStationId();
+	}
+	
 	
 }
