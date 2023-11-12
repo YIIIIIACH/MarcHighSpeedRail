@@ -39,7 +39,6 @@ public class ScheduleService {
 			System.out.println( desTime);
 			Schedule sch = new Schedule(st.getRailRoute(), st.getTrain(),depTime,desTime,st.getCostMinute());
 			res.add(schDao.save(sch));
-			// schedule_detail  schedule_arrive schedule_rest_seat schedule_seat_status
 		}
 		return res;
 		

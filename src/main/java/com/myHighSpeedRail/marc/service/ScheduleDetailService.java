@@ -16,7 +16,7 @@ public class ScheduleDetailService {
 	@Autowired
 	private ScheduleService schServ;
 	@Autowired
-	private TicketDiscountSerivce tickDisServ;
+	private TicketDiscountService tickDisServ;
 	public void setupDefaultScheduleDetail(Integer scheduleId) {
 		//假設每個列車都長一樣 座位也一樣 預設除的商務艙55座 其餘一般座400席
 		//public ScheduleDetail(Schedule schedule, TicketDiscount ticketDiscount, Integer seatRangeStart,
@@ -32,5 +32,8 @@ public class ScheduleDetailService {
 	
 	public List<String> getScheduleAllDiscountType( Integer schId){
 		return schdDao.getScheduleAllDiscountType( schId);
+	}
+	public Boolean conainDiscountType(Integer schid, String discType) {
+		return (schdDao.getScheduleDetailCountByScheduelId(schid,discType)>0)? true: false;
 	}
 }

@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.marc.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,13 +13,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
+import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.service.RailRouteStopStationService;
+import com.myHighSpeedRail.marc.service.ScheduleService;
 
 @Controller
 public class RailRouteStopStationController {
 	@Autowired
 	private RailRouteStopStationService rrssServ;
+	@Autowired
+	private ScheduleService schServ;
 	@PostMapping("/insertStopStation")
 	public @ResponseBody List<RailRouteStopStation> insertStopStation(
 			@RequestParam(value="rid")Integer rid,
@@ -32,7 +37,8 @@ public class RailRouteStopStationController {
 		}else {
 			System.err.println("station Name not found or route not found");
 		}
-		return getAllStopStation();
+//		return getAllStopStation();
+		return new ArrayList<RailRouteStopStation>();
 	}
 	
 	@GetMapping("/getAllStopStation")
@@ -44,5 +50,12 @@ public class RailRouteStopStationController {
 	@GetMapping("/getStopStationByRouteId")
 	public @ResponseBody List<RailRouteStopStation> getStopStationByRouteId(@RequestParam Integer rid){
 		return rrssServ.findByRouteId(rid);
+	}
+	
+	@GetMapping("/getScheduleStopStationByScheduleId")
+	public @ResponseBody List<RailRouteStopStation> getScheduleStopStationByScheduleId(@RequestParam Integer schid){
+		// get raiRouteId from scheduledId
+		Schedule sch = schServ.findById(schid);
+		return getStopStationByRouteId( sch.getRailRoute().getRailRouteId());
 	}
 }

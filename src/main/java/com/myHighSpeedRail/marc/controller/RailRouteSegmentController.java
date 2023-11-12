@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.marc.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class RailRouteSegmentController {
 	@GetMapping("/createRailRouteSegmentById")
 	public @ResponseBody List<RailRouteSegment> createById(@RequestParam(value="rId")Integer rId) {
 		rrss.createAllSegmentByRouteId(rId);
-		return rrss.findAll();
+		return new ArrayList<RailRouteSegment>();//rrss.findAll();
 	}
 	
 	@GetMapping("/findAllRailRouteSegment")

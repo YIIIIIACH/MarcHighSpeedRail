@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.ScheduleDetail;
 import com.myHighSpeedRail.marc.model.ScheduleRestSeat;
+import com.myHighSpeedRail.marc.model.Station;
+import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.repository.ScheduleRestSeatRepository;
 
 @Service
@@ -45,5 +47,9 @@ public class ScheduleRestSeatService {
 			}
 			schRestSeatDao.saveAll(res);
 		}
+	}
+	
+	public List<ScheduleRestSeat> segmentDiscountRestSeatInSchedule(List<Integer> schidList, Integer ststid, Integer edstid, String tickedDiscountType) {
+		return schRestSeatDao.getRestSeatByStEdStationTicketDiscount(schidList,ststid, edstid, tickedDiscountType);
 	}
 }

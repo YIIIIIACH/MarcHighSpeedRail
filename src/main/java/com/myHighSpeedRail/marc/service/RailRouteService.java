@@ -41,6 +41,17 @@ public class RailRouteService {
 		}
 		return getAll();
 	}
+	public RailRoute addRoute(Integer depStationId,Integer desStationid,Integer stopStationCnt
+			){
+		RailRoute rr=null;
+		try {
+			
+			rr = rrDao.save(new RailRoute( sDao.findById(depStationId).get(), sDao.findById(desStationid).get(), stopStationCnt));
+		}catch(Exception e){
+			System.err.println("[Error] occur in RailRouteController or Failed of Find Station by Id");
+		}
+		return rr;
+	}
 	public Optional<RailRoute> rrFindById( Integer rid) {
 		return rrDao.findById(rid);
 	}

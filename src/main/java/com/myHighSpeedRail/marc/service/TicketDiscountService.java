@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.repository.TicketDiscountRepository;
 @Service
-public class TicketDiscountSerivce {
+public class TicketDiscountService {
 
 	@Autowired
 	private TicketDiscountRepository tdDao;
