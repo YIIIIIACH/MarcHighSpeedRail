@@ -14,4 +14,12 @@ public interface RailRouteStopStationRepository extends JpaRepository<RailRouteS
 	
 	@Query("from RailRouteStopStation where railRoute.railRouteId=:rid and stopStation.stationId=:sid")
 	public List<RailRouteStopStation>findbyRouteIdStationId(Integer rid, Integer sid);
+	
+	@Query("from RailRouteStopStation where railRoute.railRouteId=:rid and railRouteStopStationSequence<:stseqmax")
+	public List<RailRouteStopStation> findByRouteIdStationSeqMaxRange(Integer rid, Integer stseqmax);
+	
+	@Query("from RailRouteStopStation where railRoute.railRouteId=:rid and railRouteStopStationSequence>:stseqmin")
+	public List<RailRouteStopStation> findByRouteIdStationSeqMinRange(Integer rid, Integer stseqmin);
+	
+	
 }

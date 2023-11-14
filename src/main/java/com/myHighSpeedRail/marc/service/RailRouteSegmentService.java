@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.marc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +21,6 @@ public class RailRouteSegmentService {
 	
 	@Autowired
 	private RailRouteStopStationService rrsss;
-	@Autowired
-	private StationService ss;
 	@Autowired
 	private RailRouteService rrs;
 	
@@ -62,5 +61,16 @@ public class RailRouteSegmentService {
 	}
 	public List<RailRouteSegment> findByRailRouteIdStartStationEndStation(Integer rrId, Integer stStId, Integer edStId){
 		return rrsDao.findByRailRouteIdStartStationEndStation(rrId, stStId, edStId);
+	}
+	public List<RailRouteSegment> findByRouteIdStartStEndStRange(Integer  rrid,List<RailRouteStopStation> endStRange,List<RailRouteStopStation> startStRange){
+		List<Integer> tmp1 = new ArrayList<Integer>();
+		List<Integer> tmp2 = new ArrayList<Integer>();
+		for( RailRouteStopStation rrss: endStRange) {
+			tmp1.add(rrss.getRailRouteStopStationSequence());
+		}
+		for( RailRouteStopStation rrss: startStRange) {
+			tmp2.add(rrss.getRailRouteStopStationSequence());
+		}
+		return rrsDao.findByStartEndStationSeqRange(rrid, tmp1, tmp2);
 	}
 }

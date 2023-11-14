@@ -96,9 +96,12 @@ public class RailRouteStopStation implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		RailRouteStopStation other = (RailRouteStopStation) obj;
-		return Objects.equals(railRoute, other.railRoute)
-				&& Objects.equals(railRouteStopStationSequence, other.railRouteStopStationSequence)
-				&& Objects.equals(stopStation, other.stopStation);
+//		return Objects.equals(railRoute, other.railRoute)
+//				&& Objects.equals(railRouteStopStationSequence, other.railRouteStopStationSequence)
+//				&& Objects.equals(stopStation, other.stopStation);
+		return railRoute.getRailRouteId().equals( other.railRoute.getRailRouteId())&&
+				railRouteStopStationSequence.equals(other.railRouteStopStationSequence)&&
+				stopStation.getStationId().equals( other.getStopStation().getStationId());
 	}
 	
 }
