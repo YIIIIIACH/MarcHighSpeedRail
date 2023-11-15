@@ -5,6 +5,8 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,6 +19,7 @@ import jakarta.persistence.TemporalType;
 public class TicketOrder {
 	@Id
 	@Column(name="ticket_order_id",nullable=false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer ticketOrderId;
 	
 	@Column( name="member_token",nullable=true)
@@ -41,6 +44,7 @@ public class TicketOrder {
 	public TicketOrder(String  memberToken, Date ticketOrderCreateTime, String status,
 			Date paymentDeadline, Integer totalPrice) {
 		super();
+		this.ticketOrderId=null;
 		this.memberToken = memberToken;
 		this.ticketOrderCreateTime = ticketOrderCreateTime;
 		this.status = status;

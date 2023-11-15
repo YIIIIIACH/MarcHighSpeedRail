@@ -61,16 +61,48 @@ public class ScheduleRestSeatService {
 		)
 	 * 
 	 */
-	public Integer updateScheduleRestSeat(Integer schid, Integer discountid, Integer rrid, Integer ststid, Integer endstid) {
-		RailRouteStopStation rrs1 = rrssServ.findByRouteIdStationId(rrid, endstid).get(0);
-		RailRouteStopStation rrs2 = rrssServ.findByRouteIdStationId(rrid, ststid).get(0);
-		List<RailRouteStopStation> startStRange = rrssServ.findByRouteIdStationSeqMaxRange(rrid, rrs1.getRailRouteStopStationSequence());
-		List<RailRouteStopStation> endStRange = rrssServ.findByRouteIdStationSeqMinRange(rrid, rrs2.getRailRouteStopStationSequence());
+	public Integer updateScheduleRestSeat(Integer schid, Integer discountid, Integer rrid, Integer ststid, Integer endstid,Integer ticketCnt) {
+		List<RailRouteStopStation> tmp1 = rrssServ.findByRouteIdStationId(rrid, endstid);
+		List<RailRouteStopStation> tmp2 = rrssServ.findByRouteIdStationId(rrid, ststid);
+		RailRouteStopStation rrs1;
+		RailRouteStopStation rrs2;
+		if( tmp1.size()<=0 || tmp2.size()<=0)return 0;
+		rrs1 = tmp1.get(0);
+		rrs2 = tmp2.get(0);
+		Integer rrs1seq= rrs1.getRailRouteStopStationSequence();
+		Integer rrs2seq =rrs2.getRailRouteStopStationSequence();
+		if( rrs2seq>= rrs1seq) return 0;
+		if( rrs1.getStopStation().getStationId()== rrs2.getStopStation().getStationId())return 0;
+		List<RailRouteStopStation> startStRange = rrssServ.findByRouteIdStationSeqMaxRange(rrid, rrs1seq);
+		List<RailRouteStopStation> endStRange = rrssServ.findByRouteIdStationSeqMinRange(rrid, rrs2seq);
+		if(startStRange.size()==0) {
+			startStRange.add(new RailRouteStopStation());
+			Station tmp = new Station();
+			tmp.setStationId(-1);
+			startStRange.get(0).setStopStation( tmp);
+		}
+//		for( RailRouteStopStation rrss: startStRange) {
+//			System.out.print( rrss.getStopStation().getStationId()+ " ");
+//		}
+//		System.out.println();
+		if(endStRange.size()==0) {
+			endStRange.add(new RailRouteStopStation());
+			Station tmp = new Station();
+			tmp.setStationId(-1);
+			endStRange.get(0).setStopStation( tmp);
+		}
+//		for( RailRouteStopStation rrss: endStRange) {
+//			System.out.print( rrss.getStopStation().getStationId()+ " ");
+//		}
+//		System.out.println();
 		List<RailRouteSegment> effectedRRSList = rrsServ.findByRouteIdStartStEndStRange( rrid, endStRange, startStRange);
+//		for(RailRouteSegment rrs: effectedRRSList) {
+//			System.out.println( rrs.getStartStation().getStationName()+" "+rrs.getEndStation().getStationName());
+//		}
 		List<Integer> effectedRRSIdList = new ArrayList<Integer>();
 		for( RailRouteSegment rrs : effectedRRSList) {
 			effectedRRSIdList.add(rrs.getRailRouteSegmentId());
 		}
-		return schRestSeatDao.updateScheduleRestSeat(400,schid,discountid,effectedRRSIdList);
+		return schRestSeatDao.updateScheduleRestSeat(ticketCnt,schid,discountid,effectedRRSIdList);
 	}
 }

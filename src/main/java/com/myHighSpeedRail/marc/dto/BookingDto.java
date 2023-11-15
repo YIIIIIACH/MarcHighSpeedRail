@@ -9,5 +9,5 @@ public class BookingDto {
 	public Integer ticketDiscountId;
 	public Integer startStationId;
 	public Integer endStationId;
-	public List<TicketDiscount> chooseDiscounts;
+	public List<Integer> chooseDiscounts;
 }

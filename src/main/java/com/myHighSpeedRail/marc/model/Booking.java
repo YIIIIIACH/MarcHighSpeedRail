@@ -3,6 +3,8 @@ package com.myHighSpeedRail.marc.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,7 +14,8 @@ import jakarta.persistence.Table;
 @Table(name="booking")
 public class Booking {
 	@Id
-	@Column(name="bookding_id",nullable=false)
+	@Column(name="booking_id",nullable=false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer bookingId;
 	
 	@Column(name="member_token",nullable=true)
@@ -27,7 +30,7 @@ public class Booking {
 	private Schedule schedule;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="rai_route_segment_id_fk",nullable=false)
+	@JoinColumn(name="rail_route_segment_id_fk",nullable=false)
 	private RailRouteSegment railRouteSegment;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -44,7 +47,7 @@ public class Booking {
 	@Column(name="ticket_price",nullable=false)
 	private Integer ticketPrice;
 	
-	@Column(name="ticket_qrcode_url",nullable=true)
+	@Column(name="ticket_qrcode",nullable=true)
 	private String ticketQrcodeUrl;
 	
 

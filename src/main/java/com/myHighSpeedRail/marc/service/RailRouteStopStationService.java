@@ -63,7 +63,7 @@ public class RailRouteStopStationService {
 		return rrssDao.findbyRouteIdStationId(rid, sid);
 	}
 	public List<RailRouteStopStation> findByRouteIdStationSeqMaxRange(Integer rid, Integer stationSeqMaxRange){
-		return rrssDao.findByRouteIdStationSeqMaxRange(rid, stationSeqMaxRange);
+		return rrssDao.findByRouteIdStationSeqMinRange(rid, stationSeqMaxRange);
 	}
 	public List<RailRouteStopStation> findByRouteIdStationSeqMinRange(Integer rid, Integer stationSeqMinRange){
 		return rrssDao.findByRouteIdStationSeqMaxRange(rid, stationSeqMinRange);

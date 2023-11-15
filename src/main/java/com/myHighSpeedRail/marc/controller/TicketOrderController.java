@@ -22,6 +22,7 @@ import com.myHighSpeedRail.marc.service.BookingService;
 import com.myHighSpeedRail.marc.service.RailRouteSegmentService;
 import com.myHighSpeedRail.marc.service.RailRouteStopStationService;
 import com.myHighSpeedRail.marc.service.ScheduleArriveService;
+import com.myHighSpeedRail.marc.service.ScheduleRestSeatService;
 import com.myHighSpeedRail.marc.service.ScheduleService;
 import com.myHighSpeedRail.marc.service.TicketDiscountService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
@@ -43,6 +44,8 @@ public class TicketOrderController {
 	private ScheduleService schServ;
 	@Autowired
 	private BookingService bServ;
+	@Autowired
+	private ScheduleRestSeatService schrsServ;
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
 		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
@@ -73,7 +76,8 @@ public class TicketOrderController {
 		Integer originPrice =rrs.getRailRouteSegmentTicketPrice();
 		// member_token ticket_order_create_time status payment_dealine total_price
 		Integer total= 0;
-		for( TicketDiscount td: bookingDto.chooseDiscounts) {
+		for( Integer tdid: bookingDto.chooseDiscounts) { // to be fixed
+			 TicketDiscount td = tkdServ.findById( tdid) ;
 			total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();
 		}
 		TicketOrder tcko = tkoServ.save(new TicketOrder( token,new Date(),"未付款",deadline, total));
@@ -84,14 +88,15 @@ public class TicketOrderController {
 		// set a bunch of booking which 
 		//member_token	tcko	sch
 		//rail_route_segment(rrs)	seat_id_fk(null)	ticket_discount_id_fk	status(未付款)	ticket_price	ticket_qrcode_url(null)
-		for( TicketDiscount td: bookingDto.chooseDiscounts) {
+		for( Integer tdid: bookingDto.chooseDiscounts) {
+			TicketDiscount td = tkdServ.findById(tdid);
 			bServ.save(new Booking(token, tcko, sch, rrs,(Seat)null, td, "未分配"
 					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
 					(String)null));
 		}
 		
 		// reduce the amount of schedule_rest_seat 
-		
+		schrsServ.updateScheduleRestSeat(sch.getScheduleId(), bookingDto.ticketDiscountId , rrs.getRailRoute().getRailRouteId() , bookingDto.startStationId , bookingDto.endStationId , bookingDto.chooseDiscounts.size() );
 		return new ResponseEntity<String>("booking success",HttpStatus.OK);
 	}
 }

@@ -43,6 +43,6 @@ public interface ScheduleRestSeatRepository extends JpaRepository<ScheduleRestSe
 	 */
 	@Transactional
 	@Modifying
-	@Query("update ScheduleRestSeat schrs set schrs.restSeatAmount = :newValue where schrs.schedule.scheduleId=:schid and schrs.ticketDiscount.ticketDiscountId=:disid and schrs.railRouteSegment.railRouteSegmentId in (:rrsidlist)")
-	public Integer updateScheduleRestSeat(Integer newValue,Integer schid,Integer disid,List<Integer> rrsidlist);
+	@Query("update ScheduleRestSeat schrs set schrs.restSeatAmount=schrs.restSeatAmount-:modifyvalue where schrs.schedule.scheduleId=:schid and schrs.ticketDiscount.ticketDiscountId=:disid and schrs.railRouteSegment.railRouteSegmentId  in (:rrsidlist)")
+	public Integer updateScheduleRestSeat(Integer modifyvalue,Integer schid,Integer disid,List<Integer> rrsidlist);
 }

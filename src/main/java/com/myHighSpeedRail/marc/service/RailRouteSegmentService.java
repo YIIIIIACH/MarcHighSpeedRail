@@ -63,14 +63,14 @@ public class RailRouteSegmentService {
 		return rrsDao.findByRailRouteIdStartStationEndStation(rrId, stStId, edStId);
 	}
 	public List<RailRouteSegment> findByRouteIdStartStEndStRange(Integer  rrid,List<RailRouteStopStation> endStRange,List<RailRouteStopStation> startStRange){
-		List<Integer> tmp1 = new ArrayList<Integer>();
-		List<Integer> tmp2 = new ArrayList<Integer>();
-		for( RailRouteStopStation rrss: endStRange) {
-			tmp1.add(rrss.getRailRouteStopStationSequence());
+		List<Integer> backStIdList = new ArrayList<Integer>();
+		List<Integer> frontStIdList = new ArrayList<Integer>();
+		for( RailRouteStopStation rrss: endStRange) {  //14
+			backStIdList.add(rrss.getStopStation().getStationId());
 		}
-		for( RailRouteStopStation rrss: startStRange) {
-			tmp2.add(rrss.getRailRouteStopStationSequence());
+		for( RailRouteStopStation rrss: startStRange) {  //20 25
+			frontStIdList.add(rrss.getStopStation().getStationId());
 		}
-		return rrsDao.findByStartEndStationSeqRange(rrid, tmp1, tmp2);
+		return rrsDao.findByStartEndStationExcludeRange(rrid, frontStIdList, backStIdList);
 	}
 }
