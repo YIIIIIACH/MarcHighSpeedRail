@@ -50,4 +50,6 @@ public class ScheduleSeatStatusController {
 		schSeatServ.registBookedSeat(schid, mask, amt);
 		return new ResponseEntity<String>( "inserted  data", HttpStatus.OK);
 	}
+	
+
 }

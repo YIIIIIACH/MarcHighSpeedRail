@@ -1,7 +1,9 @@
 package com.myHighSpeedRail.marc.controller;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,12 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.dto.BookingDto;
 import com.myHighSpeedRail.marc.model.Booking;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
+import com.myHighSpeedRail.marc.model.RailRouteStopStation;
 import com.myHighSpeedRail.marc.model.Schedule;
+import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.Seat;
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.model.TicketOrder;
@@ -23,6 +28,7 @@ import com.myHighSpeedRail.marc.service.RailRouteSegmentService;
 import com.myHighSpeedRail.marc.service.RailRouteStopStationService;
 import com.myHighSpeedRail.marc.service.ScheduleArriveService;
 import com.myHighSpeedRail.marc.service.ScheduleRestSeatService;
+import com.myHighSpeedRail.marc.service.ScheduleSeatStatusService;
 import com.myHighSpeedRail.marc.service.ScheduleService;
 import com.myHighSpeedRail.marc.service.TicketDiscountService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
@@ -46,23 +52,27 @@ public class TicketOrderController {
 	private BookingService bServ;
 	@Autowired
 	private ScheduleRestSeatService schrsServ;
+	@Autowired
+	private RailRouteStopStationService schrrssServ;
+	@Autowired
+	private ScheduleSeatStatusService schssServ;
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
 		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
-		Cookie []cookies = req.getCookies();
+//		Cookie []cookies = req.getCookies();
 		String token=null;
-		for( Cookie ck: cookies) {
-			if( ck.getName().equals("login-token")) {
-				token = ck.getValue();
-			}
-		}
-		if(token==null) {
-			// redirect to MemberSystem
-			;
-		}else {
-			//validate the current login token 
-			;
-		}
+//		for( Cookie ck: cookies) {
+//			if( ck.getName().equals("login-token")) {
+//				token = ck.getValue();
+//			}
+//		}
+//		if(token==null) {
+//			// redirect to MemberSystem
+//			;
+//		}else {
+//			//validate the current login token 
+//			;
+//		}
 		// temporary treatment
 		token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
 		
@@ -98,5 +108,44 @@ public class TicketOrderController {
 		// reduce the amount of schedule_rest_seat 
 		schrsServ.updateScheduleRestSeat(sch.getScheduleId(), bookingDto.ticketDiscountId , rrs.getRailRoute().getRailRouteId() , bookingDto.startStationId , bookingDto.endStationId , bookingDto.chooseDiscounts.size() );
 		return new ResponseEntity<String>("booking success",HttpStatus.OK);
+	}
+	
+	@PostMapping("registAllocateTicketOrderSeats")
+	public @ResponseBody ResponseEntity<String> allocateTicketOrdeSeat(@RequestParam Integer ticketOrderId){
+		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
+		//List<RailRouteStopStation> findByRouteIdStationId(Integer rid, Integer sid){
+		RailRouteStopStation stopst1 = schrrssServ.findByRouteIdStationId(
+				bList.get(0).getRailRouteSegment().getRailRoute().getRailRouteId()
+				, bList.get(0).getRailRouteSegment().getStartStation().getStationId()).get(0);
+		RailRouteStopStation stopst2 = schrrssServ.findByRouteIdStationId(
+				bList.get(0).getRailRouteSegment().getRailRoute().getRailRouteId()
+				, bList.get(0).getRailRouteSegment().getEndStation().getStationId()).get(0);
+		Integer stseq = stopst1.getRailRouteStopStationSequence();
+		Integer edseq = stopst2.getRailRouteStopStationSequence();
+		List<Booking> newBookingList = new ArrayList<Booking>();
+//		for( Booking b: bList) {
+//			b.setSeat(??);
+//			b.setStatus("已分配座位");
+//			newBookingList.add(b );
+//		}
+//		tckOrder.get
+		Long mask = 0L;
+		mask |= (1L << edseq)-1;
+		mask >>= stseq;
+		mask <<= stseq;
+		List<ScheduleSeatStatus> schssList =schssServ.getAvaibleSeat(bList.get(0).getSchedule().getScheduleId(), mask, bList.size());
+		schssList.get(0).getSeat().getSeatId();
+		for( int i=0; i<schssList.size(); i++) {
+			Booking tmp = bList.get(i);
+			tmp.setSeat(schssList.get(i).getSeat());
+			tmp.setStatus("已分配座位");
+			newBookingList.add(tmp);
+		}
+		bServ.saveAll(newBookingList);
+		schssServ.registBookedSeat(bList.get(0).getSchedule().getScheduleId(), mask, bList.size());
+		TicketOrder tmp = bList.get(0).getTicketOrder();
+		tmp.setStatus("已付款");
+		tkoServ.save(tmp );
+		return new ResponseEntity<String>( "inserted  data", HttpStatus.OK);
 	}
 }

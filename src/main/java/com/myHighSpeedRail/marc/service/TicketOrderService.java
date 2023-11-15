@@ -14,4 +14,8 @@ public class TicketOrderService {
 	public TicketOrder save(TicketOrder tcko) {
 		return tkoDao.save(tcko);
 	}
+	
+	public TicketOrder findById(Integer tckid) {
+		return tkoDao.findById(tckid).get();
+	}
 }

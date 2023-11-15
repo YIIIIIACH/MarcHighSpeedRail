@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.marc.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,5 +14,11 @@ public class BookingService {
 	private BookingRepository bDao;
 	public Booking save(Booking b) {
 		return bDao.save(b);
+	}
+	public List<Booking> findByTicketOrderId(Integer tckid){
+		return bDao.findByTicketOrderId(tckid);
+	}
+	public List<Booking> saveAll(List<Booking> bList) {
+		return bDao.saveAll(bList);
 	}
 }

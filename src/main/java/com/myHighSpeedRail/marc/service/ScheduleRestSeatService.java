@@ -81,24 +81,13 @@ public class ScheduleRestSeatService {
 			tmp.setStationId(-1);
 			startStRange.get(0).setStopStation( tmp);
 		}
-//		for( RailRouteStopStation rrss: startStRange) {
-//			System.out.print( rrss.getStopStation().getStationId()+ " ");
-//		}
-//		System.out.println();
 		if(endStRange.size()==0) {
 			endStRange.add(new RailRouteStopStation());
 			Station tmp = new Station();
 			tmp.setStationId(-1);
 			endStRange.get(0).setStopStation( tmp);
 		}
-//		for( RailRouteStopStation rrss: endStRange) {
-//			System.out.print( rrss.getStopStation().getStationId()+ " ");
-//		}
-//		System.out.println();
 		List<RailRouteSegment> effectedRRSList = rrsServ.findByRouteIdStartStEndStRange( rrid, endStRange, startStRange);
-//		for(RailRouteSegment rrs: effectedRRSList) {
-//			System.out.println( rrs.getStartStation().getStationName()+" "+rrs.getEndStation().getStationName());
-//		}
 		List<Integer> effectedRRSIdList = new ArrayList<Integer>();
 		for( RailRouteSegment rrs : effectedRRSList) {
 			effectedRRSIdList.add(rrs.getRailRouteSegmentId());
