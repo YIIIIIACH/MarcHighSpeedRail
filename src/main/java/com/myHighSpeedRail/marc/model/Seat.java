@@ -20,6 +20,12 @@ public class Seat {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="seat_id",nullable=false)
 	private Integer seatId;
+	public Integer getSeatId() {
+		return seatId;
+	}
+	public void setSeatId(Integer seatId) {
+		this.seatId = seatId;
+	}
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="train_id_fk", nullable=false)
 	private Train train;

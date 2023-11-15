@@ -3,7 +3,10 @@ package com.myHighSpeedRail.marc.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.query.spi.Limit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.marc.model.Schedule;
@@ -32,5 +35,15 @@ public class ScheduleSeatStatusService {
 			resList.add( new ScheduleSeatStatus( sch, s, 0L));
 		}
 		schSeatDao.saveAll(resList);
+	}
+	public List<ScheduleSeatStatus> getAvaibleSeat(Integer schid, Long mask, Integer amt){
+		return schSeatDao.getAvaible(schid ,mask, PageRequest.of(0, amt));
+	}
+	public void registBookedSeat( Integer schid , Long mask , Integer amt) {
+		List<ScheduleSeatStatus> seatList = getAvaibleSeat( schid, mask , amt);
+		for( ScheduleSeatStatus schss: seatList) {
+			schSeatDao.updateSeatBySchidSeatId(schid, mask, schss.getSeat().getSeatId());
+		}
+		return;
 	}
 }
