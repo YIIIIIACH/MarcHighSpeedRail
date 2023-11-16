@@ -40,17 +40,22 @@ public class ProductService {
 		pDao.deleteById(id);
 	}
 	
-	public String findByIdUpdateProductDesc(Integer id, String desc) {
+	public Product UpdateProduct(Integer id, String pName, String desc, Integer price, String type, Integer inventory) {
 		Optional<Product> optional = pDao.findById(id);
 
 		if(optional.isPresent()) {
 			
 			Product product = optional.get();
 			product.setProductDescription(desc);
-			pDao.save(product);
-			return "成功修改";
+			product.setProductName(pName);
+			product.setProductPrice(price);
+			product.setProductType(type);
+			product.setProductInventory(inventory);
+			
+			Product updatedProduct = pDao.save(product);
+			return updatedProduct;
 		}
-		return "查無此物件";
+		return null;
 	}
 	
 	public List<Product> findProductByNameLike(String productName) {

@@ -27,9 +27,14 @@ public class ProductController {
 	
 	@PostMapping("/product/add") //新增商品
 	@ResponseBody
-	public String addProduct(@RequestBody Product product) {		
-		pService.addProduct(product);		
-		return "新增成功";
+	public ResponseEntity<String> addProduct(@RequestBody Product product) {	
+		try{
+			pService.addProduct(product);		
+			return ResponseEntity.ok("商品成功新增，商品ID: " + product.getProductId());
+		
+		}catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("新增商品失敗: " + e.getMessage());
+		}
 	}
 	
 	@GetMapping("/product")  //首頁顯示商品
@@ -42,13 +47,21 @@ public class ProductController {
 	@ResponseBody
 	public ResponseEntity<String> deleteProductById(@RequestParam("id") Integer id) {
 		pService.deleteById(id);
-		return new ResponseEntity<String>("成功",HttpStatus.OK);
+		return new ResponseEntity<String>("刪除成功",HttpStatus.OK);
 	}
 	
-	@PutMapping("/product/update")  //更新商品描述
+	@PutMapping("/product/update")  //更新商品
 	@ResponseBody
-	public String updateProductDescriptionById(@RequestParam Integer id, @RequestParam String newDesc) {
-		return pService.findByIdUpdateProductDesc(id, newDesc);
+	public ResponseEntity<String> updateProductById(
+			@RequestParam Integer id, 
+			@RequestParam String newDesc, 
+			@RequestParam String newName, 
+			@RequestParam Integer newPrice,
+			@RequestParam String newType, 
+			@RequestParam Integer newInventory) {
+		
+		Product updatedProduct = pService.UpdateProduct(id, newName, newDesc, newPrice, newType, newInventory);
+		return new ResponseEntity<String>("商品更新成功，商品ID : " + updatedProduct.getProductId() ,HttpStatus.OK);
 	}
 	
 	@GetMapping("/product/findByNameLike")  //關鍵字搜尋
