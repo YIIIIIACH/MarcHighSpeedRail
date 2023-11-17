@@ -7,10 +7,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,23 +16,64 @@ import jakarta.persistence.Table;
 public class ShoppingCartItem {
 	
 	@Id
-	@Column(name = "shopping_cart_id")
-	private Integer shoppingCartId;
+	@Column(name = "shopping_cart_item_id")
+	private Integer shoppingCartItemId;
 	
 	@Column(name = "quantity")
 	private Integer quantity;
 	
+	@OneToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL )
+	private List<Product> product;
+	
+    @Column(name = "member_uuid", nullable = false)
+	private String member;
+
+	public ShoppingCartItem() {
+		super();
+	}
+
+	public ShoppingCartItem(Integer shoppingCartItemId, Integer quantity, List<Product> product, String member) {
+		super();
+		this.shoppingCartItemId = shoppingCartItemId;
+		this.quantity = quantity;
+		this.product = product;
+		this.member = member;
+	}
+
+	public Integer getShoppingCartItemId() {
+		return shoppingCartItemId;
+	}
+
+	public void setShoppingCartItemId(Integer shoppingCartItemId) {
+		this.shoppingCartItemId = shoppingCartItemId;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public List<Product> getProduct() {
+		return product;
+	}
+
+	public void setProduct(List<Product> product) {
+		this.product = product;
+	}
+
+	public String getMember() {
+		return member;
+	}
+
+	public void setMember(String member) {
+		this.member = member;
+	}
 	
 	
-//	QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
-	
-//  @JoinColumn(name = "member_id_fk", nullable = false);
-//	private Member member;
+    
+    
 }
 
-/*CREATE TABLE shopping_cart(
-shopping_cart_id int not null primary key identity(1,1),
-quantity int not null,
-product_id_fk int not null foreign key references product(product_id),
-member_id_fk uniqueidentifier not null foreign key references eeit_member(member_id)
-);*/

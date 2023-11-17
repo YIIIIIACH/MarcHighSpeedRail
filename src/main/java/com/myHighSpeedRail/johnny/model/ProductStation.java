@@ -15,22 +15,28 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="product_station")
 public class ProductStation {
+	
 	@Id
 	@JoinColumn(name="station_id_fk",nullable=false)
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Station station;
+	
 	@Id
 	@JoinColumn(name="product_id_fk",nullable=false)
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Product product;
+	
 	@Column(name="product_status")
 	private String productStatus;
+	
 	public Station getStation() {
 		return station;
 	}
+	
 	public void setStation(Station station) {
 		this.station = station;
 	}
+	
 	public Product getProduct() {
 		return product;
 	}

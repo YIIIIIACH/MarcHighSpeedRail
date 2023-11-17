@@ -6,7 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myHighSpeedRail.johnny.dto.ProductAndProductPhotoDto;
 import com.myHighSpeedRail.johnny.model.Product;
+import com.myHighSpeedRail.johnny.model.ProductPhoto;
+import com.myHighSpeedRail.johnny.repository.ProductPhotoRepository;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
 
 @Service
@@ -14,11 +17,16 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository pDao;
-	@Autowired
-	private ProductBuyingMethodService pbmServ;
 	
-	public Product addProduct(Product product) {
-		return pDao.save(product);
+	@Autowired
+	private ProductPhotoRepository ppDao;
+	
+	public Product addProduct(ProductAndProductPhotoDto pDto) {
+		Product product = new Product(null, pDto.getProductName(), pDto.getProductPrice(), pDto.getProductDescription(),pDto.getProductType(),pDto.getProductInventory());
+		Product newProduct = pDao.save(product);
+		ProductPhoto productPhoto = new ProductPhoto(null, pDto.getMimeType(),pDto.getPhotoPath(), newProduct);	
+		ppDao.save(productPhoto);
+		return newProduct;
 	}
 	
 	public Product findProductById(Integer id) {
@@ -40,17 +48,12 @@ public class ProductService {
 		pDao.deleteById(id);
 	}
 	
-	public Product UpdateProduct(Integer id, String pName, String desc, Integer price, String type, Integer inventory) {
-		Optional<Product> optional = pDao.findById(id);
+	public Product UpdateProduct(Product p) {
+		Optional<Product> optional = pDao.findById(p.getProductId());
 
 		if(optional.isPresent()) {
 			
 			Product product = optional.get();
-			product.setProductDescription(desc);
-			product.setProductName(pName);
-			product.setProductPrice(price);
-			product.setProductType(type);
-			product.setProductInventory(inventory);
 			
 			Product updatedProduct = pDao.save(product);
 			return updatedProduct;
