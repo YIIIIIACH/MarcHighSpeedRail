@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.myHighSpeedRail.johnny.dto.ProductAndProductPhotoDto;
+import com.myHighSpeedRail.johnny.dto.ProductAndPhotoDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhoto;
 import com.myHighSpeedRail.johnny.repository.ProductPhotoRepository;
@@ -17,16 +20,31 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository pDao;
-	
+		
 	@Autowired
 	private ProductPhotoRepository ppDao;
 	
-	public Product addProduct(ProductAndProductPhotoDto pDto) {
-		Product product = new Product(null, pDto.getProductName(), pDto.getProductPrice(), pDto.getProductDescription(),pDto.getProductType(),pDto.getProductInventory());
-		Product newProduct = pDao.save(product);
-		ProductPhoto productPhoto = new ProductPhoto(null, pDto.getMimeType(),pDto.getPhotoPath(), newProduct);	
-		ppDao.save(productPhoto);
-		return newProduct;
+	public Product addProduct(ProductAndPhotoDto pappDto) {
+			
+			Product product = new Product(); // 新增product
+			product.setProductName(pappDto.getProductName());
+			product.setProductPrice(pappDto.getProductPrice());
+			product.setProductDescription(pappDto.getProductDescription());
+			product.setProductType(pappDto.getProductType());
+			product.setProductInventory(pappDto.getProductInventory());
+			
+			Product savedProduct = pDao.save(product); // 儲存product
+			
+			ProductPhoto productPhoto = new ProductPhoto(); // 新增photo
+			productPhoto.setMimeType(pappDto.getMimeType());
+			productPhoto.setPhotoPath(pappDto.getPhotoPath());
+			
+			productPhoto.setProduct(savedProduct); // 設置ProductPhoto的Product屬性
+			
+			ppDao.save(productPhoto);
+			
+			return savedProduct;
+
 	}
 	
 	public Product findProductById(Integer id) {
@@ -44,6 +62,16 @@ public class ProductService {
 		return pDao.findAll();
 	}
 	
+	public Page<Product> findbyPage(Integer pageNumber){
+		PageRequest pgb = PageRequest.of(pageNumber-1, 10, Sort.Direction.ASC, "productId");
+//		Page<Product> page = pDao.findAll(pgb);
+		Page<Product> products = pDao.findProductAndPhoto(pgb);
+		
+//		System.out.println("aaaaaaaaaaaaaaaaaaaa");
+//		System.out.println(products.getContent().toString());
+		return products;
+	}
+	
 	public void deleteById(Integer id) {
 		pDao.deleteById(id);
 	}
@@ -54,6 +82,11 @@ public class ProductService {
 		if(optional.isPresent()) {
 			
 			Product product = optional.get();
+			product.setProductName(p.getProductName());
+			product.setProductDescription(p.getProductDescription());
+			product.setProductPrice(p.getProductPrice());
+			product.setProductType(p.getProductType());
+			product.setProductInventory(p.getProductInventory());
 			
 			Product updatedProduct = pDao.save(product);
 			return updatedProduct;

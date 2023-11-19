@@ -1,8 +1,6 @@
 package com.myHighSpeedRail.johnny.dto;
 
-import jakarta.persistence.Column;
-
-public class ProductAndProductPhotoDto {
+public class ProductAndPhotoDto {
 	
 	private String productName;
 	
@@ -18,11 +16,11 @@ public class ProductAndProductPhotoDto {
 	
 	private String photoPath;
 
-	public ProductAndProductPhotoDto() {
+	public ProductAndPhotoDto() {
 		super();
 	}
 
-	public ProductAndProductPhotoDto(String productName, Integer productPrice, String productDescription,
+	public ProductAndPhotoDto(String productName, Integer productPrice, String productDescription,
 			String productType, Integer productInventory, String mimeType, String photoPath) {
 		super();
 		this.productName = productName;
@@ -89,10 +87,5 @@ public class ProductAndProductPhotoDto {
 	public void setPhotoPath(String photoPath) {
 		this.photoPath = photoPath;
 	}
-	
-	
-	
-	
-	
 	
 }

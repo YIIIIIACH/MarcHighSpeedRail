@@ -32,4 +32,5 @@ public class ProductPhotoService {
 			return "更新成功";
 		}
 	}
+	
 }

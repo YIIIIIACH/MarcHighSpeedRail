@@ -1,29 +1,30 @@
 package com.myHighSpeedRail.johnny.model;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "shopping_cart")
+@Table(name = "shopping_cart_item")
 public class ShoppingCartItem {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shopping_cart_item_id")
 	private Integer shoppingCartItemId;
 	
 	@Column(name = "quantity")
 	private Integer quantity;
 	
-	@OneToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL )
-	private List<Product> product;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id_fk", nullable = false)
+	private Product product;
 	
     @Column(name = "member_uuid", nullable = false)
 	private String member;
@@ -32,7 +33,7 @@ public class ShoppingCartItem {
 		super();
 	}
 
-	public ShoppingCartItem(Integer shoppingCartItemId, Integer quantity, List<Product> product, String member) {
+	public ShoppingCartItem(Integer shoppingCartItemId, Integer quantity, Product product, String member) {
 		super();
 		this.shoppingCartItemId = shoppingCartItemId;
 		this.quantity = quantity;
@@ -56,11 +57,11 @@ public class ShoppingCartItem {
 		this.quantity = quantity;
 	}
 
-	public List<Product> getProduct() {
+	public Product getProduct() {
 		return product;
 	}
 
-	public void setProduct(List<Product> product) {
+	public void setProduct(Product product) {
 		this.product = product;
 	}
 
@@ -70,10 +71,7 @@ public class ShoppingCartItem {
 
 	public void setMember(String member) {
 		this.member = member;
-	}
-	
-	
-    
+	}  
     
 }
 

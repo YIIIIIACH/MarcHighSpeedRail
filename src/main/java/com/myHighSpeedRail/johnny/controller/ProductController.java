@@ -4,24 +4,26 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.spring6.util.SpringRequestUtils;
 
-import com.myHighSpeedRail.johnny.dto.ProductAndProductPhotoDto;
+import com.myHighSpeedRail.johnny.dto.ProductAndPhotoDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhoto;
+import com.myHighSpeedRail.johnny.service.ProductPhotoService;
 import com.myHighSpeedRail.johnny.service.ProductService;
-
-
 
 @Controller
 public class ProductController {
@@ -29,25 +31,29 @@ public class ProductController {
 	@Autowired
 	private ProductService pService;
 	
-	
-	@PostMapping("/product/add") //新增商品
+	@PostMapping("/product/add")
 	@ResponseBody
-	public ResponseEntity<String> addProduct(@RequestBody ProductAndProductPhotoDto productDto) {	
-//		Product p = new Product();
-//		BeanUtils.copyProperties(productDto, p);
+	public ResponseEntity<String> addProduct(@RequestBody ProductAndPhotoDto pappDto) {	
 		try{
-			Product aa = pService.addProduct(productDto);
-			return ResponseEntity.ok("商品成功新增，商品ID : " + aa.getProductId() + "商品名稱 : " + aa.getProductName());
+			Product p = new Product();
+			BeanUtils.copyProperties(pappDto, p);
+			Product pp = pService.addProduct(pappDto);
+			return ResponseEntity.ok("商品新增成功，商品ID: " + pp.getProductId() + ", 商品名稱 : " + p.getProductName());
 		
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("新增商品失敗: " + e.getMessage());
 		}
 	}
 	
-	@GetMapping("/product")  //首頁顯示商品
+	@GetMapping("/product")  
 	@ResponseBody
-	public List<Product> findAllProduct(){		
-		return pService.findAllProduct();
+	public Page<Product> showProducts (@RequestParam(name = "page", defaultValue = "1") Integer pageNumber, Model m){
+			Page<Product> page = pService.findbyPage(pageNumber);
+		
+			m.addAttribute("page", page);	
+			m.addAttribute("totalPages", page.getTotalPages());
+			
+			return page;	
 	}
 	
 	@DeleteMapping("/product/delete")  //透過id下架商品
@@ -57,7 +63,7 @@ public class ProductController {
 		return new ResponseEntity<String>("商品移除成功",HttpStatus.OK);
 	}
 	
-//	@PutMapping("/product/update")  //更新商品
+//	@PutMapping("/product/update")  
 //	@ResponseBody
 //	public ResponseEntity<String> updateProductById(
 //			@RequestParam Integer id, 
@@ -74,9 +80,11 @@ public class ProductController {
 //		return new ResponseEntity<String>("商品更新成功，商品ID : " + updatedProduct.getProductId() ,HttpStatus.OK);
 //	}
 	
-	public ResponseEntity<String>updateProductById(@RequestBody Product product){
-		
-		return null;
+	@PutMapping("/product/update") // 僅更新商品基本資訊
+	@ResponseBody
+	public ResponseEntity<String> updateProductById(@RequestBody Product p){
+		Product updatedProduct = pService.UpdateProduct(p);
+		return new ResponseEntity<String>("商品更新成功，商品ID: " + updatedProduct.getProductId() ,HttpStatus.OK);
 	}
 	
 	@GetMapping("/product/findByNameLike")  //關鍵字搜尋
