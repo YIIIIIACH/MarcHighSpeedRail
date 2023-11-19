@@ -37,8 +37,10 @@ public class ProductPhotoSegmentController {
 		List<ProductPhotoSegment> ppsList= ppsServ.getAllSegmentByPhotoId(pid);
 		res.photoId = ppsList.get(0).getProductPhoto().getProductPhotoId();
 		StringBuilder sb = new StringBuilder();
+		ppsList.sort((a,b)-> a.getSequence()-b.getSequence());
+		
 		for( ProductPhotoSegment ps: ppsList) {
-			System.out.print(ps.getSequence()+" ");
+//			System.out.print(ps.getSequence()+" ");
 			sb.append(new String(ps.getPhotoSegment(),StandardCharsets.UTF_8) ); 
 		}
 		res.photoData=sb.toString();
