@@ -149,6 +149,7 @@ public class ScheduleController {
 		pxt.setDate( Integer.valueOf( pxtStr[2]));
 		pxt.setHours(Integer.valueOf( pxtStr[3]));
 		pxt.setMinutes(Integer.valueOf(pxtStr[4]));
+		System.out.println(pxt);
 		// step1 List<Schedule> schList = select schArr.schedule scheduleArrive as schArr where schArr.station.stationId=:onStationId and  schArr.arriveTime between :priximateTime-offset and :proximateTime+offset;
 		List<Schedule> schInTimeRangeList = schArrServ.getScheduleByArriveStationTimeRangeFilterPastFilterDiscountAdvancePurchaseLimit(onStationId, pxt , Long.valueOf(120),discountType);// default set range to two hours
 		// step2 select schSeg.schedule  from ScheduleSegment  schSeg where schSeg.schedule in :schList and schSeg.endStation.stationId=offStationId
