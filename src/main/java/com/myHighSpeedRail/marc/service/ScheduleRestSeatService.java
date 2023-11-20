@@ -59,7 +59,7 @@ public class ScheduleRestSeatService {
 	 * update schedule_rest_seat set rest_seat_amount =rest_seat_amount  where schedule_id_fk=<SCHID> and discount_id_fk=<DISCOUNTID> and rail_route_segment_id_fk in (
 			findByRouteIdStartStEndStRange( rrid, findByRouteIdStationSeqMinRange(rrid, rrs1.getxxSeq()) , findByRouteIdStationSeqMinRange(rrid, rrs1.getxxSeq()))
 		)
-	 * 
+	 * orderSeatList;
 	 */
 	public Integer updateScheduleRestSeat(Integer schid, Integer discountid, Integer rrid, Integer ststid, Integer endstid,Integer ticketCnt) {
 		List<RailRouteStopStation> tmp1 = rrssServ.findByRouteIdStationId(rrid, endstid);

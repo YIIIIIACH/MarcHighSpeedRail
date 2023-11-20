@@ -12,15 +12,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.marc.dto.BookingBuinessSeatDto;
+import com.myHighSpeedRail.marc.dto.BookingBuinessSeatResponseDto;
 import com.myHighSpeedRail.marc.dto.ScheduleResultDto;
 import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
+import com.myHighSpeedRail.marc.model.RailRouteStopStation;
 import com.myHighSpeedRail.marc.model.Schedule;
+import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.Station;
+import com.myHighSpeedRail.marc.model.TicketDiscount;
+import com.myHighSpeedRail.marc.model.ScheduleDetail;
 import com.myHighSpeedRail.marc.service.RailRouteSegmentService;
+import com.myHighSpeedRail.marc.service.RailRouteStopStationService;
 import com.myHighSpeedRail.marc.service.ScheduleArriveService;
 import com.myHighSpeedRail.marc.service.ScheduleDetailService;
 import com.myHighSpeedRail.marc.service.ScheduleRestSeatService;
@@ -45,6 +53,8 @@ public class ScheduleController {
 	private TicketDiscountService tdServ;
 	@Autowired
 	private RailRouteSegmentService rrsServ;
+	@Autowired
+	private RailRouteStopStationService rrssServ;
 	@Autowired
 	private ScheduleArriveService schArrServ;
 	@Autowired
@@ -180,6 +190,34 @@ public class ScheduleController {
 		
 	}
 	
+	@GetMapping("/requestBusinessBook")
+	public @ResponseBody BookingBuinessSeatResponseDto requestBusinessBook(@RequestBody BookingBuinessSeatDto bbsDto){
+//		bbsDto.scheduleId
+		Schedule sch = schServ.findById(bbsDto.scheduleId);
+		RailRouteStopStation rrss1 = rrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), bbsDto.startStation.getStationId()).get(0);
+		RailRouteStopStation rrss2 = rrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), bbsDto.endStation.getStationId()).get(0);
+		
+		Integer stStSeq = rrss1.getRailRouteStopStationSequence();
+		Integer edStSeq = rrss2.getRailRouteStopStationSequence();
+		Long mask = 0L;
+		mask |= (1L << edStSeq)-1;
+		mask >>= stStSeq;
+		mask <<= stStSeq;
+		List<ScheduleDetail> schdList = schdServ.getScheduleDiscountRange(sch.getScheduleId(), bbsDto.ticketDiscountName);
+		ScheduleDetail schd = schdServ.getScheduleDiscountRange(sch.getScheduleId(), bbsDto.ticketDiscountName).get(0); 
+		List<ScheduleSeatStatus> schssList =schssServ.findByScheduleSeatRange(sch, schd.getSeatRangeStart(), schd.getSeatRangeEnd()	);
+		BookingBuinessSeatResponseDto res = new BookingBuinessSeatResponseDto();
+		res.scheduleSeatStatusList= schssList;
+		res.bookedSeatIdList = new ArrayList<Integer>();
+		for( ScheduleSeatStatus schss : schssList) {
+			if((schss.getScheduleStatus() & mask) >0) {
+				res.bookedSeatIdList.add(schss.getSchedule().getScheduleId());
+			}
+		}
+		res.startStation= rrss1.getStopStation();
+		res.endStation = rrss2.getStopStation();
+		return res;
+	}
 	
 }
 

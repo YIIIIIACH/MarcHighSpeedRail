@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.dto.BookingDto;
+import com.myHighSpeedRail.marc.dto.MakeOrderBuinessSeatDto;
 import com.myHighSpeedRail.marc.model.Booking;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
@@ -123,18 +124,12 @@ public class TicketOrderController {
 		Integer stseq = stopst1.getRailRouteStopStationSequence();
 		Integer edseq = stopst2.getRailRouteStopStationSequence();
 		List<Booking> newBookingList = new ArrayList<Booking>();
-//		for( Booking b: bList) {
-//			b.setSeat(??);
-//			b.setStatus("已分配座位");
-//			newBookingList.add(b );
-//		}
-//		tckOrder.get
 		Long mask = 0L;
 		mask |= (1L << edseq)-1;
 		mask >>= stseq;
 		mask <<= stseq;
 		List<ScheduleSeatStatus> schssList =schssServ.getAvaibleSeat(bList.get(0).getSchedule().getScheduleId(), mask, bList.size());
-		schssList.get(0).getSeat().getSeatId();
+		//schssList.get(0).getSeat().getSeatId();
 		for( int i=0; i<schssList.size(); i++) {
 			Booking tmp = bList.get(i);
 			tmp.setSeat(schssList.get(i).getSeat());
@@ -147,5 +142,72 @@ public class TicketOrderController {
 		tmp.setStatus("已付款");
 		tkoServ.save(tmp );
 		return new ResponseEntity<String>( "inserted  data", HttpStatus.OK);
+	}
+	@PostMapping(value="/bookBuinessSeat")
+	public @ResponseBody ResponseEntity<String> bookBuinessSeat(@RequestBody MakeOrderBuinessSeatDto boDto){
+		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
+//		Cookie []cookies = req.getCookies();
+		String token=null;
+//		for( Cookie ck: cookies) {
+//			if( ck.getName().equals("login-token")) {
+//				token = ck.getValue();
+//			}
+//		}
+//		if(token==null) {
+//			// redirect to MemberSystem
+//			;
+//		}else {
+//			//validate the current login token 
+//			;
+//		}
+		// temporary treatment
+		token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+		
+		RailRouteStopStation rrss1 = schrrssServ.findByRouteIdStationId(boDto.schedule.getRailRoute().getRailRouteId(), boDto.startStation.getStationId()).get(0);
+		RailRouteStopStation rrss2 = schrrssServ.findByRouteIdStationId(boDto.schedule.getRailRoute().getRailRouteId(), boDto.endStation.getStationId()).get(0);
+		// get segment mask
+		Long mask = 0L;
+		mask |= (1L << rrss2.getRailRouteStopStationSequence())-1;
+		mask >>= rrss1.getRailRouteStopStationSequence();
+		mask <<= rrss1.getRailRouteStopStationSequence();
+		//get selected scheduleSeatStatus;
+		List<Seat> tmp = new ArrayList<Seat>();
+		for( ScheduleSeatStatus schss: boDto.orderSeatList) {
+			tmp.add(schss.getSeat());
+		}
+		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(boDto.schedule, tmp);
+		// check seat Available
+		for( ScheduleSeatStatus schss: selectSchSeatList) {
+			if( (schss.getScheduleStatus() & mask) > 0) {
+				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
+			}
+		}
+		
+		// update scheduleSeatStatus
+//		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
+		schssServ.registBookedBuinessSeat(boDto.schedule.getScheduleId(), mask, selectSchSeatList);
+		// update scheduleRestSeat [Ignore now ]
+		
+		// create order
+		Integer paymentEarlyDay = tkdServ.findById(boDto.ticketDiscountId).getPurchaseEarlyLimitDay();
+		Date deadline = schArrServ.findByScheduleIdStationId(boDto.schedule.getScheduleId(), boDto.startStation.getStationId()).getArriveTime();
+		deadline = Date.from( deadline.toInstant().minusSeconds(paymentEarlyDay* 24*60*60));
+		Schedule sch =schServ.findById(boDto.schedule.getScheduleId());
+		RailRouteSegment rrs =rrsServ.findByStopStationId(sch.getRailRoute().getRailRouteId()
+				, boDto.startStation.getStationId(), boDto.endStation.getStationId()).get();
+		Integer originPrice =rrs.getRailRouteSegmentTicketPrice();
+		// member_token ticket_order_create_time status payment_dealine total_price
+		Integer total= 0;
+		TicketDiscount td = tkdServ.findById( boDto.ticketDiscountId) ;
+		for( int i=0 ; i< boDto.orderSeatList.size(); i++) {
+			total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();			
+		}
+		TicketOrder tcko = tkoServ.save(new TicketOrder( token,new Date(),"已付款",deadline, total));
+		// create Booking
+		for( int i=0 ; i< boDto.orderSeatList.size(); i++) {
+			bServ.save(new Booking(token, tcko, sch, rrs,boDto.orderSeatList.get(i).getSeat(),td, "已分配座位"
+					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
+					(String)null));
+		}		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
 	}
 }

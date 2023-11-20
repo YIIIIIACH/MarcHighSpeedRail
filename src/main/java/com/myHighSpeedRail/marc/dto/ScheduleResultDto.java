@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myHighSpeedRail.marc.model.Station;
-import com.myHighSpeedRail.marc.model.TicketDiscount;
 
 public class ScheduleResultDto {
 	/*

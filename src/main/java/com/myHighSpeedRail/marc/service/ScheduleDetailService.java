@@ -36,4 +36,7 @@ public class ScheduleDetailService {
 	public Boolean conainDiscountType(Integer schid, String discType) {
 		return (schdDao.getScheduleDetailCountByScheduelId(schid,discType)>0)? true: false;
 	}
+	public List<ScheduleDetail> getScheduleDiscountRange(Integer schid, String discType){
+		return schdDao.getScheduleDiscountRange(schid, discType);
+	}
 }

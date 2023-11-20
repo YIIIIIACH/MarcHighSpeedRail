@@ -46,4 +46,16 @@ public class ScheduleSeatStatusService {
 		}
 		return;
 	}
+	public void registBookedBuinessSeat(Integer schid, Long mask, List<ScheduleSeatStatus> seatList) {
+		for( ScheduleSeatStatus schss: seatList) {
+			schSeatDao.updateSeatBySchidSeatId(schid, mask, schss.getSeat().getSeatId());
+		}
+		return;
+	}
+	public List<ScheduleSeatStatus> findByScheduleSeatRange(Schedule sch, Integer seatRangeStart, Integer seatRangeEnd){
+		return schSeatDao.findByScheduleSeatRange(sch, seatRangeStart, seatRangeEnd);
+	}
+	public List<ScheduleSeatStatus> findBySeatSchedule(Schedule sch, List<Seat> seatlist){
+		return schSeatDao.findBySeatSchedule(sch, seatlist);
+	}
 }
