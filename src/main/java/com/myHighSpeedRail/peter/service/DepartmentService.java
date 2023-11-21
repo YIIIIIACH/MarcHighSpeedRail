@@ -2,6 +2,7 @@ package com.myHighSpeedRail.peter.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.peter.model.Department;
@@ -12,8 +13,10 @@ import com.myHighSpeedRail.peter.repoistory.EmployeeHistoricalDepartmentReposito
 @Service
 public class DepartmentService {
 
+	@Autowired
 	public DepartmentRepository dDao;
-
+	
+	@Autowired
 	public EmployeeHistoricalDepartmentRepository ehdDao;
 
 	public SystemAuthor getDepartmentSystemAuthor(Integer id) {

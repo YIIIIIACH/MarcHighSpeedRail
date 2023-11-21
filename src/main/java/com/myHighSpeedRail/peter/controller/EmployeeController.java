@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
 import com.myHighSpeedRail.peter.handler.SystemAuthorHandler;
+import com.myHighSpeedRail.peter.model.Department;
 import com.myHighSpeedRail.peter.model.Employee;
 import com.myHighSpeedRail.peter.model.EmployeeHistoricalDepartment;
 import com.myHighSpeedRail.peter.model.SystemAuthor;
@@ -101,6 +102,13 @@ public class EmployeeController {
 	@PostMapping("/employee/department/add")
 	public void addEmpDepartment(@RequestBody EmployeeHistoricalDepartment ehd) {
 		eService.EmployeeAddDepartment(ehd);
+	}
+
+	@ResponseBody
+	@GetMapping("/employee/department/{id}")
+	public Department getEmpLatestDepartment(@PathVariable("id") Integer empId) {
+		Department dept = eService.findLatestDepartment(empId);
+		return dept;
 	}
 
 }

@@ -12,6 +12,6 @@ import com.myHighSpeedRail.peter.model.EmployeeHistoricalDepartment;
 @Repository
 public interface EmployeeHistoricalDepartmentRepository extends JpaRepository<EmployeeHistoricalDepartment, Integer> {
 
-	@Query(value = "select top(1) * from [MarcHighSpeedRailDB].[dbo].[employee_historical_department] order by [department_effective_date] desc where [employee_id_fk] = :id", nativeQuery = true)
+	@Query(value = "select top(1) * from [MarcHighSpeedRailDB].[dbo].[employee_historical_department] where [employee_id_fk] = :id order by [department_effective_date] desc", nativeQuery = true)
 	EmployeeHistoricalDepartment findEmployeeLatestDepartmentById(@Param("id") Integer employeeId);
 }

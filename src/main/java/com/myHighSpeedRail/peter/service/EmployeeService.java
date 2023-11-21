@@ -66,10 +66,8 @@ public class EmployeeService {
 
 	// 未完成
 	public Department findLatestDepartment(Integer empId) {
-
 		EmployeeHistoricalDepartment ehd = ehdDao.findEmployeeLatestDepartmentById(empId);
-//		ehd.
-		return null;
+		return ehd.getDepartment();
 	}
 
 	public void EmployeeAddDepartment(EmployeeHistoricalDepartment ehd) {

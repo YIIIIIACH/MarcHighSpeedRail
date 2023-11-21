@@ -45,7 +45,44 @@ public class EmployeeHistoricalDepartment {
 
 	public EmployeeHistoricalDepartment() {
 	}
-	
-	
+
+	public Integer getEmployeeHistoricalDepartmentId() {
+		return employeeHistoricalDepartmentId;
+	}
+
+	public void setEmployeeHistoricalDepartmentId(Integer employeeHistoricalDepartmentId) {
+		this.employeeHistoricalDepartmentId = employeeHistoricalDepartmentId;
+	}
+
+	public Date getDepartmentEffectiveDate() {
+		return departmentEffectiveDate;
+	}
+
+	public void setDepartmentEffectiveDate(Date departmentEffectiveDate) {
+		this.departmentEffectiveDate = departmentEffectiveDate;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	@Override
+	public String toString() {
+		return "EmployeeHistoricalDepartment [employeeHistoricalDepartmentId=" + employeeHistoricalDepartmentId
+				+ ", departmentEffectiveDate=" + departmentEffectiveDate + ", employee=" + employee + ", department="
+				+ department + "]";
+	}
 
 }
