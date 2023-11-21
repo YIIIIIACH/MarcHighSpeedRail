@@ -38,17 +38,4 @@ public class ScheduleRestSeatController {
 		return schRestSeatServ.segmentDiscountRestSeatInSchedule( slist, ststId, edstId, tdType);
 	}
 	
-	//Integer updateScheduleRestSeat(Integer schid, Integer discountid, Integer rrid, Integer ststid, Integer endstid) {
-	@PostMapping("/testUpdateScheduleRestSeat")
-	public @ResponseBody ResponseEntity<String> updateScheduleRestSeat(@RequestParam(value="schid")Integer schid
-			,@RequestParam(value="disid") Integer discountid,@RequestParam(value="rrid") Integer rrid
-			,@RequestParam(value="ststid") Integer ststid,@RequestParam(value="endstid") Integer endstid
-			,@RequestParam(value="tikcnt")Integer tickCnt){
-		Integer effectRow=0;
-		effectRow = schRestSeatServ.updateScheduleRestSeat(schid, discountid, rrid, ststid, endstid,tickCnt);
-		if(effectRow>0) {
-			return new ResponseEntity<String>("update success",HttpStatus.OK);
-		}
-		return new ResponseEntity<String>("not update or failed",HttpStatus.BAD_REQUEST);
-	}
 }
