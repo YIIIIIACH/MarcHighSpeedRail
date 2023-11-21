@@ -20,24 +20,23 @@ public class EmergencyContactPerson {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="emergency_contact_person_id")
+	@Column(name = "emergency_contact_person_id")
 	private Integer emergencyContactPersonId;
-	
-	@Column(name="emergency_contact_person_name")
+
+	@Column(name = "emergency_contact_person_name")
 	private String emergencyContactPersonName;
-	
-	@Column(name="emergency_contact_person_relationship")
+
+	@Column(name = "emergency_contact_person_relationship")
 	private String emergencyContactPersonRelationship;
-	
-	@Column(name="emergency_contact_person_phone_number")
+
+	@Column(name = "emergency_contact_person_phone_number")
 	private String emergencyContactPersonPhoneNumber;
-	
-	@JsonBackReference
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="employee_id_fk")
+
+	@JsonBackReference(value = "empEcp")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
-	
-	
+
 	public EmergencyContactPerson() {
 	}
 

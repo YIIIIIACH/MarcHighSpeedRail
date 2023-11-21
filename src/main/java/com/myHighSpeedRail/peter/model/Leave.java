@@ -3,6 +3,8 @@ package com.myHighSpeedRail.peter.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,23 +16,24 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="leave")
+@Table(name = "leave")
 public class Leave {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="leave_id")
+	@Column(name = "leave_id")
 	private Integer leaveId;
-	
-	@Column(name="leave_name")
+
+	@Column(name = "leave_name")
 	private String leaveName;
-	
-	@Column(name="available_leave_days_description")
+
+	@Column(name = "available_leave_days_description")
 	private String availableLeaveDaysDescription;
-	
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "leave",cascade = CascadeType.ALL)
+
+	@JsonManagedReference(value = "leaEl")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leave", cascade = CascadeType.ALL)
 	private List<EmployeeLeave> employeeLeave = new LinkedList<EmployeeLeave>();
-	
+
 	public Leave() {
 	}
 

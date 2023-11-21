@@ -13,24 +13,24 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="employee_title")
+@Table(name = "employee_title")
 public class EmployeeTitle {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="employee_title_id")
+	@Column(name = "employee_title_id")
 	private Integer employee_title_id;
-	
-	@JsonBackReference
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="employee_id_fk")
+
+	@JsonBackReference(value = "empEt")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
-	
-	@JsonBackReference
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="title_id_fk")
+
+	@JsonBackReference(value = "titEt")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "title_id_fk")
 	private Title title;
-	
+
 	public EmployeeTitle() {
 	}
 

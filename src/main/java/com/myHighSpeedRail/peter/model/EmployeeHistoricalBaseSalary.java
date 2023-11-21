@@ -32,7 +32,7 @@ public class EmployeeHistoricalBaseSalary {
 	@Column(name="salary_effective_date")
 	private Date salaryEffectiveDate;
 	
-	@JsonBackReference
+	@JsonBackReference(value = "empEhbs")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="employee_id_fk")
 	private Employee employee;

@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.peter.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,19 +23,61 @@ public class SystemAuthor {
 	private Integer systemAuthorId;
 	
 	@Column(name="author_json")
-	private String authorSson;
+	private String authorJson;
 	
-	@JsonBackReference
-	@ManyToOne
+
+	@JsonBackReference(value="empSa")
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="employee_id_fk")
 	private Employee employee;
 	
-	@JsonBackReference
+	
+	@JsonBackReference(value="depSa")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="department_id_fk")
 	private Department department;
 	
 	public SystemAuthor() {
 	}
+
+	public Integer getSystemAuthorId() {
+		return systemAuthorId;
+	}
+
+	public void setSystemAuthorId(Integer systemAuthorId) {
+		this.systemAuthorId = systemAuthorId;
+	}
+
+	public String getAuthorJson() {
+		return authorJson;
+	}
+
+	public void setAuthorJson(String authorSson) {
+		this.authorJson = authorSson;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	@Override
+	public String toString() {
+		return "SystemAuthor [systemAuthorId=" + systemAuthorId + ", authorJson=" + authorJson + "]";
+	}
+
+	
+	
 
 }

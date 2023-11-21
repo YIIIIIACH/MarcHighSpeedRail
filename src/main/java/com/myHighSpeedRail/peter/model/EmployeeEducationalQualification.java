@@ -38,7 +38,7 @@ public class EmployeeEducationalQualification {
 	@Column(name="academic_status")
 	private String academicStatus;
 	
-	@JsonBackReference
+	@JsonBackReference(value = "empEeq")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="employee_id_fk")
 	private Employee employee;

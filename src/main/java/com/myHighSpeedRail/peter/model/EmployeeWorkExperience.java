@@ -3,6 +3,7 @@ package com.myHighSpeedRail.peter.model;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +39,7 @@ public class EmployeeWorkExperience {
 	@Column(name="salary_kind")
 	private String salaryKind;
 	
-	@JsonBackReference
+	@JsonBackReference(value = "empEwe")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="employee_id_fk")
 	private Employee employee;
