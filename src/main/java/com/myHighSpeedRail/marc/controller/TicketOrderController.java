@@ -1,6 +1,5 @@
 package com.myHighSpeedRail.marc.controller;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -187,6 +186,7 @@ public class TicketOrderController {
 //		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
 		schssServ.registBookedBuinessSeat(boDto.schedule.getScheduleId(), mask, selectSchSeatList);
 		// update scheduleRestSeat [Ignore now ]
+		schrsServ.updateScheduleRestSeat( boDto.schedule.getScheduleId(), boDto.ticketDiscountId , boDto.schedule.getRailRoute().getRailRouteId() , boDto.startStation.getStationId() , boDto.endStation.getStationId() , boDto.orderSeatList.size() );
 		
 		// create order
 		Integer paymentEarlyDay = tkdServ.findById(boDto.ticketDiscountId).getPurchaseEarlyLimitDay();

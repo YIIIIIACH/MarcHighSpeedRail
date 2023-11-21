@@ -45,4 +45,11 @@ public interface ScheduleRestSeatRepository extends JpaRepository<ScheduleRestSe
 	@Modifying
 	@Query("update ScheduleRestSeat schrs set schrs.restSeatAmount=schrs.restSeatAmount-:modifyvalue where schrs.schedule.scheduleId=:schid and schrs.ticketDiscount.ticketDiscountId=:disid and schrs.railRouteSegment.railRouteSegmentId  in (:rrsidlist)")
 	public Integer updateScheduleRestSeat(Integer modifyvalue,Integer schid,Integer disid,List<Integer> rrsidlist);
+	
+	//test query
+	@Query("from ScheduleRestSeat where schedule.scheduleId=:schid and ticketDiscount.ticketDiscountId=:disid and railRouteSegment.railRouteSegmentId  in (:rrsidlist)")
+	public List<ScheduleRestSeat> findBySchDisEffectedSeg(Integer schid,Integer disid,List<Integer> rrsidlist);
+	
+	@Query("from ScheduleRestSeat where schedule.scheduleId=:schid and ticketDiscount.ticketDiscountId=:discountid and railRouteSegment.railRouteSegmentId=:segid")
+	public List<ScheduleRestSeat> findBySchDiscSeg( Integer schid, Integer discountid, Integer segid);
 }
