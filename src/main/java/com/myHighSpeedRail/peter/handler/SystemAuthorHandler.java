@@ -25,10 +25,10 @@ public class SystemAuthorHandler {
 	@Autowired
 	private SystemsService sService;
 
-	private JSONArray getSystemById(String authorJSON, Integer sysid) {
+	private JSONArray getSystemById(String authorJSON, Integer sysId) {
 
 		JSONObject j;
-		String sysidString = String.valueOf(sysid);
+		String sysIdString = String.valueOf(sysId);
 		try {
 
 //			String tmp = "{\"Data\":{\"Name\":\"MichaelChan\",\"Email\":\"XXXX@XXX.com\",\"Phone\":[1234567,0911123456]}}";
@@ -39,7 +39,7 @@ public class SystemAuthorHandler {
 
 //			Object jsonOb = j.getJSONObject("Data").getJSONArray("Phone");
 //			Object jsonOb = j.getJSONObject("authorJson").getJSONArray(sysidString);
-			JSONArray jsonArray = j.getJSONObject("authorJson").getJSONArray(sysidString);
+			JSONArray jsonArray = j.getJSONObject("authorJson").getJSONArray(sysIdString);
 
 //			System.out.println("AAAAAAAA" + jsonArray);
 
@@ -54,15 +54,27 @@ public class SystemAuthorHandler {
 		return null;
 	}
 
-	public Boolean rightsOfView(Employee emp, String sysName) {
+	// 判斷能否做View
+	public Boolean rightsOfView(Integer empId, String sysName) {
+
+		Employee emp = eService.findEmployeeById(empId);
+
+		if (emp == null) {
+			System.out.println("沒有此員工ID");// 這個要不要做?
+			return false;
+		}
+
 		Systems system = sService.findSystemByName(sysName);
 		SystemAuthor empSystemAuthor = eService.getEmployeeSystemAuthor(emp.getEmployeeId());
 		System.out.println("PPPPPPP" + empSystemAuthor);
-		if (!(empSystemAuthor == null)) {// eService如果沒有找到匹配的權限，回傳NULL，這邊接到要做處理
+
+		// eService如果沒有找到匹配的權限，回傳NULL，這邊接到要做處理
+		if (!(empSystemAuthor == null)) {
 			String empauthorJson = empSystemAuthor.getAuthorJson();
-			System.out.println("AAAAAA" + empauthorJson);
+			System.out.println("empauthorJson: " + empauthorJson);
 			System.out.println(empauthorJson);
 			JSONArray author = getSystemById(empSystemAuthor.getAuthorJson(), system.getSystemId());
+
 			try {
 				if (author.get(0).equals(1)) {
 					return true;
@@ -70,6 +82,7 @@ public class SystemAuthorHandler {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+
 			return false;
 
 		} else {
@@ -79,21 +92,25 @@ public class SystemAuthorHandler {
 		}
 	}
 
+	// 判斷能否做Create
 	public Boolean rightsOfCreate() {
 		System.out.println("AAAAAAAAAAAAAAAAtest");
 		return false;
 	}
 
+	// 判斷能否做Research
 	public Boolean rightsOfResearch() {
 		System.out.println("AAAAAAAAAAAAAAAAtest");
 		return false;
 	}
 
+	// 判斷能否做Update
 	public Boolean rightsOfUpdate() {
 		System.out.println("AAAAAAAAAAAAAAAAtest");
 		return false;
 	}
 
+	// 判斷能否做Delete
 	public Boolean rightsOfDelete() {
 		System.out.println("AAAAAAAAAAAAAAAAtest");
 		return false;

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
 import com.myHighSpeedRail.peter.handler.SystemAuthorHandler;
 import com.myHighSpeedRail.peter.model.Employee;
+import com.myHighSpeedRail.peter.model.EmployeeHistoricalDepartment;
 import com.myHighSpeedRail.peter.model.SystemAuthor;
 import com.myHighSpeedRail.peter.service.DepartmentService;
 import com.myHighSpeedRail.peter.service.EmployeeService;
@@ -78,9 +79,13 @@ public class EmployeeController {
 	@ResponseBody
 	@GetMapping("/employee/system-author/{id}")
 	public Boolean testEmpSystemAuthor(@PathVariable("id") Integer id) throws JSONException {
-		Employee emp = eService.findEmployeeById(id);
-		if (emp != null) {
-			Boolean access = sahService.rightsOfView(emp, "測試系統一");
+//		Employee emp = eService.findEmployeeById(id);
+//		if (emp != null) {
+//			Boolean access = sahService.rightsOfView(emp, "測試系統一");
+//			return access;
+//		}
+		if (id != null) {
+			Boolean access = sahService.rightsOfView(id, "測試系統一");
 			return access;
 		}
 //		SystemAuthorHandler.test();
@@ -91,5 +96,11 @@ public class EmployeeController {
 //		SystemAuthor authorList = eService.getEmployeeSystemAuthor(id);
 //		return authorList;
 //	}
+
+	@ResponseBody
+	@PostMapping("/employee/department/add")
+	public void addEmpDepartment(@RequestBody EmployeeHistoricalDepartment ehd) {
+		eService.EmployeeAddDepartment(ehd);
+	}
 
 }
