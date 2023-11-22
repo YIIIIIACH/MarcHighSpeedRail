@@ -21,4 +21,7 @@ public class BookingService {
 	public List<Booking> saveAll(List<Booking> bList) {
 		return bDao.saveAll(bList);
 	}
+	public List<Booking> findByMember(String memuuid){
+		return bDao.findByMember(memuuid);
+	}
 }

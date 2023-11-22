@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.dto.BookingBuinessSeatDto;
 import com.myHighSpeedRail.marc.dto.BookingBuinessSeatResponseDto;
+import com.myHighSpeedRail.marc.dto.ImplSingleScheduleTemplateDto;
 import com.myHighSpeedRail.marc.dto.ScheduleResultDto;
 import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
@@ -59,6 +60,30 @@ public class ScheduleController {
 	private ScheduleArriveService schArrServ;
 	@Autowired
 	private StationService sServ;
+	
+	//new version of schedule template impplementation , which are specific the discount seat type range;
+	@SuppressWarnings("deprecation")
+	@PostMapping("/impSingleScheduleTemplate")
+	public ResponseEntity<String> impSingleScheduleTemplate(@RequestBody ImplSingleScheduleTemplateDto dto){
+		try {
+			System.out.println( dto.implDate);
+			String[] ymd = dto.implDate.split("-");
+			/// the Month of java.util.Date is from 0 to 11 , so must Minus one!!!!!!!!1
+			Date tarDate = new Date((Integer.valueOf(ymd[0])%100)+100,Integer.valueOf(ymd[1])-1,Integer.valueOf(ymd[2]));
+			System.out.print(tarDate);
+			Schedule sch = schServ.implSingleScheduleTemplate(tarDate, dto.schtId);
+			schdServ.setupScheduleDetail( sch.getScheduleId(), dto.seatRangeList, dto.discountTypeIdList);
+			scharrServ.setupScheduleArriveBySchedule(sch.getScheduleId());
+			
+			schrsServ.setupScheduleRestSeat(sch.getScheduleId());
+			
+			schssServ.setupSchdeuleSeatStatus(sch.getScheduleId());		
+			return new ResponseEntity<String>("implement success", HttpStatus.OK);			
+		}catch(Exception e) {
+			return new ResponseEntity<String>("exception happend",HttpStatus.CONFLICT);
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
 	@PostMapping("/impScheduleTemplate")
 	public ResponseEntity<String> implementTemplate(@RequestParam(value="date") String dateStr){

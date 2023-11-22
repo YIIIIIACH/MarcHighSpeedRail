@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.marc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,18 @@ public class ScheduleDetailService {
 		Schedule sch = schServ.findById(scheduleId);
 		schdDao.save(new ScheduleDetail(sch, tickDisServ.findById(12) ,1, 400));
 		schdDao.save(new ScheduleDetail(sch, tickDisServ.findById(26) ,401, 455));
+	}
+	
+	public Integer setupScheduleDetail( Integer scheduleId, List<Integer> rangeList, List<Integer> discIdList) {
+		Schedule sch = schServ.findById(scheduleId);
+		List<ScheduleDetail> sdList= new ArrayList<ScheduleDetail>();
+		int seatIdx=1;
+		for( int i=0; i<rangeList.size(); i++) {
+			sdList.add( new ScheduleDetail( sch, tickDisServ.findById( discIdList.get(i)), seatIdx, rangeList.get(i)));
+			seatIdx= rangeList.get(i)+1;
+		}
+		sdList = schdDao.saveAll( sdList);
+		return sdList.size();
 	}
 	
 	public List<ScheduleDetail> findByScheduleId(Integer schId){

@@ -14,4 +14,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	
 	@Query("from Booking where ticketOrder.ticketOrderId=:tckodid")
 	public List<Booking> findByTicketOrderId(Integer tckodid);
+	
+	@Query("from Booking where memberToken=:memuuid")
+	public List<Booking> findByMember(String memuuid);
 }

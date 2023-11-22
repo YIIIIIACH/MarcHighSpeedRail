@@ -45,4 +45,5 @@ public class ScheduleTemplateController {
 		}
 		return ResponseEntity.ok("insert was successful");
 	}
+	
 }

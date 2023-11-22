@@ -25,7 +25,6 @@ public class ScheduleService {
 		List<ScheduleTemplate> stList = stServ.getAllScheduleTemplate();
 		List<Schedule> res= new ArrayList<Schedule>();
 		for( ScheduleTemplate st : stList) {
-			System.out.println("here");
 			
 			Date tmp = st.getDepartTime();
 			Date depTime = new Date(tarDate.getTime());
@@ -46,5 +45,21 @@ public class ScheduleService {
 	
 	public Schedule findById(Integer schId) {
 		return schDao.findById(schId).get();
+	}
+	
+	public Schedule implSingleScheduleTemplate( Date tarDate, Integer schtid) throws Exception{
+		ScheduleTemplate st = stServ.findById(schtid);
+		Date tmp = st.getDepartTime();
+		Date depTime = new Date(tarDate.getTime());
+		depTime.setHours(tmp.getHours());
+		depTime.setMinutes(tmp.getMinutes());
+		System.out.println( depTime);
+		Date tmp2 = st.getDestinateTime();
+		Date desTime= new Date(tarDate.getTime());
+		desTime.setHours(tmp2.getHours());
+		desTime.setMinutes(tmp2.getMinutes());
+		System.out.println( desTime);
+		Schedule sch = new Schedule(st.getRailRoute(), st.getTrain(),depTime,desTime,st.getCostMinute());
+		return schDao.save(sch);
 	}
 }

@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.dto.BookingDto;
+import com.myHighSpeedRail.marc.dto.DisplayMemberBookingTicketDto;
+import com.myHighSpeedRail.marc.dto.DisplayMemberTicketOrderDto;
 import com.myHighSpeedRail.marc.dto.MakeOrderBuinessSeatDto;
 import com.myHighSpeedRail.marc.model.Booking;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
@@ -209,5 +213,26 @@ public class TicketOrderController {
 					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
 					(String)null));
 		}		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
+		
 	}
+	@GetMapping("/getAllMemberTicketOrder/{memuuid}")
+	public @ResponseBody DisplayMemberTicketOrderDto getAllMemberTicketOrder(@PathVariable String memuuid) {
+		List<TicketOrder> tckorList  = tkoServ.findByMember(memuuid);
+		DisplayMemberTicketOrderDto res = new DisplayMemberTicketOrderDto();
+		res.orderCreateTimes= new ArrayList<Date>();
+		res.orderStatuses = new ArrayList<String>();
+		res.paymentDeadlines= new ArrayList<Date>();
+		res.ticketOrderIds = new ArrayList<Integer>();
+		res.totalPrices= new ArrayList<Integer>();
+		res.memberToken= memuuid;
+		for( TicketOrder tckod : tckorList) {
+			res.orderCreateTimes.add(tckod.getTicketOrderCreateTime());
+			res.orderStatuses.add(tckod.getStatus());
+			res.paymentDeadlines.add( tckod.getPaymentDeadline());
+			res.ticketOrderIds.add(tckod.getTicketOrderId());
+			res.totalPrices.add(tckod.getTotalPrice());
+		}
+		return res;
+	}
+	
 }
