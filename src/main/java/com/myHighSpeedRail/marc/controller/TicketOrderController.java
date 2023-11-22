@@ -65,6 +65,7 @@ public class TicketOrderController {
 		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
 //		Cookie []cookies = req.getCookies();
 		String token=null;
+		token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
 //		for( Cookie ck: cookies) {
 //			if( ck.getName().equals("login-token")) {
 //				token = ck.getValue();
@@ -75,10 +76,13 @@ public class TicketOrderController {
 //			;
 //		}else {
 //			//validate the current login token 
-//			;
+//		ResponseEntity<String> resEntity = restTemplate.getForEntity( 羽忻會員系統的url ,  String.class);
+		// String uuid = resEntity.getBody()
+//		if( uuid != null) {
+			// token is verify and get a member uuid
+//		}
 //		}
 		// temporary treatment
-		token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
 		
 		//create an ticket order and set order status to 未付款
 		Integer paymentEarlyDay = tkdServ.findById(bookingDto.ticketDiscountId).getPurchaseEarlyLimitDay();
