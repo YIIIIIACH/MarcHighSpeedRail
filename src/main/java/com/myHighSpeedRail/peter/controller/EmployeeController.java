@@ -44,10 +44,11 @@ public class EmployeeController {
 
 	@PostMapping("/employee/login")
 	@ResponseBody
-	public ResponseEntity<SessionLoginEmployeeDTO> postLogin(@RequestParam("empname") String loginName,
+	public ResponseEntity<SessionLoginEmployeeDTO> postLogin(@RequestParam("empAccount") String loginAccount,
 			@RequestParam("psw") String loginPwd, HttpSession httpSession) {
 
-		Employee result = eService.checklogin(loginName, loginPwd);
+		Employee result = eService.checklogin(loginAccount, loginPwd);
+		System.out.println("result: " + result);
 
 		if (result != null) {
 			SessionLoginEmployeeDTO empDTO = new SessionLoginEmployeeDTO();
@@ -110,5 +111,28 @@ public class EmployeeController {
 		Department dept = eService.findLatestDepartment(empId);
 		return dept;
 	}
+
+//	@PostMapping("/users/login")
+//	public String postLogin(
+//			@RequestParam("uname") String loginName, 
+//			@RequestParam("psw") String loginPwd,
+//			HttpSession httpSession,
+//            Model model) {
+//		
+//		Users result = uService.checklogin(loginName, loginPwd);
+//		
+//		if(result != null) {
+//			SessionLoginUserDTO userDTO = new SessionLoginUserDTO();
+//			userDTO.setId(result.getId());
+//			userDTO.setUsername(result.getUsername());
+//			
+//			httpSession.setAttribute("loginUser", userDTO);
+//		}else {
+//			model.addAttribute("loginFail", "帳號密碼錯誤");
+//		}
+//		
+//		
+//		return "users/loginPage";
+//	}
 
 }

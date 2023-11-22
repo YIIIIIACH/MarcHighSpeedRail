@@ -30,6 +30,11 @@ public class SystemAuthorHandler {
 
 	@Autowired
 	private SystemsService sService;
+	
+	private String authorJsonSave;
+	
+	//現有系統個數
+	private String SystmeNumbers;
 
 	// 解析JSON字串
 	private JSONArray getSystemById(String authorJSON, Integer sysId) {
@@ -42,11 +47,14 @@ public class SystemAuthorHandler {
 
 //			j = new JSONObject(tmp);
 			j = new JSONObject(authorJSON);
-			System.out.println("DDDDDDDDDD" + j);
+			System.out.println("JSONObject: " + j);
 
 //			Object jsonOb = j.getJSONObject("Data").getJSONArray("Phone");
 //			Object jsonOb = j.getJSONObject("authorJson").getJSONArray(sysidString);
+			JSONObject jObj = j.getJSONObject("authorJson");
+			
 			JSONArray jsonArray = j.getJSONObject("authorJson").getJSONArray(sysIdString);
+			System.out.println("jsonArray: "+jsonArray);
 
 //			return jsonOb;
 
@@ -76,7 +84,7 @@ public class SystemAuthorHandler {
 		}
 
 		SystemAuthor empSystemAuthor = eService.getEmployeeSystemAuthor(emp.getEmployeeId());
-		System.out.println("PPPPPPP" + empSystemAuthor);
+		System.out.println("empSystemAuthor: " + empSystemAuthor);
 
 		// eService如果沒有找到匹配的權限，回傳NULL，這邊接到要做處理
 		if (!(empSystemAuthor == null)) {

@@ -32,9 +32,12 @@ public class EmployeeService {
 
 	public Employee checklogin(String empAccount, String pwd) {
 		Employee emp = eDao.findByEmployeeAccount(empAccount);
+//		System.out.println("emp: " + emp);
 
 		if (emp != null) {
+			System.out.println("match: " + pwdEncoder.matches(pwd, emp.getEmployeePassword()));
 			if (pwdEncoder.matches(pwd, emp.getEmployeePassword())) {
+				System.out.println("emp: " + emp);
 				return emp;
 			}
 		}
@@ -44,6 +47,7 @@ public class EmployeeService {
 	}
 
 	public void employeeAdd(Employee e) {
+		e.setEmployeePassword(pwdEncoder.encode(e.getEmployeePassword()));
 		eDao.save(e);
 	}
 

@@ -17,3 +17,4 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	Employee findByEmployeeIdJoinSystemAuthor(@Param("id") Integer employeeId);
 	
 }
+ 
