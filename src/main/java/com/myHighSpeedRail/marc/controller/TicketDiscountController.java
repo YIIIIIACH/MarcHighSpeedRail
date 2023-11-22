@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.repository.TicketDiscountRepository;
-import com.myHighSpeedRail.marc.service.TicketDiscountSerivce;
+import com.myHighSpeedRail.marc.service.TicketDiscountService;
 
 
 @RestController
 public class TicketDiscountController {
 	@Autowired
-	private TicketDiscountSerivce tdServ;
+	private TicketDiscountService tdServ;
 	
 	@GetMapping(value="/getAllDiscount")
 	public List<TicketDiscount> getAll(){

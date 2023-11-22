@@ -2,13 +2,11 @@ package com.myHighSpeedRail.marc.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.marc.model.RailRoute;
-import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
 import com.myHighSpeedRail.marc.model.ScheduleTemplate;
 import com.myHighSpeedRail.marc.model.Station;
@@ -23,9 +21,10 @@ public class SchduleTemplateService {
 	@Autowired
 	private RailRouteService rrServ;
 	@Autowired
-	private RailRouteSegmentService rrsServ;
-	@Autowired
 	private RailRouteStopStationService rrssServ;
+	public ScheduleTemplate findById(Integer id) {
+		return stDao.findById(id).get();
+	}
 	
 	public List<ScheduleTemplate> getAllScheduleTemplate(){
 		return stDao.findAll();

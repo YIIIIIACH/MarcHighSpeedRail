@@ -10,4 +10,7 @@ public interface TicketDiscountRepository extends JpaRepository<TicketDiscount, 
 	// get all discount type
 	@Query(value="select t.ticketDiscountType from TicketDiscount as t group by t.ticketDiscountType")
 	public List<String> getAllDiscountType();
+	
+	@Query( value="from TicketDiscount as t where t.ticketDiscountType=:disType")
+	public List<TicketDiscount> findByDiscountType(String disType);
 }

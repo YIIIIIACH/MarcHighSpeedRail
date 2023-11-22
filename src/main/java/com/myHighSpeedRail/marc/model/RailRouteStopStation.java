@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.marc.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -79,6 +80,28 @@ public class RailRouteStopStation implements Serializable {
 
 	public void setStopStation(Station stopStation) {
 		this.stopStation = stopStation;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(railRoute, railRouteStopStationSequence, stopStation);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RailRouteStopStation other = (RailRouteStopStation) obj;
+//		return Objects.equals(railRoute, other.railRoute)
+//				&& Objects.equals(railRouteStopStationSequence, other.railRouteStopStationSequence)
+//				&& Objects.equals(stopStation, other.stopStation);
+		return railRoute.getRailRouteId().equals( other.railRoute.getRailRouteId())&&
+				railRouteStopStationSequence.equals(other.railRouteStopStationSequence)&&
+				stopStation.getStationId().equals( other.getStopStation().getStationId());
 	}
 	
 }

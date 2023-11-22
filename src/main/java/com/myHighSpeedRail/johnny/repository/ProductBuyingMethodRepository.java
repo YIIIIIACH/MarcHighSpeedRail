@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.myHighSpeedRail.johnny.model.ProductBuyingMethod;
 
 public interface ProductBuyingMethodRepository extends JpaRepository<ProductBuyingMethod,Integer>{
+	
+	
 }
 
 

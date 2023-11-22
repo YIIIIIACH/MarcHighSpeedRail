@@ -1,13 +1,16 @@
 package com.myHighSpeedRail.marc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
+import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.repository.RailRouteSegmentRepository;
 
@@ -18,8 +21,6 @@ public class RailRouteSegmentService {
 	
 	@Autowired
 	private RailRouteStopStationService rrsss;
-	@Autowired
-	private StationService ss;
 	@Autowired
 	private RailRouteService rrs;
 	
@@ -53,5 +54,23 @@ public class RailRouteSegmentService {
 	}
 	public List<RailRouteSegment> findByRailRouteId(Integer rrid){
 		return rrsDao.findByRailRouteId(rrid);
+	}
+	
+	public List<RailRoute> findScheduleByStartStationEndStation(Integer stStId,Integer edStId){
+		return rrsDao.findByStartStationEndStation(stStId, edStId);
+	}
+	public List<RailRouteSegment> findByRailRouteIdStartStationEndStation(Integer rrId, Integer stStId, Integer edStId){
+		return rrsDao.findByRailRouteIdStartStationEndStation(rrId, stStId, edStId);
+	}
+	public List<RailRouteSegment> findByRouteIdStartStEndStRange(Integer  rrid,List<RailRouteStopStation> endStRange,List<RailRouteStopStation> startStRange){
+		List<Integer> backStIdList = new ArrayList<Integer>();
+		List<Integer> frontStIdList = new ArrayList<Integer>();
+		for( RailRouteStopStation rrss: endStRange) {  //14
+			backStIdList.add(rrss.getStopStation().getStationId());
+		}
+		for( RailRouteStopStation rrss: startStRange) {  //20 25
+			frontStIdList.add(rrss.getStopStation().getStationId());
+		}
+		return rrsDao.findByStartEndStationExcludeRange(rrid, frontStIdList, backStIdList);
 	}
 }

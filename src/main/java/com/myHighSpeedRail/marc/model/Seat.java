@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.marc.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,6 +20,12 @@ public class Seat {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="seat_id",nullable=false)
 	private Integer seatId;
+	public Integer getSeatId() {
+		return seatId;
+	}
+	public void setSeatId(Integer seatId) {
+		this.seatId = seatId;
+	}
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="train_id_fk", nullable=false)
 	private Train train;
@@ -81,5 +89,20 @@ public class Seat {
 
 	public void setSeatDescirption(String seatDescirption) {
 		this.seatDescirption = seatDescirption;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(seatId);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Seat other = (Seat) obj;
+		return Objects.equals(seatId, other.seatId);
 	}
 }

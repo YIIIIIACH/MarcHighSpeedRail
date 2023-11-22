@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.johnny.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,6 +29,7 @@ public class ProductPhoto {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id_fk",  nullable = false)
+	@JsonIgnore
 	private Product product;
 
 	public ProductPhoto() {

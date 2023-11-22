@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.marc.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,6 +72,21 @@ public class TicketDiscount {
 	}
 	public void setPurchaseEarlyLimitDay(Integer purchaseEarlyLimitDay) {
 		this.purchaseEarlyLimitDay = purchaseEarlyLimitDay;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(ticketDiscountId);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TicketDiscount other = (TicketDiscount) obj;
+		return Objects.equals(ticketDiscountId, other.ticketDiscountId);
 	}
 	
 	

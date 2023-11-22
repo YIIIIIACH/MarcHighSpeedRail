@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.marc.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -84,5 +85,24 @@ public class ScheduleRestSeat implements Serializable{
 		this.ticketDiscount = ticketDiscount;
 		this.restSeatAmount = restSeatAmount;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(railRouteSegment, schedule, ticketDiscount);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ScheduleRestSeat other = (ScheduleRestSeat) obj;
+		return Objects.equals(railRouteSegment, other.railRouteSegment) && Objects.equals(schedule, other.schedule)
+				&& Objects.equals(ticketDiscount, other.ticketDiscount);
+	}
+	
 	
 }

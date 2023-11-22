@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.marc.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -99,4 +101,20 @@ public class RailRouteSegment {
 	public void setRailRouteSegmentDurationMinute(Integer railRouteSegmentDurationMinute) {
 		this.railRouteSegmentDurationMinute = railRouteSegmentDurationMinute;
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(railRouteSegmentId);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RailRouteSegment other = (RailRouteSegment) obj;
+		return Objects.equals(railRouteSegmentId, other.railRouteSegmentId);
+	}
+	
 }

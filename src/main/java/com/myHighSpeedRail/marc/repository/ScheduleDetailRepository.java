@@ -10,4 +10,11 @@ import com.myHighSpeedRail.marc.model.ScheduleDetail;
 public interface ScheduleDetailRepository extends JpaRepository<ScheduleDetail , Integer> {
 	@Query("from ScheduleDetail where schedule.scheduleId=:schid")
 	public List<ScheduleDetail> findByScheduleId(Integer schid);
+	@Query("select schd.ticketDiscount.ticketDiscountType from ScheduleDetail as schd where schd.schedule.scheduleId=:schId group by schd.ticketDiscount.ticketDiscountType")
+	public List<String> getScheduleAllDiscountType(Integer schId);
+	@Query("select count(schd) from ScheduleDetail as schd where schd.schedule.scheduleId=:schId and schd.ticketDiscount.ticketDiscountType=:discType")
+	public Long getScheduleDetailCountByScheduelId(Integer schId,String discType);
+	@Query("from ScheduleDetail schd where schd.ticketDiscount.ticketDiscountType=:dname"+
+	" and schd.schedule.scheduleId=:schid")
+	public List<ScheduleDetail> getScheduleDiscountRange(Integer schid , String dname);
 }

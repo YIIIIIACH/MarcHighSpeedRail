@@ -1,10 +1,15 @@
 package com.myHighSpeedRail.johnny.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,11 +36,20 @@ public class Product {
 	@Column(name = "product_inventory", nullable = false)
 	private Integer productInventory;
 	
+	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ProductPhoto> photos;
+	
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", productName=" + productName + ", productPrice=" + productPrice
+				+ ", productDescription=" + productDescription + ", productType=" + productType + ", productInventory="
+				+ productInventory + ", photos=" + photos + "]";
+	}
 
 	public Product() {
 		super();
 	}
-	
+
 	public Product(Integer productId, String productName, Integer productPrice, String productDescription,
 			String productType, Integer productInventory) {
 		super();
@@ -94,9 +108,17 @@ public class Product {
 	public void setProductInventory(Integer productInventory) {
 		this.productInventory = productInventory;
 	}
+
+	public List<ProductPhoto> getPhoto() {
+		return photos;
+	}
+
+	public void setPhoto(List<ProductPhoto> photos) {
+		this.photos = photos;
+	}
 	
 	
-	
+
 }
 
 

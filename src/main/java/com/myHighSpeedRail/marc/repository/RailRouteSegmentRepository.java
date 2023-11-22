@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
+import com.myHighSpeedRail.marc.model.RailRouteStopStation;
 
 public interface RailRouteSegmentRepository extends JpaRepository<RailRouteSegment,Integer>{
 	@Query("from RailRouteSegment rrs where rrs.endStation.stationId=:eid and rrs.startStation.stationId=:sid and rrs.railRoute.railRouteId=:rid")
@@ -14,4 +16,15 @@ public interface RailRouteSegmentRepository extends JpaRepository<RailRouteSegme
 	
 	@Query("from RailRouteSegment where railRoute.railRouteId=:rrid")
 	public List<RailRouteSegment> findByRailRouteId(Integer rrid);
+	
+	
+	// step2 select schSeg.schedule  from ScheduleSegment  schSeg where schSeg.schedule in :schList and schSeg.endStation.stationId=offStationId
+	// check on and off station
+	@Query(" select rrs.railRoute from RailRouteSegment as rrs where rrs.startStation.stationId=:stStId and rrs.endStation.stationId=:edStId")
+	public List<RailRoute> findByStartStationEndStation(Integer stStId,Integer edStId);
+	@Query("from RailRouteSegment where railRoute.railRouteId=:rrid and startStation.stationId=:ststid and endStation.stationId=:edstid")
+	public List<RailRouteSegment>findByRailRouteIdStartStationEndStation(Integer rrid, Integer ststid, Integer edstid);
+	@Query("from RailRouteSegment where railRoute.railRouteId=:rrid and startStation.stationId not in (:stStExcludeList) and endStation.stationId  not in (:endStExcludeList)")
+	public List<RailRouteSegment> findByStartEndStationExcludeRange(Integer rrid,List<Integer> stStExcludeList, List<Integer>  endStExcludeList);
+	// 20 25 , 14
 }

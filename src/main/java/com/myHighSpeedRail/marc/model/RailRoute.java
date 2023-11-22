@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -69,5 +70,20 @@ public class RailRoute{
 	}
 	public void setStopStationCount(Integer stopStationCount) {
 		this.stopStationCount = stopStationCount;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(railRouteId);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RailRoute rr = (RailRoute)obj;
+		return (rr.getRailRouteId()==this.railRouteId)&&(rr.getDepartStation()==this.departStation)&&(rr.getDestinateStation()==this.destinateStation);
 	}
 }
