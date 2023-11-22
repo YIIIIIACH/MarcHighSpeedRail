@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
+import com.myHighSpeedRail.peter.handler.EmployeeSystemAuthor;
 import com.myHighSpeedRail.peter.handler.SystemAuthorHandler;
 import com.myHighSpeedRail.peter.model.Department;
 import com.myHighSpeedRail.peter.model.Employee;
@@ -32,16 +33,19 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService eService;
-
+	
 //	@Autowired
 //	private static DepartmentService dService;
 //
-//	@Autowired
-//	private static SystemsService sService;
+	@Autowired
+	private SystemsService sService;
 
 	@Autowired
 	private SystemAuthorHandler sahService;
 
+	@Autowired
+	private EmployeeSystemAuthor employeeSystemAuthor;
+	
 	@PostMapping("/employee/login")
 	@ResponseBody
 	public ResponseEntity<SessionLoginEmployeeDTO> postLogin(@RequestParam("empAccount") String loginAccount,
@@ -81,13 +85,16 @@ public class EmployeeController {
 	@ResponseBody
 	@GetMapping("/employee/system-author/{id}")
 	public Boolean testEmpSystemAuthor(@PathVariable("id") Integer id) throws JSONException {
-//		Employee emp = eService.findEmployeeById(id);
+		Employee emp = eService.findEmployeeById(id);
 //		if (emp != null) {
 //			Boolean access = sahService.rightsOfView(emp, "測試系統一");
 //			return access;
 //		}
 		if (id != null) {
-			Boolean access = sahService.rightsOfView(id, "測試系統一");
+			EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(emp);
+			employeeSystemAuthor.setAuthorJson(esa.getAuthorJson());
+			
+			Boolean access = employeeSystemAuthor.rightsOfView(id, "測試系統一");
 			return access;
 		}
 //		SystemAuthorHandler.test();
@@ -112,27 +119,5 @@ public class EmployeeController {
 		return dept;
 	}
 
-//	@PostMapping("/users/login")
-//	public String postLogin(
-//			@RequestParam("uname") String loginName, 
-//			@RequestParam("psw") String loginPwd,
-//			HttpSession httpSession,
-//            Model model) {
-//		
-//		Users result = uService.checklogin(loginName, loginPwd);
-//		
-//		if(result != null) {
-//			SessionLoginUserDTO userDTO = new SessionLoginUserDTO();
-//			userDTO.setId(result.getId());
-//			userDTO.setUsername(result.getUsername());
-//			
-//			httpSession.setAttribute("loginUser", userDTO);
-//		}else {
-//			model.addAttribute("loginFail", "帳號密碼錯誤");
-//		}
-//		
-//		
-//		return "users/loginPage";
-//	}
 
 }

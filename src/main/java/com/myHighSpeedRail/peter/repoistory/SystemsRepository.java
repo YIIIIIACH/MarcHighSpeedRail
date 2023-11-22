@@ -14,4 +14,6 @@ public interface SystemsRepository extends JpaRepository<Systems, Integer> {
 
 	@Query("from Systems where systemName = :name")
 	Optional<Systems> findBysystemName(@Param("name")String name);
+	
+	long count();
 }

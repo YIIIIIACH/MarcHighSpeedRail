@@ -3,6 +3,7 @@ package com.myHighSpeedRail.peter.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.peter.model.SystemAuthor;
@@ -47,6 +48,10 @@ public class SystemsService {
 			return optional.get();
 		}
 		return null;
+	}
+
+	public Long findSystemCount() {
+		return sDao.count();
 	}
 
 }
