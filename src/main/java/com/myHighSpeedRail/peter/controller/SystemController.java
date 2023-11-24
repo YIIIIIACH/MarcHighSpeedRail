@@ -1,5 +1,8 @@
 package com.myHighSpeedRail.peter.controller;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +53,13 @@ public class SystemController {
 	public Systems findSystemById(@PathVariable("id") Integer id) {
 
 		return sService.findSystemById(id);
+	}
+	
+	@ResponseBody
+	@GetMapping("/system/all")
+	public List<Systems> testfindAllSystems() {
+
+		return sService.findAllSystems();
 	}
 	
 	

@@ -22,7 +22,7 @@ import com.myHighSpeedRail.peter.model.Department;
 import com.myHighSpeedRail.peter.model.Employee;
 import com.myHighSpeedRail.peter.model.EmployeeHistoricalDepartment;
 import com.myHighSpeedRail.peter.model.SystemAuthor;
-import com.myHighSpeedRail.peter.service.DepartmentService;
+import com.myHighSpeedRail.peter.model.Systems;
 import com.myHighSpeedRail.peter.service.EmployeeService;
 import com.myHighSpeedRail.peter.service.SystemsService;
 
@@ -33,7 +33,7 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService eService;
-	
+
 //	@Autowired
 //	private static DepartmentService dService;
 //
@@ -45,7 +45,7 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeSystemAuthor employeeSystemAuthor;
-	
+
 	@PostMapping("/employee/login")
 	@ResponseBody
 	public ResponseEntity<SessionLoginEmployeeDTO> postLogin(@RequestParam("empAccount") String loginAccount,
@@ -85,26 +85,16 @@ public class EmployeeController {
 	@ResponseBody
 	@GetMapping("/employee/system-author/{id}")
 	public Boolean testEmpSystemAuthor(@PathVariable("id") Integer id) throws JSONException {
+		
 		Employee emp = eService.findEmployeeById(id);
-//		if (emp != null) {
-//			Boolean access = sahService.rightsOfView(emp, "測試系統一");
-//			return access;
-//		}
 		if (id != null) {
 			EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(emp);
-			employeeSystemAuthor.setAuthorJson(esa.getAuthorJson());
-			
-			Boolean access = employeeSystemAuthor.rightsOfView(id, "測試系統一");
+
+			Boolean access = esa.rightsOfView(id, "測試系統一");
 			return access;
 		}
-//		SystemAuthorHandler.test();
 		return false;
 	}
-
-//	public SystemAuthor findEmpSystemAuthor(Integer id) {
-//		SystemAuthor authorList = eService.getEmployeeSystemAuthor(id);
-//		return authorList;
-//	}
 
 	@ResponseBody
 	@PostMapping("/employee/department/add")
@@ -118,6 +108,5 @@ public class EmployeeController {
 		Department dept = eService.findLatestDepartment(empId);
 		return dept;
 	}
-
 
 }
