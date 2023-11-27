@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 import com.myHighSpeedRail.johnny.service.ShoppingCartItemService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class ShoppinCartItemController {
 	
@@ -26,16 +29,24 @@ public class ShoppinCartItemController {
 	@ResponseBody
 	public ResponseEntity<String> addToCart(  // 商品加入購物車
 			@RequestParam(value = "id") Integer productId,
-			@RequestParam(value = "quntity") Integer quntity,
-			@RequestParam(value = "member") String member){
-		try {
-		cartService.addItemToCart(productId, quntity, member);
-			
+			@RequestParam(value = "quantity") Integer quantity,
+			HttpServletRequest req){
+		
+//		Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
+//		Cookie []cookies = req.getCookies();
+//		String token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+//		for(Cookie ck : cookies) {
+//			if(ck.getName().equals("login-token")) {
+//				token = ck.getValue();
+//			}
+//		}
+//		if(token==null) {
+//			// redirect to MemberSystem
+//		}
+		// 驗證會員token存在不 by member system
+		cartService.addItemToCart(productId, quantity, req);			
 		return ResponseEntity.ok("商品已成功加入購物車");
-		}catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("請先登入會員");		
-		}
+	
 	}
 	
 	@GetMapping("/ShoppinCart")
@@ -45,13 +56,12 @@ public class ShoppinCartItemController {
 	}
 	
 	@DeleteMapping("/ShoppinCart/delete")
-	@ResponseBody
 	public ResponseEntity<String> removeItemFromCart(@RequestParam("id") Integer id){
 		String result = cartService.removeItemFromCart(id);
 		
 		if("刪除成功".equals(result))
 		{
-			return ResponseEntity.ok("商品刪除成功");// 狀態馬需不需要改成noContent
+			return ResponseEntity.ok("商品刪除成功");// 狀態碼需不需要改成noContent
 			
 		}else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);

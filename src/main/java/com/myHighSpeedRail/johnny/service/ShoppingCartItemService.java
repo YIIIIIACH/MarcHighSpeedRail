@@ -4,12 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
 import com.myHighSpeedRail.johnny.repository.ShoppingCartItemRepository;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ShoppingCartItemService {
@@ -20,7 +25,12 @@ public class ShoppingCartItemService {
 	@Autowired
 	private ProductRepository pDao;
 	
-	public ShoppingCartItem addItemToCart(Integer Id, Integer quantity, String member) {
+	public ShoppingCartItem addItemToCart(Integer Id, Integer quantity, HttpServletRequest req) {
+//	public ShoppingCartItem addItemToCart(Integer Id, Integer quantity, String member) {
+		
+		String token = getTokenFromRequest(req);
+		
+		
 		Optional<Product> optional = pDao.findById(Id);
 		
 		if(optional.isPresent()) {
@@ -29,7 +39,7 @@ public class ShoppingCartItemService {
 			ShoppingCartItem cart = new ShoppingCartItem();
 			cart.setProduct(product);
 			cart.setQuantity(quantity);
-			cart.setMember(member);
+			cart.setMember(token);
 			
 			return cartDao.save(cart);
 			
@@ -38,6 +48,10 @@ public class ShoppingCartItemService {
 		}
 	}
 	
+	private String getTokenFromRequest(HttpServletRequest req) {
+		return "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+	}
+
 	public List<ShoppingCartItem> showAllCartItems(){
 		return cartDao.findAll();	
 	}

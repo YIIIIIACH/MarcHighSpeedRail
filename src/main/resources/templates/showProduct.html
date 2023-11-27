@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org/">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Product</title>
+  </head>
+  <body>
+    <button id="myBtn">取得產品</button>
+    <div id="output"></div>
+
+    <script>
+		
+      const url = "http://localhost:8080/MarcHighSpeedRail/product/page?p=1";
+      const output = document.getElementById("output");
+
+      document.getElementById("myBtn").addEventListener("click", () => {
+        getData(url);
+      });
+
+      function getData(url) {
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`status code ${response.text}`);
+            }
+            return response.json();
+          })
+          .then((jsObject) => {
+			  console.log(jsObject);
+            htmlMaker(jsObject);
+          })
+          .catch((err) => {
+			  console.log(err);
+            errorHtmlMaker();
+          });
+      }
+
+      function htmlMaker(jsData) {
+        output.innerHTML += "<h4>產品列表 :</h4>";
+
+        jsData.content.forEach((element) => {
+          const div = document.createElement("div");
+          div.innerHTML += "<div> id: " + element.productId + "</div>";
+		  div.innerHTML += "<div> id: " + element.productName + "</div>";
+          output.append(div);
+        });
+      }
+      
+      function errorHtmlMaker(){
+      output.innerHTML += "<h4>發生錯誤</h4>";
+      }
+    </script>
+  </body>
+</html>

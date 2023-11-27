@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>upload image</title>
+</head>
+<body>
+    <input type="file" id="input">
+    <button onclick="parseImage()">parse image</button>
+    <button onclick="postImage()">Post</button>
+    <button onclick="getImageAndAppend()">GETAppend</button>
+    <img id="img" >
+    <!-- <p><img id="tar" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt ="Red dot"><p> -->
+    <script>
+        const inputEl = document.getElementById('input');
+        var tmp;
+        let r = new FileReader()
+        var aa;
+        let bodycontent;
+        function parseImage(){
+            r.readAsDataURL(inputEl.files[0])
+            r.onload = function() {
+				aa = r.result;
+			};
+        }
+        function postImage(){
+			if (aa != null) {
+				bodycontent = JSON.stringify({
+					"productId":26,
+                    "productName":'水壺',
+                    "productPrice":400,
+                    "productDescription": '很貴',
+                    "productType": 'dd',
+                    "productInventory":100,
+					"photoData": r.result
+				})
+            	fetch('http://localhost:8080/MarcHighSpeedRail/product/add', {
+                	body: bodycontent, // must match 'Content-Type' header
+                	cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                	credentials: "same-origin", // include, same-origin, *omit
+                	headers: {
+                	"user-agent": "Mozilla/4.0 MDN Example",
+                	"content-type": "application/json",
+                	},
+                	method: "POST", // *GET, POST, PUT, DELETE, etc.
+                	mode: "same-origin", // no-cors, cors, *same-origin
+                	redirect: "follow", // manual, *follow, error
+                	referrer: "no-referrer", // *client, no-referrer
+            	});
+            }else{
+				console.error("檔案尚未讀取完成");
+			} 
+        }
+        function getImageAndAppend(){
+            fetch('http://localhost:8080/MarcHighSpeedRail/getProductPhoto?pid=1', {
+                headers: {
+                "user-agent": "Mozilla/4.0 MDN Example",
+                "content-type": "application/json",
+                },
+                credentials: "include",
+                method: "GET", // *GET, POST, PUT, DELETE, etc.
+                mode: "no-cors", // no-cors, cors, *same-origin
+            }).then((res)=>{
+				if(res.status >= 200 && res.status < 300){
+					return res.json();
+				}
+            }).then(function(data){
+				console.log( data);
+				tmp=data;
+				document.getElementById('img').src = data.photoData;
+			})
+        }
+    </script>
+</body>
+</html>
