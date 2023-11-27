@@ -3,6 +3,7 @@ package com.myHighSpeedRail.peter.model;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,17 +45,20 @@ public class EmployeeLeave {
 	@Column(name = "leave_employee_confirm_date")
 	private Date leaveEmployeeConfirmDate;
 
-	@JsonBackReference(value = "leaEl")
+//	@JsonIgnore
+//	@JsonBackReference(value = "leaEl")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_leave_kind_id_fk")
 	private Leave leave;
 
-	@JsonBackReference(value = "empElman") 
+//	@JsonIgnore
+//	@JsonBackReference(value = "empElman") 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "manager_id_fk")
 	private Employee manager;
 
-	@JsonBackReference(value = "empElemp")
+//	@JsonIgnore
+//	@JsonBackReference(value = "empElemp")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;

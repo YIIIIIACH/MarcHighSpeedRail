@@ -68,7 +68,7 @@ public class EmployeeService {
 		return null;
 	}
 
-	// 
+	//
 	public Department findLatestDepartment(Integer empId) {
 		EmployeeHistoricalDepartment ehd = ehdDao.findEmployeeLatestDepartmentById(empId);
 		return ehd.getDepartment();
@@ -81,6 +81,9 @@ public class EmployeeService {
 	public void EmployeeAddMutiDepartment(List<EmployeeHistoricalDepartment> ehdList) {
 		ehdDao.saveAll(ehdList);
 	}
-	
-	
+
+	public List<Employee> EmployeefindAll() {
+		return eDao.findAll();
+	}
+
 }

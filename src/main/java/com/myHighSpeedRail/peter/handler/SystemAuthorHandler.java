@@ -17,7 +17,8 @@ import com.myHighSpeedRail.peter.service.EmployeeService;
 import com.myHighSpeedRail.peter.service.SystemsService;
 
 /**
- * 傳入系統名稱、員工ID，返回權限為true或false
+ * 輸入員工id尋找屬於此員工的權限，返還裝有權限與系統表的物件
+ * 
  */
 
 @Component
@@ -39,11 +40,10 @@ public class SystemAuthorHandler {
 	// 現有系統個數
 	private Long SystemNumber;
 
-
 	public EmployeeSystemAuthor getEmpSystemAccess(Employee e) {
 		// 找到現有系統個數
 		SystemNumber = sService.findSystemCount();
-		System.out.println("count: " + sService.findSystemCount());
+		System.out.println("number of systems: " + sService.findSystemCount());
 
 		// 把所有系統放進List存起來
 		systemList = sService.findAllSystems();
@@ -66,7 +66,10 @@ public class SystemAuthorHandler {
 
 			encapsulateJsonToMap(empAuthorJson);
 
-			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
+//			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
+			EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+			esa.setAuthorJson(authorJsonMap);
+			esa.setSystemList(systemList);
 
 			return esa;
 //			JSONArray author = getSystemById(empSystemAuthor.getAuthorJson(), system.getSystemId());
@@ -85,7 +88,10 @@ public class SystemAuthorHandler {
 
 			encapsulateJsonToMap(deptAuthorJson);
 
-			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
+//			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
+			EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+			esa.setAuthorJson(authorJsonMap);
+			esa.setSystemList(systemList);
 
 			return esa;
 
@@ -93,7 +99,7 @@ public class SystemAuthorHandler {
 
 	}
 
-	public void encapsulateJsonToMap(String authorJSON) {
+	private void encapsulateJsonToMap(String authorJSON) {
 		// 把權限裝進Map裡面
 		authorJsonMap = new HashMap<Integer, JSONArray>();
 		for (int i = 1; i < SystemNumber; i++) {

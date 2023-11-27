@@ -3,6 +3,7 @@ package com.myHighSpeedRail.peter.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -27,7 +28,8 @@ public class Title {
 	@Column(name = "title_name")
 	private String titleName;
 
-	@JsonManagedReference(value = "titEt")
+	@JsonIgnore
+//	@JsonManagedReference(value = "titEt")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "title", cascade = CascadeType.ALL)
 	private List<EmployeeTitle> employeeTitle = new LinkedList<EmployeeTitle>();
 

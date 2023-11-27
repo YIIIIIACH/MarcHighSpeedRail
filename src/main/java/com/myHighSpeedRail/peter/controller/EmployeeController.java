@@ -43,9 +43,6 @@ public class EmployeeController {
 	@Autowired
 	private SystemAuthorHandler sahService;
 
-	@Autowired
-	private EmployeeSystemAuthor employeeSystemAuthor;
-
 	@PostMapping("/employee/login")
 	@ResponseBody
 	public ResponseEntity<SessionLoginEmployeeDTO> postLogin(@RequestParam("empAccount") String loginAccount,
@@ -85,14 +82,16 @@ public class EmployeeController {
 	@ResponseBody
 	@GetMapping("/employee/system-author/{id}")
 	public Boolean testEmpSystemAuthor(@PathVariable("id") Integer id) throws JSONException {
-		
+
 		Employee emp = eService.findEmployeeById(id);
 		if (id != null) {
 			EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(emp);
 
 			Boolean access = esa.rightsOfView(id, "測試系統一");
+
 			return access;
 		}
+
 		return false;
 	}
 
@@ -107,6 +106,12 @@ public class EmployeeController {
 	public Department getEmpLatestDepartment(@PathVariable("id") Integer empId) {
 		Department dept = eService.findLatestDepartment(empId);
 		return dept;
+	}
+
+	@ResponseBody
+	@GetMapping("/employee/all")
+	public List<Employee> findAllEmployees() {
+		return eService.EmployeefindAll();
 	}
 
 }

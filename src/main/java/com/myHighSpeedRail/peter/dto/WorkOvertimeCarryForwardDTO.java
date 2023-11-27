@@ -1,77 +1,48 @@
-package com.myHighSpeedRail.peter.model;
+package com.myHighSpeedRail.peter.dto;
 
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+public class WorkOvertimeCarryForwardDTO {
 
-@Entity
-@Table(name = "employee_work_overtime")
-public class EmployeeWorkOvertime {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "employee_work_overtime_id")
+	@JsonProperty("workOvertimeId")
 	private Integer employeeWorkOvertimeId;
 
 	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	@Column(name = "employee_work_overtime_start_time")
+	@JsonProperty("startTime")
 	private Date employeeWorkOvertimeStartTime;
 
 	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	@Column(name = "employee_work_overtime_end_time")
+	@JsonProperty("endTime")
 	private Date employeeWorkOvertimeEndTime;
 
-	@Column(name = "employee_work_overtime_reason")
+	@JsonProperty("reason")
 	private String employeeWorkOvertimeReason;
 
-	@Column(name = "manager_work_overtime_audit")
+	@JsonProperty("audit")
 	private String managerWorkOvertimeAudit;
 
 	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	@Column(name = "work_overtime_audit_results_sanding_date")
+	@JsonProperty("resultSnadDate")
 	private Date workOvertimeAuditResultsSandingDate;
 
+	@JsonProperty("managerId")
+	private Integer managerId;
+
+	@JsonProperty("employeeId")
+	private Integer employeeId;
+
 	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	@Column(name = "work_overtime_carry_forward_date")
+	@JsonProperty("CarryForwardDate")
 	private Date workOvertimeCarryForwardDate;
-
-	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
-	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	@Column(name = "work_overtime_employee_confirm_date")
-	private Date workOvertimeEmployeeConfirmDate;
-
-//	@JsonIgnore
-//	@JsonBackReference(value = "empEwoman")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "manager_id_fk")
-	private Employee manager;
-
-//	@JsonIgnore
-//	@JsonBackReference(value = "empEwoemp")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "employee_id_fk")
-	private Employee employee;
-
-	public EmployeeWorkOvertime() {
-	}
 
 	public Integer getEmployeeWorkOvertimeId() {
 		return employeeWorkOvertimeId;
@@ -121,36 +92,28 @@ public class EmployeeWorkOvertime {
 		this.workOvertimeAuditResultsSandingDate = workOvertimeAuditResultsSandingDate;
 	}
 
+	public Integer getManagerId() {
+		return managerId;
+	}
+
+	public void setManagerId(Integer managerId) {
+		this.managerId = managerId;
+	}
+
+	public Integer getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(Integer employeeId) {
+		this.employeeId = employeeId;
+	}
+
 	public Date getWorkOvertimeCarryForwardDate() {
 		return workOvertimeCarryForwardDate;
 	}
 
 	public void setWorkOvertimeCarryForwardDate(Date workOvertimeCarryForwardDate) {
 		this.workOvertimeCarryForwardDate = workOvertimeCarryForwardDate;
-	}
-
-	public Date getWorkOvertimeEmployeeConfirmDate() {
-		return workOvertimeEmployeeConfirmDate;
-	}
-
-	public void setWorkOvertimeEmployeeConfirmDate(Date workOvertimeEmployeeConfirmDate) {
-		this.workOvertimeEmployeeConfirmDate = workOvertimeEmployeeConfirmDate;
-	}
-
-	public Employee getManager() {
-		return manager;
-	}
-
-	public void setManager(Employee manager) {
-		this.manager = manager;
-	}
-
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
 	}
 
 }
