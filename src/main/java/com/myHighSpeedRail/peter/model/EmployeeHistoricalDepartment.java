@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,11 +34,13 @@ public class EmployeeHistoricalDepartment {
 	@Column(name = "department_effective_date")
 	private Date departmentEffectiveDate;
 
+//	@JsonIgnore
 	@JsonBackReference(value = "empEhd")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
 
+//	@JsonIgnore
 	@JsonBackReference(value = "depEhd")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id_fk")

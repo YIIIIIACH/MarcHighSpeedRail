@@ -3,6 +3,7 @@ package com.myHighSpeedRail.peter.model;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class EmployeeLeave {
 	private Date employeeLeaveStartTime;
 
 	@Column(name = "employee_leave_end_time")
-	private Date employeeLeaveDndTime;
+	private Date employeeLeaveEndTime;
 
 	@Column(name = "employee_leave_reason")
 	private String employeeLeaveReason;
@@ -44,22 +45,113 @@ public class EmployeeLeave {
 	@Column(name = "leave_employee_confirm_date")
 	private Date leaveEmployeeConfirmDate;
 
-	@JsonBackReference(value = "leaEl")
+//	@JsonIgnore
+//	@JsonBackReference(value = "leaEl")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_leave_kind_id_fk")
 	private Leave leave;
 
-	@JsonBackReference(value = "empElman") 
+//	@JsonIgnore
+//	@JsonBackReference(value = "empElman") 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "manager_id_fk")
 	private Employee manager;
 
-	@JsonBackReference(value = "empElemp")
+//	@JsonIgnore
+//	@JsonBackReference(value = "empElemp")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
 
 	public EmployeeLeave() {
+	}
+
+	public Integer getEmployeeLeaveId() {
+		return employeeLeaveId;
+	}
+
+	public void setEmployeeLeaveId(Integer employeeLeaveId) {
+		this.employeeLeaveId = employeeLeaveId;
+	}
+
+	public Date getEmployeeLeaveStartTime() {
+		return employeeLeaveStartTime;
+	}
+
+	public void setEmployeeLeaveStartTime(Date employeeLeaveStartTime) {
+		this.employeeLeaveStartTime = employeeLeaveStartTime;
+	}
+
+	public Date getEmployeeLeaveEndTime() {
+		return employeeLeaveEndTime;
+	}
+
+	public void setEmployeeLeaveEndTime(Date employeeLeaveEndTime) {
+		this.employeeLeaveEndTime = employeeLeaveEndTime;
+	}
+
+	public String getEmployeeLeaveReason() {
+		return employeeLeaveReason;
+	}
+
+	public void setEmployeeLeaveReason(String employeeLeaveReason) {
+		this.employeeLeaveReason = employeeLeaveReason;
+	}
+
+	public String getManagerLeaveAudit() {
+		return managerLeaveAudit;
+	}
+
+	public void setManagerLeaveAudit(String managerLeaveAudit) {
+		this.managerLeaveAudit = managerLeaveAudit;
+	}
+
+	public Date getLeaveAuditResultsSandingDate() {
+		return leaveAuditResultsSandingDate;
+	}
+
+	public void setLeaveAuditResultsSandingDate(Date leaveAuditResultsSandingDate) {
+		this.leaveAuditResultsSandingDate = leaveAuditResultsSandingDate;
+	}
+
+	public Date getLeaveCarryForwardDate() {
+		return leaveCarryForwardDate;
+	}
+
+	public void setLeaveCarryForwardDate(Date leaveCarryForwardDate) {
+		this.leaveCarryForwardDate = leaveCarryForwardDate;
+	}
+
+	public Date getLeaveEmployeeConfirmDate() {
+		return leaveEmployeeConfirmDate;
+	}
+
+	public void setLeaveEmployeeConfirmDate(Date leaveEmployeeConfirmDate) {
+		this.leaveEmployeeConfirmDate = leaveEmployeeConfirmDate;
+	}
+
+	public Leave getLeave() {
+		return leave;
+	}
+
+	public void setLeave(Leave leave) {
+		this.leave = leave;
+	}
+
+	public Employee getManager() {
+		return manager;
+	}
+
+	public void setManager(Employee manager) {
+		this.manager = manager;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 }

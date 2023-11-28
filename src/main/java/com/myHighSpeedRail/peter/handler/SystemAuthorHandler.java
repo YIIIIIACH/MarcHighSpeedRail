@@ -1,22 +1,24 @@
 package com.myHighSpeedRail.peter.handler;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.myHighSpeedRail.peter.model.Department;
 import com.myHighSpeedRail.peter.model.Employee;
 import com.myHighSpeedRail.peter.model.SystemAuthor;
+import com.myHighSpeedRail.peter.model.Systems;
 import com.myHighSpeedRail.peter.service.DepartmentService;
 import com.myHighSpeedRail.peter.service.EmployeeService;
 import com.myHighSpeedRail.peter.service.SystemsService;
 
 /**
- * 傳入系統名稱、員工ID，返回權限為true或false
+ * 輸入員工id尋找屬於此員工的權限，返還裝有權限與系統表的物件
+ * 
  */
 
 @Component
@@ -33,103 +35,18 @@ public class SystemAuthorHandler {
 
 	private HashMap<Integer, JSONArray> authorJsonMap;
 
+	private List<Systems> systemList;
+
 	// 現有系統個數
 	private Long SystemNumber;
-
-//	// 解析JSON字串
-//		private JSONArray getSystemById(String authorJSON, Integer sysId) {
-//
-//			JSONObject j;
-//			String sysIdString = String.valueOf(sysId);
-//			try {
-//
-////				String tmp = "{\"Data\":{\"Name\":\"MichaelChan\",\"Email\":\"XXXX@XXX.com\",\"Phone\":[1234567,0911123456]}}";
-//
-////				j = new JSONObject(tmp);
-//				j = new JSONObject(authorJSON);
-//				System.out.println("JSONObject: " + j);
-//
-////				Object jsonOb = j.getJSONObject("Data").getJSONArray("Phone");
-////				Object jsonOb = j.getJSONObject("authorJson").getJSONArray(sysidString);
-//				JSONObject jObj = j.getJSONObject("authorJson");
-//
-//				JSONArray jsonArray = j.getJSONObject("authorJson").getJSONArray(sysIdString);
-//				System.out.println("jsonArray: " + jsonArray);
-//
-//				System.out.println("authorJsonMap: " + authorJsonMap);
-//
-////				return jsonOb;
-//
-//				return jsonArray;
-//
-//			} catch (Exception e) {
-//				System.err.println("Error: " + e.getMessage());
-//			}
-//
-//			return null;
-//		}
-
-//	// 判斷系統權限
-//	public Boolean systemAccessJudgment(Integer empId, String sysName, Integer judgeKind) {
-//		Employee emp = eService.findEmployeeById(empId);
-//
-//		if (emp == null) {
-//			System.out.println("沒有此員工ID");// 這個要不要做?
-//			return false;
-//		}
-//
-//		Systems system = sService.findSystemByName(sysName);
-//
-//		if (system == null) {
-//			System.out.println("沒有此系統名稱");// 這個要不要做?
-//			return false;
-//		}
-//
-//		SystemAuthor empSystemAuthor = eService.getEmployeeSystemAuthor(emp.getEmployeeId());
-//		System.out.println("empSystemAuthor: " + empSystemAuthor);
-//
-//		// eService如果沒有找到匹配的權限，回傳NULL，這邊接到要做處理
-//		if (!(empSystemAuthor == null)) {
-////			String empAuthorJson = empSystemAuthor.getAuthorJson();
-////			System.out.println("empauthorJson: " + empAuthorJson);
-////			System.out.println(empAuthorJson);
-//			JSONArray author = getSystemById(empSystemAuthor.getAuthorJson(), system.getSystemId());
-//
-//			try {
-//				if (author.get(judgeKind).equals(1)) {
-//					return true;
-//				}
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//
-//			return false;
-//
-//		} else {
-////			List<EmployeeHistoricalDepartment> ehdList = emp.getEmployeeHistoricalDepartment();
-////			EmployeeHistoricalDepartment ehd = ehdList.get(0);
-////			ehd.get
-//			Department dept = eService.findLatestDepartment(empId);
-//			SystemAuthor departmentSystemAuthor = dService.getDepartmentSystemAuthor(dept.getDepartmentId());
-//			String deptAuthorJson = departmentSystemAuthor.getAuthorJson();
-//			System.out.println("deptAuthorJson: " + deptAuthorJson);
-//			System.out.println(deptAuthorJson);
-//			JSONArray author = getSystemById(departmentSystemAuthor.getAuthorJson(), system.getSystemId());
-//			try {
-//				if (author.get(0).equals(1)) {
-//					return true;
-//				}
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//			return false;
-//		}
-//	}
 
 	public EmployeeSystemAuthor getEmpSystemAccess(Employee e) {
 		// 找到現有系統個數
 		SystemNumber = sService.findSystemCount();
-		System.out.println("count: " + sService.findSystemCount());
+		System.out.println("number of systems: " + sService.findSystemCount());
+
+		// 把所有系統放進List存起來
+		systemList = sService.findAllSystems();
 
 		Employee emp = eService.findEmployeeById(e.getEmployeeId());
 
@@ -148,8 +65,11 @@ public class SystemAuthorHandler {
 			String empAuthorJson = empSystemAuthor.getAuthorJson();
 
 			encapsulateJsonToMap(empAuthorJson);
-			
-			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap);
+
+//			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
+			EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+			esa.setAuthorJson(authorJsonMap);
+			esa.setSystemList(systemList);
 
 			return esa;
 //			JSONArray author = getSystemById(empSystemAuthor.getAuthorJson(), system.getSystemId());
@@ -167,17 +87,19 @@ public class SystemAuthorHandler {
 			String deptAuthorJson = departmentSystemAuthor.getAuthorJson();
 
 			encapsulateJsonToMap(deptAuthorJson);
-			
-			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap);
+
+//			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
+			EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+			esa.setAuthorJson(authorJsonMap);
+			esa.setSystemList(systemList);
 
 			return esa;
-
 
 		}
 
 	}
 
-	public void encapsulateJsonToMap(String authorJSON) {
+	private void encapsulateJsonToMap(String authorJSON) {
 		// 把權限裝進Map裡面
 		authorJsonMap = new HashMap<Integer, JSONArray>();
 		for (int i = 1; i < SystemNumber; i++) {
@@ -192,6 +114,5 @@ public class SystemAuthorHandler {
 			}
 		}
 	}
-
 
 }

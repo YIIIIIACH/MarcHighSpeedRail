@@ -36,14 +36,17 @@ public class Product {
 	@Column(name = "product_inventory", nullable = false)
 	private Integer productInventory;
 	
+//	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<ProductPhoto> photoSegment;
+	
 	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<ProductPhoto> photos;
+	private List<ProductPhotoSegment> photoSegment;
 	
 	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", productName=" + productName + ", productPrice=" + productPrice
 				+ ", productDescription=" + productDescription + ", productType=" + productType + ", productInventory="
-				+ productInventory + ", photos=" + photos + "]";
+				+ productInventory + ", photoSegment=" + photoSegment + "]";
 	}
 
 	public Product() {
@@ -109,13 +112,7 @@ public class Product {
 		this.productInventory = productInventory;
 	}
 
-	public List<ProductPhoto> getPhoto() {
-		return photos;
-	}
-
-	public void setPhoto(List<ProductPhoto> photos) {
-		this.photos = photos;
-	}
+	
 	
 	
 

@@ -18,4 +18,5 @@ public class TestController {
 	public @ResponseBody List<Station> testJohny(){
 		return ss.getAllStation();
 	}
+	
 }

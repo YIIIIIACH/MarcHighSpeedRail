@@ -19,9 +19,13 @@ public class ProductPhotoSegment {
 	@Column(name="product_photo_segment_id")
 	private Integer productPhotoSegmentId;
 	
+//	@ManyToOne(fetch= FetchType.LAZY)
+//	@JoinColumn(name="product_photo_id_fk",nullable=false)
+//	private ProductPhoto productPhoto;
+	
 	@ManyToOne(fetch= FetchType.LAZY)
-	@JoinColumn(name="product_photo_id_fk",nullable=false)
-	private ProductPhoto productPhoto;
+	@JoinColumn(name="product_id_fk",nullable=false)
+	private Product product;
 	
 	@Column(name="segment_seq")
 	private Integer sequence;
@@ -30,8 +34,8 @@ public class ProductPhotoSegment {
 	private byte[]  photoSegment;
 	
 	public ProductPhotoSegment() {;}
-	public ProductPhotoSegment(ProductPhoto productPhoto, Integer sequence, byte[] photoSegment) {
-		this.productPhoto = productPhoto;
+	public ProductPhotoSegment(Product product, Integer sequence, byte[] photoSegment) {
+		this.product = product;
 		this.sequence = sequence;
 		this.photoSegment = photoSegment;
 	}
@@ -44,12 +48,12 @@ public class ProductPhotoSegment {
 		this.productPhotoSegmentId = productPhotoSegmentId;
 	}
 
-	public ProductPhoto getProductPhoto() {
-		return productPhoto;
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setProductPhoto(ProductPhoto productPhoto) {
-		this.productPhoto = productPhoto;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public Integer getSequence() {

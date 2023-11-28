@@ -1,9 +1,10 @@
 package com.myHighSpeedRail.peter.service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.peter.model.SystemAuthor;
@@ -52,6 +53,10 @@ public class SystemsService {
 
 	public Long findSystemCount() {
 		return sDao.count();
+	}
+
+	public List<Systems> findAllSystems() {
+		return sDao.findAll();		
 	}
 
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.spring6.util.SpringRequestUtils;
 
-import com.myHighSpeedRail.johnny.dto.ProductAndPhotoDto;
+import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhoto;
 import com.myHighSpeedRail.johnny.service.ProductPhotoService;
@@ -31,34 +31,58 @@ public class ProductController {
 	@Autowired
 	private ProductService pService;
 	
+//	回傳是 ResponseEntity, 就不需要加@ResponseBody 
 	@PostMapping("/product/add")
-	@ResponseBody
-	public ResponseEntity<String> addProduct(@RequestBody ProductAndPhotoDto pappDto) {	
+	public ResponseEntity<String> addProduct(@RequestBody ProductAndPhotoSegmentDto pappDto) {	
 		try{
-			Product p = new Product();
-			BeanUtils.copyProperties(pappDto, p);
+//			Product p = new Product();
+//			BeanUtils.copyProperties(pappDto, p);
+			
 			Product pp = pService.addProduct(pappDto);
-			return ResponseEntity.ok("商品新增成功，商品ID: " + pp.getProductId() + ", 商品名稱 : " + p.getProductName());
+			return ResponseEntity.ok("商品新增成功，商品ID: " + pp.getProductId() + ", 商品名稱 : " + pp.getProductName());
 		
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("新增商品失敗: " + e.getMessage());
 		}
 	}
 	
-	@GetMapping("/product")  
+//	@PostMapping("/product/add") //只新增單筆 product 基本資訊
+//	public ResponseEntity<String> addProduct(@RequestBody Product p) {	
+//		try{
+////			Product p = new Product();
+////			BeanUtils.copyProperties(pappDto, p);
+//			Product pp = pService.addProduct(p);
+//			return ResponseEntity.ok("商品新增成功，商品ID: " + pp.getProductId() + ", 商品名稱 : " + pp.getProductName());
+//		
+//		}catch(Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("新增商品失敗: " + e.getMessage());
+//		}
+//	}
+	
+	@PostMapping("/product/addAll") // 新增多筆 product
 	@ResponseBody
-	public Page<Product> showProducts (@RequestParam(name = "page", defaultValue = "1") Integer pageNumber, Model m){
-			Page<Product> page = pService.findbyPage(pageNumber);
+	public List<Product> addAllProduct(@RequestBody List<Product> pList){
+		 return pService.addAllProduct(pList);
+	}
+	
+	@GetMapping("/product")
+	public String toProduct() {
+		return "showProduct";
+	}
+	
+	@GetMapping("/product/page")  //取得product (分頁)
+	public ResponseEntity<Page<Product>> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
+			Page<Product> products = pService.findbyPage(pageNumber);
 		
-			m.addAttribute("page", page);	
-			m.addAttribute("totalPages", page.getTotalPages());
+//			m.addAttribute("page", page);	
+//			m.addAttribute("totalPages", page.getTotalPages());
 			
-			return page;	
+			return ResponseEntity.ok(products);	
 	}
 	
 	@DeleteMapping("/product/delete")  //透過id下架商品
-	@ResponseBody
 	public ResponseEntity<String> deleteProductById(@RequestParam("id") Integer id) {
+		
 		pService.deleteById(id);
 		return new ResponseEntity<String>("商品移除成功",HttpStatus.OK);
 	}
@@ -81,7 +105,6 @@ public class ProductController {
 //	}
 	
 	@PutMapping("/product/update") // 僅更新商品基本資訊
-	@ResponseBody
 	public ResponseEntity<String> updateProductById(@RequestBody Product p){
 		Product updatedProduct = pService.UpdateProduct(p);
 		return new ResponseEntity<String>("商品更新成功，商品ID: " + updatedProduct.getProductId() ,HttpStatus.OK);

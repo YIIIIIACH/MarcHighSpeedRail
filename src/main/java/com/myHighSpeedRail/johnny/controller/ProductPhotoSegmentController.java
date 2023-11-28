@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.johnny.dto.PostPhotoDto;
+import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.service.ProductPhotoSegmentService;
 
@@ -25,28 +26,33 @@ public class ProductPhotoSegmentController {
 	
 	@Autowired
 	private ProductPhotoSegmentService ppsServ;
+	//, consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
 	
-	@PostMapping(value = "/photoSegment", consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-	public @ResponseBody ResponseEntity<String> postPhoto(@RequestBody PostPhotoDto ppDto){
+	@PostMapping(value = "/photoSegment")
+	public @ResponseBody ResponseEntity<String> postPhoto(@RequestBody ProductAndPhotoSegmentDto ppDto){
 		ppsServ.savePhoto(ppDto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	
 	@GetMapping("/getProductPhoto")
 	public @ResponseBody PostPhotoDto getPhoto(@RequestParam(value="pid")Integer pid){
+		
 		PostPhotoDto res = new PostPhotoDto();
-		List<ProductPhotoSegment> ppsList= ppsServ.getAllSegmentByPhotoId(pid);
-		res.photoId = ppsList.get(0).getProductPhoto().getProductPhotoId();
+		List<ProductPhotoSegment> ppsList= ppsServ.getAllPhotoSegmentByProductId(pid);
+		res.productId = ppsList.get(0).getProduct().getProductId();
+		
 		StringBuilder sb = new StringBuilder();
 		ppsList.sort((a,b)-> a.getSequence()-b.getSequence());
 		
 		for( ProductPhotoSegment ps: ppsList) {
-//			System.out.print(ps.getSequence()+" ");
+
 			sb.append(new String(ps.getPhotoSegment(),StandardCharsets.UTF_8) ); 
 		}
-		res.photoData=sb.toString();
+		
+		res.photoData = sb.toString();
 		return res;
 	}
+	
 	@GetMapping("/testPhoto")
 	public String doTest() {
 		return "uploadimage";

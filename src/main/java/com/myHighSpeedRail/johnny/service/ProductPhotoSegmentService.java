@@ -8,27 +8,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.johnny.dto.PostPhotoDto;
+import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
+import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhoto;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.repository.ProductPhotoRepository;
 import com.myHighSpeedRail.johnny.repository.ProductPhotoSegmentRepository;
+import com.myHighSpeedRail.johnny.repository.ProductRepository;
 
 @Service
 public class ProductPhotoSegmentService {
+	
 	@Autowired
 	private ProductPhotoSegmentRepository ppsDao;
 	@Autowired
-	private ProductPhotoRepository rrDao;
-	public List<ProductPhotoSegment> getAllSegmentByPhotoId(Integer id){
-		return ppsDao.getAllSegmentByPhotoId(id);
+	private ProductRepository pDao;
+	
+	public List<ProductPhotoSegment> getAllPhotoSegmentByProductId(Integer id){
+		return ppsDao.getAllPhotoSegmentByProductId(id);
 	}
-	public Integer savePhoto(PostPhotoDto ppDto) {
+	
+	public Integer savePhoto(ProductAndPhotoSegmentDto ppDto) {
+		
 		byte[] photoData = ppDto.photoData.getBytes();
 		int dataLen = photoData.length;
-		ProductPhoto pp = rrDao.findById(6).get();
-		List<ProductPhotoSegment> segList=new ArrayList<ProductPhotoSegment>();
+		Product product = pDao.findById(ppDto.productId).get();
+		
+		//step 1 insert a photo to product_photo table
+		//Photo p =  new Photo();
+		// p = ppServ.save( p) ;
+		
+		// step 2 insert all photo segment to table of the new product_photo_id
+		// p 
+//		byte[] photoData = ppDto.photoData.getBytes();
+//		int dataLen = photoData.length;
+		List<ProductPhotoSegment> segList = new ArrayList<ProductPhotoSegment>();
 		for(int i=0 ; i*1024 < dataLen; i++) {
-			segList.add(new ProductPhotoSegment(pp, i
+			segList.add(new ProductPhotoSegment(product, i
 					,Arrays.copyOfRange(photoData, i*1024, (dataLen>(i+1)*1024)?(i+1)*1024:dataLen )
 					));
 		}
