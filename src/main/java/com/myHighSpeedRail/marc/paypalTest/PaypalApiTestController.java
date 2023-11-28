@@ -1,0 +1,218 @@
+package com.myHighSpeedRail.marc.paypalTest;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ValueNode;
+import com.myHighSpeedRail.marc.dto.paypalapi.CreatePayPalOrderDto;
+
+@Controller
+public class PaypalApiTestController {
+	@Value("${paypal.api.basic.token}")
+	private String basicToken;
+	private String bearerToken=null;
+	private Date latestTokenUpdate=null;
+	
+	public class JsonToken{
+		public String access_token;
+		public JsonToken() {
+			this.access_token=null;
+		}
+	}
+	
+	@PostMapping("/getAccessTokenTest")
+	public @ResponseBody ResponseEntity<String> getToken(){
+		// check if old token is expire? if less than 5 minute will not get now token
+		if( latestTokenUpdate==null) {
+			//haven't get a token yet
+		}
+		else if( new Date().getTime() -latestTokenUpdate.getTime() <= 1000*60*5) {
+			return new ResponseEntity<String>("old token not expire yet:"+bearerToken, HttpStatus.OK);
+		}
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			String url = "https://api.sandbox.paypal.com/v1/oauth2/token";
+			URL obj = new URL(url);
+			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("accept", "application/json");
+			con.setRequestProperty("accept-language", "en_US");
+			con.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+			con.setRequestProperty("authorization", "basic "+basicToken);
+			String body = "grant_type=client_credentials";
+
+			// Send request
+			con.setDoOutput(true);
+			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+			wr.writeBytes(body);
+			wr.flush();
+			wr.close();
+
+			BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			// Print the response
+//			System.out.println(response.toString());
+			JsonNode root = mapper.readTree(response.toString());
+			Map<String, String> map = new HashMap<>();
+			addKeys("", root, map, new ArrayList<>());
+
+//			map.entrySet()
+//			     .forEach(System.out::println);
+			bearerToken = map.get("access_token");
+			latestTokenUpdate= new Date();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("getToken"+bearerToken,HttpStatus.OK);
+	}
+	
+	private void addKeys(String currentPath, JsonNode jsonNode, Map<String, String> map, List<Integer> suffix) {
+	    if (jsonNode.isObject()) {
+	        ObjectNode objectNode = (ObjectNode) jsonNode;
+	        Iterator<Map.Entry<String, JsonNode>> iter = objectNode.fields();
+	        String pathPrefix = currentPath.isEmpty() ? "" : currentPath + "-";
+
+	        while (iter.hasNext()) {
+	            Map.Entry<String, JsonNode> entry = iter.next();
+	            addKeys(pathPrefix + entry.getKey(), entry.getValue(), map, suffix);
+	        }
+	    } else if (jsonNode.isArray()) {
+	        ArrayNode arrayNode = (ArrayNode) jsonNode;
+
+	        for (int i = 0; i < arrayNode.size(); i++) {
+	            suffix.add(i + 1);
+	            addKeys(currentPath, arrayNode.get(i), map, suffix);
+
+	            if (i + 1 <arrayNode.size()){
+	                suffix.remove(arrayNode.size() - 1);
+	            }
+	        }
+
+	    } else if (jsonNode.isValueNode()) {
+	        if (currentPath.contains("-")) {
+	            for (int i = 0; i < suffix.size(); i++) {
+	                currentPath += "-" + suffix.get(i);
+	            }
+
+	            suffix = new ArrayList<>();
+	        }
+
+	        ValueNode valueNode = (ValueNode) jsonNode;
+	        map.put(currentPath, valueNode.asText());
+	    }
+	}
+	
+	@PostMapping("/createOrderTest")
+	public @ResponseBody ResponseEntity<String>createOrderTest(@RequestParam String token,@RequestBody CreatePayPalOrderDto dto){
+		try {
+			String url = "https://api.sandbox.paypal.com/v2/checkout/orders";
+			URL obj = new URL(url);
+			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("accept", "application/json");
+			con.setRequestProperty("content-type", "application/json");
+			con.setRequestProperty("accept-language", "en_US");
+			con.setRequestProperty("authorization", "Bearer "+token);
+//			System.out.println(token);
+			ObjectMapper mapper = new ObjectMapper();
+			
+			String body= mapper.writeValueAsString(dto);
+//			System.out.println(body);
+			// Send request
+			con.setDoOutput(true);
+			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+			wr.write(body);
+			wr.flush();
+			wr.close();
+
+			BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			// Print the response
+//			System.out.println(response.toString());
+			return new ResponseEntity<String>("success "+response.toString(),HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
+	}
+	
+	@PostMapping("/capturePayPalTest")
+	public @ResponseBody ResponseEntity<String> captureTest(@RequestParam String token, @RequestParam String orderid){
+		try {
+			String url = "https://api.sandbox.paypal.com/v2/checkout/orders/"+orderid+"/capture";
+			URL obj = new URL(url);
+			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("content-type", "application/json");
+			con.setRequestProperty("authorization", "Bearer "+token);
+			BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			// Print the response
+//			System.out.println(response.toString());
+			return new ResponseEntity<String> ("success :"+response.toString(),HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String> ("not work",HttpStatus.BAD_REQUEST);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
