@@ -46,9 +46,14 @@ public class EmployeeService {
 
 	}
 
-	public void employeeAdd(Employee e) {
+	public void employeeAdd(Employee e){
 		e.setEmployeePassword(pwdEncoder.encode(e.getEmployeePassword()));
 		eDao.save(e);
+	}
+	public Employee employeeUpdate(Employee e) {
+		e.setEmployeePassword(pwdEncoder.encode(e.getEmployeePassword()));
+		eDao.save(e);
+		return e;
 	}
 
 	public SystemAuthor getEmployeeSystemAuthor(Integer id) {
@@ -84,6 +89,20 @@ public class EmployeeService {
 
 	public List<Employee> EmployeefindAll() {
 		return eDao.findAll();
+	}
+	
+	public void EmployeeDeleteById(Integer id) {
+		eDao.deleteById(id);;
+	}
+	
+	public boolean checkEmpAccountIfExist(String account) {
+		Employee emp = eDao.findByEmployeeAccount(account);
+
+		if (emp != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

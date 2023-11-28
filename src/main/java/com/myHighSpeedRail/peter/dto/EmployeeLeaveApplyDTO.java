@@ -12,7 +12,7 @@ public class EmployeeLeaveApplyDTO {
 	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@JsonProperty("startTime")
-	private Date employeeWorkOvertimeStartTime;
+	private Date employeeLeaveStartTime;
 
 	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
@@ -20,11 +20,15 @@ public class EmployeeLeaveApplyDTO {
 	private Date employeeWorkOvertimeEndTime;
 
 	@JsonProperty("reason")
-	private String employeeWorkOvertimeReason;
+	private String employeeLeaveReason;
 
 	@JsonProperty("managerId")
 	private Integer managerId;
 
 	@JsonProperty("employeeId")
 	private Integer employeeId;
+
+	@JsonProperty("leaveKind")
+	private String employeeLeaveKind;
+	
 }

@@ -26,8 +26,8 @@ public class SystemAuthor {
 	private String authorJson;
 	
 
-	@JsonIgnore
-//	@JsonBackReference(value="empSa")
+//	@JsonIgnore
+	@JsonBackReference(value="empSa")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="employee_id_fk")
 	private Employee employee;
