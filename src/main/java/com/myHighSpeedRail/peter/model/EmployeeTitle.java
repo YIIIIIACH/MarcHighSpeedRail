@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.peter.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,11 +22,13 @@ public class EmployeeTitle {
 	@Column(name = "employee_title_id")
 	private Integer employee_title_id;
 
+//	@JsonIgnore
 	@JsonBackReference(value = "empEt")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
 
+//	@JsonIgnore
 	@JsonBackReference(value = "titEt")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "title_id_fk")

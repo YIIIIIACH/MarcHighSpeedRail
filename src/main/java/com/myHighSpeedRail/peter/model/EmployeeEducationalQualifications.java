@@ -3,6 +3,7 @@ package com.myHighSpeedRail.peter.model;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,13 +16,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="educational_qualifications")
-public class EmployeeEducationalQualification {
+@Table(name="employee_educational_qualifications")
+public class EmployeeEducationalQualifications {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="educational_qualifications_id")
-	private Integer educationalQualificationsId;
+	@Column(name="employee_educational_qualifications_id")
+	private Integer employeeEducationalQualificationsId;
 	
 	@Column(name="school_name")
 	private String schoolName;
@@ -38,12 +39,13 @@ public class EmployeeEducationalQualification {
 	@Column(name="academic_status")
 	private String academicStatus;
 	
+//	@JsonIgnore
 	@JsonBackReference(value = "empEeq")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="employee_id_fk")
 	private Employee employee;
 
-	public EmployeeEducationalQualification() {
+	public EmployeeEducationalQualifications() {
 	}
 
 }

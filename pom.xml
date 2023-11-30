@@ -62,7 +62,13 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
-		
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>2.15.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -70,6 +76,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <configuration>
+			      <archive>
+			        <manifest>
+			          <addClasspath>true</addClasspath>
+			          <classpathPrefix>lib/</classpathPrefix>
+			          <mainClass>com.myHighSpeedRail.MarcHighSpeedRailApplication</mainClass>
+			        </manifest>
+			      </archive>
+			    </configuration>-->
 			</plugin>
 		</plugins>
 	</build>

@@ -38,4 +38,15 @@ public class SendAPIRequestController {
 		}
 		return resEntity.getBody().getStationList();
 	}
+	@GetMapping("/testAPIRequestDirectList")
+	public @ResponseBody List<Station> testAPIByGetStationDirectList(){
+		@SuppressWarnings("rawtypes")
+		ResponseEntity<List> resEntity = restTemplate.getForEntity("http://localhost:8080/MarcHighSpeedRail/getAllStation",  List.class);
+		if(resEntity.getBody().size()>0) {
+			System.out.println("get something");
+		}else {
+			System.out.println("get nothing");
+		}
+		return (List<Station>)resEntity.getBody();
+	}
 }

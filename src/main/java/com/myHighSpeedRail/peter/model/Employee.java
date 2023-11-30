@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -31,6 +35,8 @@ public class Employee {
 	@Column(name = "employee_gender")
 	private String employeeGender;
 
+	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
+	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@Column(name = "employee_birth")
 	private Date employeeBirth;
 
@@ -55,6 +61,8 @@ public class Employee {
 	@Column(name = "employee_photo")
 	private String employeePhoto;// 想要在資料庫裡寫資料夾邏輯
 
+	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
+	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@Column(name = "employee_arrival_date")
 	private Date employeeArrivalDate;
 
@@ -82,46 +90,57 @@ public class Employee {
 				+ ", employeePassword=" + employeePassword + "]";
 	}
 
+//	@JsonIgnore
 	@JsonManagedReference(value = "empSa")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<SystemAuthor> systemAuthor = new LinkedList<SystemAuthor>();
 
+//	@JsonIgnore
 	@JsonManagedReference(value = "empEhd")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeHistoricalDepartment> employeeHistoricalDepartment = new LinkedList<EmployeeHistoricalDepartment>();
 
-	@JsonManagedReference(value = "empEwoemp")
+//	@JsonManagedReference(value = "empEwoemp")
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeWorkOvertime> EmployeeWorkOvertimeByEmployee = new LinkedList<EmployeeWorkOvertime>();
 
-	@JsonManagedReference(value = "empEwoman")
+//	@JsonManagedReference(value = "empEwoman")
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "manager", cascade = CascadeType.ALL)
 	private List<EmployeeWorkOvertime> EmployeeWorkOvertimeByManager = new LinkedList<EmployeeWorkOvertime>();
 
+//	@JsonIgnore
 	@JsonManagedReference(value = "empEeq")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
-	private List<EmployeeEducationalQualification> employeeEducationalQualification = new LinkedList<EmployeeEducationalQualification>();
+	private List<EmployeeEducationalQualifications> employeeEducationalQualifications = new LinkedList<EmployeeEducationalQualifications>();
 
+//	@JsonIgnore
 	@JsonManagedReference(value = "empEcp")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmergencyContactPerson> emergencyContactPerson = new LinkedList<EmergencyContactPerson>();
 
+//	@JsonIgnore
 	@JsonManagedReference(value = "empEwe")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeWorkExperience> employeeWorkExperience = new LinkedList<EmployeeWorkExperience>();
 
+//	@JsonIgnore
 	@JsonManagedReference(value = "empEhbs")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeHistoricalBaseSalary> employeeHistoricalBaseSalary = new LinkedList<EmployeeHistoricalBaseSalary>();
 
-	@JsonManagedReference(value = "empElemp")
+	@JsonIgnore
+//	@JsonManagedReference(value = "empElemp")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeLeave> employeeLeaveByEmployee = new LinkedList<EmployeeLeave>();
 
-	@JsonManagedReference(value = "empElman")
+	@JsonIgnore
+//	@JsonManagedReference(value = "empElman")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "manager", cascade = CascadeType.ALL)
 	private List<EmployeeLeave> employeeLeaveByManager = new LinkedList<EmployeeLeave>();
 
+//	@JsonIgnore
 	@JsonManagedReference(value = "empEt")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeTitle> employeeTitle = new LinkedList<EmployeeTitle>();
@@ -289,13 +308,13 @@ public class Employee {
 		EmployeeWorkOvertimeByManager = employeeWorkOvertimeByManager;
 	}
 
-	public List<EmployeeEducationalQualification> getEmployeeEducationalQualification() {
-		return employeeEducationalQualification;
+	public List<EmployeeEducationalQualifications> getEmployeeEducationalQualifications() {
+		return employeeEducationalQualifications;
 	}
 
-	public void setEmployeeEducationalQualification(
-			List<EmployeeEducationalQualification> employeeEducationalQualification) {
-		this.employeeEducationalQualification = employeeEducationalQualification;
+	public void setEmployeeEducationalQualifications(
+			List<EmployeeEducationalQualifications> employeeEducationalQualifications) {
+		this.employeeEducationalQualifications = employeeEducationalQualifications;
 	}
 
 	public List<EmergencyContactPerson> getEmergencyContactPerson() {
@@ -346,6 +365,4 @@ public class Employee {
 		this.employeeTitle = employeeTitle;
 	}
 
-
-	
 }
