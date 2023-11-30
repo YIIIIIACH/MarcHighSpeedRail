@@ -2,6 +2,7 @@ package com.myHighSpeedRail.peter.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.peter.dto.CheckLoginDTO;
+import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
 import com.myHighSpeedRail.peter.handler.EmployeeSystemAuthor;
 import com.myHighSpeedRail.peter.handler.SystemAuthorHandler;
 import com.myHighSpeedRail.peter.model.Department;
@@ -30,6 +33,8 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class EmployeeController {
+
+	private static final String SessionLoginEmployee = null;
 
 	@Autowired
 	private EmployeeService eService;
@@ -59,11 +64,34 @@ public class EmployeeController {
 			sessionEmp.setEmpId(result.getEmployeeId());
 			sessionEmp.setEmpName(result.getEmployeeName());
 			sessionEmp.setEsa(esa);
+			httpSession.setAttribute("loginEmployee", sessionEmp);
 			return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("帳號或密碼錯誤");
 	}
+	
+//	// 登入並拿取員工資料包含權限
+//		@ResponseBody
+//		@PostMapping("/employee/login")
+//		public ResponseEntity<?> employeeLogin(@RequestBody CheckLoginDTO clDTO, HttpSession httpSession) {
+//
+//			Employee result = eService.checklogin(clDTO.getAccount(),clDTO.getPassword());
+//			System.out.println("result: " + result);
+//
+//			if (result != null) {
+//				EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(result);
+//
+//				SessionLoginEmployee sessionEmp = new SessionLoginEmployee();
+//				sessionEmp.setEmpId(result.getEmployeeId());
+//				sessionEmp.setEmpName(result.getEmployeeName());
+//				sessionEmp.setEsa(esa);
+//				httpSession.setAttribute("loginEmployee", sessionEmp);
+//				return ResponseEntity.status(HttpStatus.OK).body("登入成功");
+//			}
+//
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("帳號或密碼錯誤");
+//		}
 
 //	@PostMapping("/api/users/login")
 //	public ResponseEntity<?> loginPost(@RequestBody UserNameAndPwdDto userDTO, HttpSession httpSession) {
@@ -99,12 +127,12 @@ public class EmployeeController {
 	@ResponseBody
 	@PostMapping("/employee/add")
 	public ResponseEntity<?> addEmpData(@RequestBody Employee emp) {
-		
-		if(eService.checkEmpAccountIfExist(emp.getEmployeeAccount())) {
+
+		if (eService.checkEmpAccountIfExist(emp.getEmployeeAccount())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("員工帳號已存在");
 		}
-			eService.employeeAdd(emp);
-			return ResponseEntity.status(HttpStatus.CREATED).body("新增成功");
+		eService.employeeAdd(emp);
+		return ResponseEntity.status(HttpStatus.CREATED).body("新增成功");
 	}
 
 	@ResponseBody
@@ -141,48 +169,53 @@ public class EmployeeController {
 	public List<Employee> findAllEmployees() {
 		return eService.EmployeefindAll();
 	}
-	
+
 	@ResponseBody
 	@PutMapping("/employee")
 	public ResponseEntity<String> updateEmployee(@RequestBody Employee emp) {
 		Employee e = eService.findEmployeeById(emp.getEmployeeId());
-		if(e!=null) {		
+		if (e != null) {
 			Employee udEmp = eService.employeeUpdate(emp);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("更新成功");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("沒有此員工");
-	}	
-	
+	}
+
 	@ResponseBody
 	@DeleteMapping("/employee/{id}")
 	public ResponseEntity<String> deleteEmployee(@PathVariable("id") Integer id) {
 		Employee e = eService.findEmployeeById(id);
-		if(e!=null) {		
+		if (e != null) {
 			eService.EmployeeDeleteById(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("刪除成功");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("沒有此員工");
 	}
 
-//	// 拿取session內的員工資料裝進map中但不包含權限
-//	@GetMapping("/employee/map")
-//	public ResponseEntity<?> testSessionValue(HttpSession httpSession) {
-//
-//		System.out.println("檢查登入 controller");
-//
-//		LoginUserDTO loginUser = (LoginUserDTO) httpSession.getAttribute("loginUser");
-//
-//		if (loginUser == null) {
-//			System.out.println("session attribute 空的");
-//			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
-//		}
-//
+	// 拿取session內的員工資料裝進map中但不包含權限
+	@GetMapping("/employee/dto")
+	public ResponseEntity<?> getLoginInfo(HttpSession httpSession) {
+
+		System.out.println("檢查登入 controller");
+
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+		}
+
 //		Map<String, String> responseMap = new HashMap<>();
-//
-//		responseMap.put("userId", loginUser.getUserId().toString());
-//		responseMap.put("userName", loginUser.getUsername());
-//
+
+//		responseMap.put("userId", emp.getEmpName().toString());
+//		responseMap.put("userName", emp.getEmpId().toString());
+
+		SessionLoginEmployeeDTO empDTO = new SessionLoginEmployeeDTO();
+		empDTO.setEmpId(emp.getEmpId());
+		empDTO.setEmpName(emp.getEmpName());
+
+		return ResponseEntity.status(HttpStatus.OK).body(empDTO);
 //		return new ResponseEntity<Map<String, String>>(responseMap, HttpStatus.OK);
-//	}
+	}
 
 }
