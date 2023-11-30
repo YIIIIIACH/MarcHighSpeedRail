@@ -44,6 +44,7 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({"product"}) //忽略 ProductPhotoSegment Entity 內的 product 成員
 	private List<ProductPhotoSegment> photoSegment;
+	// private String photoData;
 
 	@Override
 	public String toString() {

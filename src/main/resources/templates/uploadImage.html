@@ -27,16 +27,16 @@
         function postImage(){
 			if (aa != null) {
 				bodycontent = JSON.stringify({
-					"productId":25,
-                    "productName":'777',
-                    "productPrice":400,
-                    "productDescription": '很貴',
-                    "productType": 'dd',
-                    "productInventory":100,
+					"productId":20,
+                   //"productName":'7778',
+                   //"productPrice":400,
+                   //"productDescription": '很貴',
+                   //"productType": 'dd',
+                   //"productInventory":100,
 					"photoData": r.result
 				})
 				console.log(r.result)
-            	fetch('http://localhost:8080/MarcHighSpeedRail/product/add', {
+            	fetch('http://localhost:8080/MarcHighSpeedRail/photoSegment', {
                 	body: bodycontent, // must match 'Content-Type' header
                 	cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
                 	credentials: "same-origin", // include, same-origin, *omit

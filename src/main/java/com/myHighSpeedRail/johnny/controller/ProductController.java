@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.johnny.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.johnny.dto.DisplayProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
+import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.service.ProductService;
 
 @Controller
@@ -68,6 +71,42 @@ public class ProductController {
 	@GetMapping("/product/add1")
 	public String toAddProduct() {
 		return "addProduct";
+	}
+	
+	@GetMapping("/products")
+	@ResponseBody
+	public List<DisplayProductDto> getAllproduct(){
+		// return List<DisplayProductDto> 
+		List<Product> pList = pService.findAllProduct();
+		List<DisplayProductDto> res= new ArrayList<DisplayProductDto>();
+		int flag =0;
+		for( Product p : pList) {
+			DisplayProductDto tmp = new DisplayProductDto();
+			tmp.productDescription= p.getProductDescription();
+			tmp.productId= p.getProductId();
+			tmp.productInventory= p.getProductInventory();
+			tmp.productName=p.getProductName();
+			tmp.productPrice=p.getProductPrice();
+			tmp.productType=p.getProductType();
+			p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+//			StringBuilder sb= new StringBuilder();
+//			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+//				sb.append(pps.getPhotoSegment().toString());
+//				sb.
+//			}
+			String sb ="";
+			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+//				sb.concat(pps.getPhotoSegment().toString());
+				sb+= pps.getPhotoSegment().toString();
+			}
+			tmp.PhotoData= sb;
+			res.add(tmp);
+			if(flag==0) {
+//				System.out.println("show"+sb);
+				flag=1;
+			}
+		}
+		 return res;
 	}
 	
 	@GetMapping("/product/page")  //取得product (分頁)
