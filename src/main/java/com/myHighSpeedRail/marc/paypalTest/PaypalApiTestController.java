@@ -133,7 +133,8 @@ public class PaypalApiTestController {
 	}
 	
 	@PostMapping("/createOrderTest")
-	public @ResponseBody ResponseEntity<String>createOrderTest(@RequestParam String token,@RequestBody CreatePayPalOrderDto dto){
+	public @ResponseBody ResponseEntity<String>createOrderTest(@RequestBody CreatePayPalOrderDto dto){
+		getToken();// will refresh the bearer token and update Date;
 		try {
 			String url = "https://api.sandbox.paypal.com/v2/checkout/orders";
 			URL obj = new URL(url);
@@ -142,7 +143,7 @@ public class PaypalApiTestController {
 			con.setRequestProperty("accept", "application/json");
 			con.setRequestProperty("content-type", "application/json");
 			con.setRequestProperty("accept-language", "en_US");
-			con.setRequestProperty("authorization", "Bearer "+token);
+			con.setRequestProperty("authorization", "Bearer "+bearerToken);
 //			System.out.println(token);
 			ObjectMapper mapper = new ObjectMapper();
 			
@@ -174,14 +175,15 @@ public class PaypalApiTestController {
 	}
 	
 	@PostMapping("/capturePayPalTest")
-	public @ResponseBody ResponseEntity<String> captureTest(@RequestParam String token, @RequestParam String orderid){
+	public @ResponseBody ResponseEntity<String> captureTest( @RequestParam String orderid){
+		getToken();
 		try {
 			String url = "https://api.sandbox.paypal.com/v2/checkout/orders/"+orderid+"/capture";
 			URL obj = new URL(url);
 			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 			con.setRequestMethod("POST");
 			con.setRequestProperty("content-type", "application/json");
-			con.setRequestProperty("authorization", "Bearer "+token);
+			con.setRequestProperty("authorization", "Bearer "+bearerToken);
 			BufferedReader in = new BufferedReader(
 				new InputStreamReader(con.getInputStream()));
 			String inputLine;

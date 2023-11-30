@@ -3,6 +3,7 @@ package com.myHighSpeedRail.marc.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ import com.myHighSpeedRail.marc.service.TicketDiscountService;
 public class TicketDiscountController {
 	@Autowired
 	private TicketDiscountService tdServ;
-	
+	@CrossOrigin
 	@GetMapping(value="/getAllDiscount")
 	public List<TicketDiscount> getAll(){
 		return tdServ.findAll();
@@ -28,6 +29,7 @@ public class TicketDiscountController {
 		tdServ.save(td);
 		return this.getAll();
 	}
+	@CrossOrigin
 	@GetMapping(value="/getAllTicketDiscountType")
 	public List<String> getAllType(){
 		return tdServ.getAllType();
