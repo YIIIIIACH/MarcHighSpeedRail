@@ -3,11 +3,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.marc.dto.AllocateTicketDto;
 import com.myHighSpeedRail.marc.dto.DisplayMemberBookingTicketDto;
 import com.myHighSpeedRail.marc.model.Booking;
 import com.myHighSpeedRail.marc.model.TicketOrder;
@@ -71,5 +76,19 @@ public class BookingController {
 			res.ticketStatusList.add(b.getStatus());
 		}
 		return res;
+	}
+	
+	@PostMapping("/allocateBooking")
+	public @ResponseBody ResponseEntity<String> allocateBooking(@RequestBody AllocateTicketDto dto){
+		// check desMemberToken is valid;
+		 // to be continue
+		//
+		int resStatus = bServ.allocateBooking(dto.srcMemberToken, dto.desMemberToken, dto.bookingId);
+		if( resStatus > 0) {
+			return new ResponseEntity<String> ("allocate success",HttpStatus.OK);			
+		}else if (resStatus< 0) {
+			return new ResponseEntity<String>("server error",HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<String>("target booking or user not found",HttpStatus.OK);
 	}
 }

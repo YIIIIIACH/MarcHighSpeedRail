@@ -24,4 +24,8 @@ public class BookingService {
 	public List<Booking> findByMember(String memuuid){
 		return bDao.findByMember(memuuid);
 	}
+	
+	public Integer allocateBooking( String srcMemberToken, String desMemberToken, Integer bookingId) {
+		return bDao.allocateBooking(srcMemberToken, desMemberToken, bookingId);
+	}
 }

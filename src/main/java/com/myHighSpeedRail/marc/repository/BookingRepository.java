@@ -17,4 +17,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	
 	@Query("from Booking where memberToken=:memuuid")
 	public List<Booking> findByMember(String memuuid);
+	
+	@Query("update Booking set memberToken=:desmembertoken where bookingId=:bid and memberToken=:srcmembertoken")
+	public Integer allocateBooking(String srcmembertoken, String desmembertoken , Integer bid);
 }
