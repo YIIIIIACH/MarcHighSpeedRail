@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	名稱 : <input type="text" id="name">
+	<br>
+	價格 : <input type="text" id="price">
+	<br>
+	描述 : <input type="text" id="desc">
+	<br>
+	種類 : <input type="text" id="type">
+	<br>
+	庫存 : <input type="text" id="inven">
+	<br>
+	<input type="button" id="btn" value="上架"> 
+
+<script>
+
+	const url = 'http://localhost:8080/MarcHighSpeedRail/product/add'
+
+	document.getElementById('btn').addEventListener('click', function(){
+		let data = {
+			productName : document.getElementById('name').value,
+			productPrice : document.getElementById('price').value,
+			productDescription : document.getElementById('desc').value,
+			productType : document.getElementById('type').value,
+			productInventory : document.getElementById('inven').value,
+		}
+		console.log(data)
+		let json = JSON.stringify(data)
+		console.log(json)
+
+		postData(url,json);
+		})
+	
+	function postData(url,json){
+		fetch(url,{
+			body : json,
+			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, same-origin, *omit
+            headers: {
+            	"user-agent": "Mozilla/4.0 MDN Example",
+                "content-type": "application/json",
+            },
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            mode: "same-origin", // no-cors, cors, *same-origin
+            redirect: "follow", // manual, *follow, error
+            referrer: "no-referrer",
+		})
+	}
+
+		
+	
+</script>
+</body>
+</html>

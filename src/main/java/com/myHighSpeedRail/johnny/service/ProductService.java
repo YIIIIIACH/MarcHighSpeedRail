@@ -1,6 +1,6 @@
 package com.myHighSpeedRail.johnny.service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
-import com.myHighSpeedRail.johnny.model.ProductPhoto;
-import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
-import com.myHighSpeedRail.johnny.repository.ProductPhotoRepository;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
 
 @Service

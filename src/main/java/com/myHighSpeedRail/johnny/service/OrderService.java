@@ -23,7 +23,7 @@ public class OrderService {
 		
 		for(ShoppingCartItem cartItem : cartItems) {
 			o.setMember(cartItem.getMember());
-			o.setOrderCreationDate(new Date());
+//			o.setOrderCreationDate(new Date());
 			o.setOrderStatus("Pending");
 //			o.setStation(cartItem.getProduct());
 

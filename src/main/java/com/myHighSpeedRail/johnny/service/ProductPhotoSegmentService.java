@@ -7,12 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.myHighSpeedRail.johnny.dto.PostPhotoDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
-import com.myHighSpeedRail.johnny.model.ProductPhoto;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
-import com.myHighSpeedRail.johnny.repository.ProductPhotoRepository;
 import com.myHighSpeedRail.johnny.repository.ProductPhotoSegmentRepository;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
 

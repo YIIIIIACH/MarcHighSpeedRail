@@ -2,14 +2,12 @@ package com.myHighSpeedRail.johnny.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.thymeleaf.spring6.util.SpringRequestUtils;
 
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
-import com.myHighSpeedRail.johnny.model.ProductPhoto;
-import com.myHighSpeedRail.johnny.service.ProductPhotoService;
 import com.myHighSpeedRail.johnny.service.ProductService;
 
 @Controller
@@ -70,12 +65,14 @@ public class ProductController {
 		return "showProduct";
 	}
 	
+	@GetMapping("/product/add1")
+	public String toAddProduct() {
+		return "addProduct";
+	}
+	
 	@GetMapping("/product/page")  //取得product (分頁)
 	public ResponseEntity<Page<Product>> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
 			Page<Product> products = pService.findbyPage(pageNumber);
-		
-//			m.addAttribute("page", page);	
-//			m.addAttribute("totalPages", page.getTotalPages());
 			
 			return ResponseEntity.ok(products);	
 	}
@@ -119,7 +116,9 @@ public class ProductController {
 	@GetMapping("/product/findByType") //依種類搜尋
 	@ResponseBody
 	public List<Product> findProductByProductType(@RequestParam("selectType") String selectType){
-		return pService.findProductByProductType(selectType);
+		
+		List<Product> pList = pService.findProductByProductType(selectType);
+		return pList;
 	}
 	
 	@GetMapping("/product/findByPrice") //依價格區間搜尋

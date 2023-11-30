@@ -23,7 +23,7 @@ public class ProductPhotoSegment {
 //	@JoinColumn(name="product_photo_id_fk",nullable=false)
 //	private ProductPhoto productPhoto;
 	
-	@ManyToOne(fetch= FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="product_id_fk",nullable=false)
 	private Product product;
 	
@@ -31,7 +31,7 @@ public class ProductPhotoSegment {
 	private Integer sequence;
 	
 	@Column(name="photo_segment")
-	private byte[]  photoSegment;
+	private byte[] photoSegment;
 	
 	public ProductPhotoSegment() {;}
 	public ProductPhotoSegment(Product product, Integer sequence, byte[] photoSegment) {
