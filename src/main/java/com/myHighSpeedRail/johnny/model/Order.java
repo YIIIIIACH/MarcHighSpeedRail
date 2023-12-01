@@ -2,6 +2,9 @@ package com.myHighSpeedRail.johnny.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myHighSpeedRail.marc.model.Station;
 
 import jakarta.persistence.Column;
@@ -12,7 +15,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "order")
@@ -23,6 +29,10 @@ public class Order {
 	@Column(name = "order_id", nullable = false)
 	private Integer orderId;
 	
+	@JsonFormat(pattern = "yyyy/MM/dd") // 輸出的時候 轉出去以前, 先做轉換 
+	@DateTimeFormat(pattern = "yyyy/MM/dd") // 轉換前端 String 日期到 Java 端日期格式
+	@Temporal(TemporalType.DATE) 
+	// TemporalType.DATE: 只保留日期部分。 TemporalType.TIME: 只保留時間部分。 TemporalType.TIMESTAMP: 保留日期和時間部分。
 	@Column(name = "order_creation_date", nullable = false)
 	private Date orderCreationDate;
 	
@@ -41,6 +51,14 @@ public class Order {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "station_id_fk", nullable = false)
 	private	Station station;
+	
+	@PrePersist // 物件轉到 persist 狀態之前要做的事
+	// 在 save 以前, 先 new Date()
+	public void onCreate() {
+		if(orderCreationDate == null) {
+			orderCreationDate = new Date();
+		}
+	}
 
 	public Order() {
 		super();

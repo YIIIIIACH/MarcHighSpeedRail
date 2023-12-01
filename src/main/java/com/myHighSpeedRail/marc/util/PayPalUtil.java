@@ -1,4 +1,5 @@
-package com.myHighSpeedRail.marc.paypalTest;
+package com.myHighSpeedRail.marc.util;
+
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,15 +32,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 import com.myHighSpeedRail.marc.dto.paypalapi.CreatePayPalOrderDto;
 
-@Controller
-public class PaypalApiTestController {
+@Service
+public class PayPalUtil {
 	@Value("${paypal.api.basic.token}")
-	private String basicToken;
+	private String basicToken;// ="QWFGOUFodi1XNWJ5eDlPeVJJMXBTWWNxTEE3aURqSXRtUlVPTFlvdG5wam1YQ1Q3S2RmRVBRLXNVOWViTUIzSU5hN1NQMG1ITjlwSVdQMnU6RUFBRGEtMExKaV9mU1FPbVdGU25vRHdtRDAyNWtZdEpkUWVzWDdCc0FESUVVbWZMNjBhUTVHSlFKMm0tTDBIbzBnMnNqY0RVQ3QwZmU3elQ=";
 	private String bearerToken=null;
 	private Date latestTokenUpdate=null;
 	
-	@PostMapping("/getAccessTokenTest")
-	public @ResponseBody ResponseEntity<String> getToken(){
+	public @ResponseBody ResponseEntity<String> getTokenUtil(){
 		// check if old token is expire? if less than 5 minute will not get now token
 		if( latestTokenUpdate==null) {
 			//haven't get a token yet
@@ -125,9 +126,12 @@ public class PaypalApiTestController {
 	    }
 	}
 	
-	@PostMapping("/createOrderTest")
-	public @ResponseBody ResponseEntity<String>createOrder(@RequestBody CreatePayPalOrderDto dto){
-		getToken();// will refresh the bearer token and update Date;
+	public @ResponseBody ResponseEntity<String>createOrderUtil(@RequestBody CreatePayPalOrderDto dto){
+		getTokenUtil();// will refresh the bearer token and update Date;
+		System.out.println("get token");
+		System.out.println(basicToken);
+		System.out.println(bearerToken);
+		System.out.println(latestTokenUpdate);
 		try {
 			String url = "https://api.sandbox.paypal.com/v2/checkout/orders";
 			URL obj = new URL(url);
@@ -167,9 +171,8 @@ public class PaypalApiTestController {
 		return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
 	}
 	
-	@PostMapping("/capturePayPalTest")
-	public @ResponseBody ResponseEntity<String> captureTest( @RequestParam String orderid){
-		getToken();
+	public @ResponseBody ResponseEntity<String> captureOrderUtil( @RequestParam String orderid){
+		getTokenUtil();
 		try {
 			String url = "https://api.sandbox.paypal.com/v2/checkout/orders/"+orderid+"/capture";
 			URL obj = new URL(url);

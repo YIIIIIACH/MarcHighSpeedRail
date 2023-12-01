@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.marc.util.PayPalUtil;
 import com.myHighSpeedRail.marc.dto.BookingDto;
 import com.myHighSpeedRail.marc.dto.DisplayMemberBookingTicketDto;
 import com.myHighSpeedRail.marc.dto.DisplayMemberTicketOrderDto;
 import com.myHighSpeedRail.marc.dto.MakeOrderBuinessSeatDto;
+import com.myHighSpeedRail.marc.dto.paypalapi.AppContext;
+import com.myHighSpeedRail.marc.dto.paypalapi.CreatePayPalOrderDto;
+import com.myHighSpeedRail.marc.dto.paypalapi.Unit;
+import com.myHighSpeedRail.marc.dto.paypalapi.*;
 import com.myHighSpeedRail.marc.model.Booking;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
@@ -60,6 +66,13 @@ public class TicketOrderController {
 	private RailRouteStopStationService schrrssServ;
 	@Autowired
 	private ScheduleSeatStatusService schssServ;
+	
+	@Autowired
+	private PayPalUtil paypalServ;
+	
+	@Value("${server.baseurl}")
+	private String SERVER_BASE_URL;
+	
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
 		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
@@ -115,11 +128,57 @@ public class TicketOrderController {
 		
 		// reduce the amount of schedule_rest_seat 
 		schrsServ.updateScheduleRestSeat(sch.getScheduleId(), bookingDto.ticketDiscountId , rrs.getRailRoute().getRailRouteId() , bookingDto.startStationId , bookingDto.endStationId , bookingDto.chooseDiscounts.size() );
-		return new ResponseEntity<String>("booking success",HttpStatus.OK);
+		return new ResponseEntity<String>("booking success ,ticketOrderId:"+tcko.getTicketOrderId(),HttpStatus.OK);
 	}
 	
-	@PostMapping("registAllocateTicketOrderSeats")
-	public @ResponseBody ResponseEntity<String> allocateTicketOrdeSeat(@RequestParam Integer ticketOrderId){
+	@PostMapping("/createTicketOrder")
+	public @ResponseBody ResponseEntity<String> createPayPalTicketOrder(@RequestParam Integer ticketOrderId){
+		// get info of ticket order
+		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
+		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
+//		bList.get(0).getTicketOrder();
+		// put info into dto
+		dto.intent="CAPTURE";
+		// add application context into dto
+		AppContext actx= new AppContext();
+		//會redirect client 到一隻專門接收user approve 成功資訊的controller
+		actx.return_url=SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);
+		actx.cancel_url="http://google.com"; 
+		dto.application_context= actx;
+		// add purchase_units into dto
+		List<Unit> purUnits= new ArrayList<Unit>();
+		Unit u = new Unit();
+		u.items= new ArrayList<Item>();
+		// add item 
+		Integer priceSum=0;
+		for(int i=0; i<bList.size(); i++) {
+			Booking b= bList.get(i);
+			Item tmp = new Item();
+			tmp.name= "MarcHSR_Ticket";
+			tmp.description=  b.getRailRouteSegment().getStartStation().getStationName()+"-"+b.getRailRouteSegment().getEndStation().getStationName()+b.getTicketDiscount().getTicketDiscountName();
+			tmp.quantity="1";
+			priceSum+= b.getTicketPrice();
+			UnitAmount ua= new UnitAmount("TWD", String.valueOf(b.getTicketPrice())+".00");
+			tmp.unit_amount=ua;
+			u.items.add(tmp);
+		}
+		//create Amount
+		Amount am = new Amount();
+		am.currency_code="TWD";
+		am.value= String.valueOf(priceSum)+".00";
+		am.breakdown= new Breakdown("TWD", priceSum);
+		u.amount= am;
+		purUnits.add(u);
+		dto.purchase_units=purUnits;
+		
+//		return dto;
+//		return new ResponseEntity<String>("still in progress",HttpStatus.OK);
+		return paypalServ.createOrderUtil(dto);
+	}
+	
+	@GetMapping("registAllocateTicketOrderSeats")
+	public @ResponseBody ResponseEntity<String> allocateTicketOrdeSeat(@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
+		
 		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
 		//List<RailRouteStopStation> findByRouteIdStationId(Integer rid, Integer sid){
 		RailRouteStopStation stopst1 = schrrssServ.findByRouteIdStationId(
@@ -148,7 +207,9 @@ public class TicketOrderController {
 		TicketOrder tmp = bList.get(0).getTicketOrder();
 		tmp.setStatus("已付款");
 		tkoServ.save(tmp );
-		return new ResponseEntity<String>( "inserted  data", HttpStatus.OK);
+		//go capture the paypal token
+		return paypalServ.captureOrderUtil(paypalOrderId);
+//		return new ResponseEntity<String>( "inserted  data", HttpStatus.OK);
 	}
 	@PostMapping(value="/bookBuinessSeat")
 	public @ResponseBody ResponseEntity<String> bookBuinessSeat(@RequestBody MakeOrderBuinessSeatDto boDto){
