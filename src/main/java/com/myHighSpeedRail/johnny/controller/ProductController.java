@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.johnny.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,12 +95,13 @@ public class ProductController {
 //				sb.append(pps.getPhotoSegment().toString());
 //				sb.
 //			}
-			String sb ="";
+			StringBuilder sb = new StringBuilder();
 			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
 //				sb.concat(pps.getPhotoSegment().toString());
-				sb+= pps.getPhotoSegment().toString();
+//				String str = new String(byteArray1, 0, 3, StandardCharsets.UTF_8);
+				sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
 			}
-			tmp.PhotoData= sb;
+			tmp.PhotoData= sb.toString();
 			res.add(tmp);
 			if(flag==0) {
 //				System.out.println("show"+sb);
@@ -109,11 +111,40 @@ public class ProductController {
 		 return res;
 	}
 	
+//	@GetMapping("/product/page")  //取得product (分頁)
+//	public ResponseEntity<Page<Product>> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
+//			Page<Product> products = pService.findbyPage(pageNumber);
+//			
+//			return ResponseEntity.ok(products);	
+//	}
+	
 	@GetMapping("/product/page")  //取得product (分頁)
-	public ResponseEntity<Page<Product>> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
-			Page<Product> products = pService.findbyPage(pageNumber);
+	public List<DisplayProductDto> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
+			List<Product> pList = pService.findbyPage(pageNumber);
+			List<DisplayProductDto> res= new ArrayList<DisplayProductDto>();
+			int flag =0;
+			for( Product p : pList) {
+				DisplayProductDto tmp = new DisplayProductDto();
+				tmp.productDescription= p.getProductDescription();
+				tmp.productId= p.getProductId();
+				tmp.productInventory= p.getProductInventory();
+				tmp.productName=p.getProductName();
+				tmp.productPrice=p.getProductPrice();
+				tmp.productType=p.getProductType();
+				p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
 			
-			return ResponseEntity.ok(products);	
+				StringBuilder sb = new StringBuilder();
+				for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+					sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+				}
+				
+				tmp.PhotoData= sb.toString();
+				res.add(tmp);
+				if(flag==0) {
+					flag=1;
+				}
+			}
+			 return res;
 	}
 	
 	@DeleteMapping("/product/delete")  //透過id下架商品
@@ -148,23 +179,116 @@ public class ProductController {
 	
 	@GetMapping("/product/findByNameLike")  //關鍵字搜尋
 	@ResponseBody
-	public List<Product> findProductByNameLike(@RequestParam("nameInput") String nameInput ){
-		return pService.findProductByNameLike(nameInput);
+	public List<DisplayProductDto> findProductByNameLike(@RequestParam("nameInput") String nameInput ){
+		 List<Product> pList = pService.findProductByNameLike(nameInput);
+		 List<DisplayProductDto> res= new ArrayList<DisplayProductDto>();
+			int flag =0;
+			for( Product p : pList) {
+				DisplayProductDto tmp = new DisplayProductDto();
+				tmp.productDescription= p.getProductDescription();
+				tmp.productId= p.getProductId();
+				tmp.productInventory= p.getProductInventory();
+				tmp.productName=p.getProductName();
+				tmp.productPrice=p.getProductPrice();
+				tmp.productType=p.getProductType();
+				p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+//				StringBuilder sb= new StringBuilder();
+//				for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+//					sb.append(pps.getPhotoSegment().toString());
+//					sb.
+//				}
+				StringBuilder sb = new StringBuilder();
+				for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+//					sb.concat(pps.getPhotoSegment().toString());
+//					String str = new String(byteArray1, 0, 3, StandardCharsets.UTF_8);
+					sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+				}
+				tmp.PhotoData= sb.toString();
+				res.add(tmp);
+				if(flag==0) {
+//					System.out.println("show"+sb);
+					flag=1;
+				}
+			}
+			 return res;
 	}
 	
-	@GetMapping("/product/findByType") //依種類搜尋
+//	@GetMapping("/product/findByType") //依種類搜尋v1
+//	@ResponseBody
+//	public List<Product> findProductByProductType(@RequestParam("selectType") String selectType){
+//		
+//		List<Product> pList = pService.findProductByProductType(selectType);
+//		return pList;
+//	}
+	
+	@GetMapping("/product/findByType") //依種類搜尋v2
 	@ResponseBody
-	public List<Product> findProductByProductType(@RequestParam("selectType") String selectType){
+	public List<DisplayProductDto> findProductByProductType(@RequestParam("selectType") String selectType){
 		
 		List<Product> pList = pService.findProductByProductType(selectType);
-		return pList;
+		List<DisplayProductDto> res= new ArrayList<DisplayProductDto>();
+		int flag =0;
+		for( Product p : pList) {
+			DisplayProductDto tmp = new DisplayProductDto();
+			tmp.productDescription= p.getProductDescription();
+			tmp.productId= p.getProductId();
+			tmp.productInventory= p.getProductInventory();
+			tmp.productName=p.getProductName();
+			tmp.productPrice=p.getProductPrice();
+			tmp.productType=p.getProductType();
+			p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+
+			StringBuilder sb = new StringBuilder();
+			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+
+				sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+			}
+			tmp.PhotoData= sb.toString();
+			res.add(tmp);
+			if(flag==0) {
+				flag=1;
+			}
+		}
+		 return res;
+		
 	}
 	
-	@GetMapping("/product/findByPrice") //依價格區間搜尋
+//	@GetMapping("/product/findByPrice") //依價格區間搜尋v1
+//	@ResponseBody
+//	public List<Product> findProdictByProductPrice
+//	(@RequestParam("firstPrice") Integer firstPrice, @RequestParam("secondPrice") Integer secondPrice){
+//		return pService.findProductByProductPrice(firstPrice, secondPrice);
+//	}
+	
+	@GetMapping("/product/findByPrice") //依價格區間搜尋v2
 	@ResponseBody
-	public List<Product> findProdictByProductPrice
+	public List<DisplayProductDto> findProdictByProductPrice
 	(@RequestParam("firstPrice") Integer firstPrice, @RequestParam("secondPrice") Integer secondPrice){
-		return pService.findProductByProductPrice(firstPrice, secondPrice);
+		 List<Product> pList = pService.findProductByProductPrice(firstPrice, secondPrice);
+		 List<DisplayProductDto> res= new ArrayList<DisplayProductDto>();
+		 int flag =0;
+			for( Product p : pList) {
+				DisplayProductDto tmp = new DisplayProductDto();
+				tmp.productDescription= p.getProductDescription();
+				tmp.productId= p.getProductId();
+				tmp.productInventory= p.getProductInventory();
+				tmp.productName=p.getProductName();
+				tmp.productPrice=p.getProductPrice();
+				tmp.productType=p.getProductType();
+				p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+
+				StringBuilder sb = new StringBuilder();
+				for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+
+					sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+				}
+				tmp.PhotoData= sb.toString();
+				res.add(tmp);
+				if(flag==0) {
+					flag=1;
+				}
+			}
+			return res;
 	}
 	
 }
