@@ -65,12 +65,14 @@ public class EmployeeController {
 			sessionEmp.setEmpName(result.getEmployeeName());
 			sessionEmp.setEsa(esa);
 			httpSession.setAttribute("loginEmployee", sessionEmp);
+			SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+			System.out.println("emp: " + emp);
 			return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("帳號或密碼錯誤");
 	}
-	
+
 //	// 登入並拿取員工資料包含權限
 //		@ResponseBody
 //		@PostMapping("/employee/login")
@@ -199,6 +201,8 @@ public class EmployeeController {
 		System.out.println("檢查登入 controller");
 
 		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		System.out.println("emp2: " + emp);
 
 		if (emp == null) {
 			System.out.println("session attribute 空的");

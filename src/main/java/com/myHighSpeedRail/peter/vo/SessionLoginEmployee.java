@@ -36,4 +36,8 @@ public class SessionLoginEmployee {
 		this.esa = esa;
 	}
 
+	@Override
+	public String toString() {
+		return "SessionLoginEmployee [empId=" + empId + ", empName=" + empName + ", esa=" + esa + "]";
+	}
 }
