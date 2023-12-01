@@ -26,4 +26,6 @@ public interface ScheduleSeatStatusRepository extends JpaRepository<ScheduleSeat
 	//findBySeatSchedule(Schedule sch, List<Seat> seatlist){
 	@Query(value="from ScheduleSeatStatus where schedule=:sch and seat in (:seatlist)")
 	public List<ScheduleSeatStatus> findBySeatSchedule(Schedule sch, List<Seat> seatlist);
+	@Query(value="from ScheduleSeatStatus where schedule.scheduleId=:schid and seat.seatId=:stid")
+	public List<ScheduleSeatStatus> findBySchidSeatid(Integer schid, Integer stid);
 }

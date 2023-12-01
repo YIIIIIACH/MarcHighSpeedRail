@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.service.ScheduleSeatStatusService;
+import com.myHighSpeedRail.marc.service.ScheduleService;
 
 @Controller
 public class ScheduleSeatStatusController {
 
 	@Autowired
 	private ScheduleSeatStatusService schSeatServ;
+	@Autowired
+	private ScheduleService schServ;
 	
 	@PostMapping("/setupScheduleSeatStatus")
 	public @ResponseBody ResponseEntity<String> setupByScheduleId(@RequestParam Integer schId){
@@ -50,6 +53,9 @@ public class ScheduleSeatStatusController {
 		schSeatServ.registBookedSeat(schid, mask, amt);
 		return new ResponseEntity<String>( "inserted  data", HttpStatus.OK);
 	}
-	
+	@GetMapping("/getSchSeatStatus")
+	public @ResponseBody List<ScheduleSeatStatus> getSchSeatStatus(@RequestParam Integer schid, @RequestParam Integer seatid) {
+		return schSeatServ.findBySchidSeatid(schid, seatid);
+	}
 
 }

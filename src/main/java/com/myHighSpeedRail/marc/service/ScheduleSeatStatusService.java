@@ -56,4 +56,7 @@ public class ScheduleSeatStatusService {
 	public List<ScheduleSeatStatus> findBySeatSchedule(Schedule sch, List<Seat> seatlist){
 		return schSeatDao.findBySeatSchedule(sch, seatlist);
 	}
+	public List<ScheduleSeatStatus> findBySchidSeatid(Integer schid,Integer seatid){
+		return schSeatDao.findBySchidSeatid(schid, seatid);
+	}
 }

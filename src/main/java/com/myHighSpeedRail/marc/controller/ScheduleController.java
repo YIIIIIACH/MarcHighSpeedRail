@@ -216,7 +216,7 @@ public class ScheduleController {
 		
 	}
 	
-	@GetMapping("/requestBusinessBook")
+	@PostMapping("/requestBusinessBook")
 	public @ResponseBody BookingBuinessSeatResponseDto requestBusinessBook(@RequestBody BookingBuinessSeatDto bbsDto){
 //		bbsDto.scheduleId
 		Schedule sch = schServ.findById(bbsDto.scheduleId);
