@@ -7,9 +7,9 @@ import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.Station;
 
 public class MakeOrderBuinessSeatDto {
-	public List<ScheduleSeatStatus>  orderSeatList;
-	public Schedule schedule;
+	public List<Integer>  orderSeatIdList;
+	public Integer scheduleId;
 	public Station startStation;
 	public Station endStation;
-	public Integer ticketDiscountId;
+	public String ticketDiscountName;
 }
