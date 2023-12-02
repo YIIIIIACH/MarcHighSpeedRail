@@ -64,12 +64,22 @@ public class ProductService {
 		return pDao.findAll();
 	}
 	
-	public Page<Product> findbyPage(Integer pageNumber){
+//	public Page<Product> findbyPage(Integer pageNumber){
+//		Pageable pgb = PageRequest.of(pageNumber-1, 10, Sort.Direction.ASC, "productId"); //分頁設定
+//		Page<Product> page = pDao.findAll(pgb); //找到符合分頁設定的product
+////		Page<Product> products = pDao.findProductAndPhoto(pgb);
+////		List<Product> content = page.getContent();
+//		return page;
+//		//回傳是Page型別, 在前端要用.content.forEach()取得裡面的物件
+//		//回傳是List型別, 在前端要用.forEach()取得物件
+//	}
+	
+	public List<Product> findbyPage(Integer pageNumber){
 		Pageable pgb = PageRequest.of(pageNumber-1, 10, Sort.Direction.ASC, "productId"); //分頁設定
 		Page<Product> page = pDao.findAll(pgb); //找到符合分頁設定的product
 //		Page<Product> products = pDao.findProductAndPhoto(pgb);
-//		List<Product> content = page.getContent();
-		return page;
+		List<Product> content = page.getContent();
+		return content;
 		//回傳是Page型別, 在前端要用.content.forEach()取得裡面的物件
 		//回傳是List型別, 在前端要用.forEach()取得物件
 	}
