@@ -31,8 +31,8 @@ public class Leave {
 	@Column(name = "available_leave_days_description")
 	private String availableLeaveDaysDescription;
 
-//	@JsonIgnore
-	@JsonManagedReference(value = "leaEl")
+	@JsonIgnore
+//	@JsonManagedReference(value = "leaEl")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leave", cascade = CascadeType.ALL)
 	private List<EmployeeLeave> employeeLeave = new LinkedList<EmployeeLeave>();
 

@@ -102,15 +102,18 @@ public class SystemAuthorHandler {
 	private void encapsulateJsonToMap(String authorJSON) {
 		// 把權限裝進Map裡面
 		authorJsonMap = new HashMap<Integer, JSONArray>();
-		for (int i = 1; i < SystemNumber; i++) {
+		for (int i = 1; i <= SystemNumber; i++) {
 			try {
 				String s = String.valueOf(i);
+//				System.out.println("i: " + s);
 				JSONObject jsonObj = new JSONObject(authorJSON);
 				JSONArray jsonArray = jsonObj.getJSONObject("authorJson").getJSONArray(s);
+				System.out.println("jsonArray: " + jsonArray);
 				authorJsonMap.put(i, jsonArray);
 
 			} catch (Exception e) {
-				e.printStackTrace();
+//				e.printStackTrace();
+				System.out.println("未設定系統權限，系統ID: " + i);
 			}
 		}
 	}

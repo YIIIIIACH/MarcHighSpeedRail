@@ -28,8 +28,8 @@ public class EmployeeTitle {
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
 
-//	@JsonIgnore
-	@JsonBackReference(value = "titEt")
+	@JsonIgnore
+//	@JsonBackReference(value = "titEt")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "title_id_fk")
 	private Title title;
