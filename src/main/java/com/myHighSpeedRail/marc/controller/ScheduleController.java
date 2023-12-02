@@ -216,7 +216,7 @@ public class ScheduleController {
 		
 	}
 	
-	@GetMapping("/requestBusinessBook")
+	@PostMapping("/requestDiscountTypeBook")
 	public @ResponseBody BookingBuinessSeatResponseDto requestBusinessBook(@RequestBody BookingBuinessSeatDto bbsDto){
 //		bbsDto.scheduleId
 		Schedule sch = schServ.findById(bbsDto.scheduleId);
@@ -225,6 +225,9 @@ public class ScheduleController {
 		
 		Integer stStSeq = rrss1.getRailRouteStopStationSequence();
 		Integer edStSeq = rrss2.getRailRouteStopStationSequence();
+		if(stStSeq >= edStSeq) {
+			return new BookingBuinessSeatResponseDto();
+		}
 		Long mask = 0L;
 		mask |= (1L << edStSeq)-1;
 		mask >>= stStSeq;
@@ -233,7 +236,7 @@ public class ScheduleController {
 		ScheduleDetail schd = schdServ.getScheduleDiscountRange(sch.getScheduleId(), bbsDto.ticketDiscountName).get(0); 
 		List<ScheduleSeatStatus> schssList =schssServ.findByScheduleSeatRange(sch, schd.getSeatRangeStart(), schd.getSeatRangeEnd()	);
 		BookingBuinessSeatResponseDto res = new BookingBuinessSeatResponseDto();
-		res.scheduleSeatStatusList= schssList;
+		res.seatList= schssList.stream().map((a)-> a.getSeat()).toList();
 		res.bookedSeatIdList = new ArrayList<Integer>();
 		for( ScheduleSeatStatus schss : schssList) {
 			if((schss.getScheduleStatus() & mask) >0) {

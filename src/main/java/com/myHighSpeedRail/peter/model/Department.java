@@ -28,13 +28,13 @@ public class Department {
 	@Column(name="department_name")
 	private String departmentName;
 	
-//	@JsonIgnore
-	@JsonManagedReference(value="depSa")
+	@JsonIgnore
+//	@JsonManagedReference(value="depSa")
 	@OneToMany(fetch = FetchType.LAZY,mappedBy = "department",cascade = CascadeType.ALL)
 	private List<SystemAuthor> systemAuthor = new LinkedList<SystemAuthor>();
 	
-//	@JsonIgnore
-	@JsonManagedReference(value="depEhd") 
+	@JsonIgnore
+//	@JsonManagedReference(value="depEhd") 
 	@OneToMany(fetch = FetchType.LAZY,mappedBy = "department",cascade = CascadeType.ALL)
 	private List<EmployeeHistoricalDepartment> employeeHistoricalDepartment = new LinkedList<EmployeeHistoricalDepartment>();
 

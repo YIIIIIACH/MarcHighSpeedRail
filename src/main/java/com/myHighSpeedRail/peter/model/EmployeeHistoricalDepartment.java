@@ -40,8 +40,8 @@ public class EmployeeHistoricalDepartment {
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
 
-//	@JsonIgnore
-	@JsonBackReference(value = "depEhd")
+	@JsonIgnore
+//	@JsonBackReference(value = "depEhd")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id_fk")
 	private Department department;

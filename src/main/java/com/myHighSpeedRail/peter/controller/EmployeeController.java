@@ -34,8 +34,6 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class EmployeeController {
 
-	private static final String SessionLoginEmployee = null;
-
 	@Autowired
 	private EmployeeService eService;
 
@@ -55,7 +53,7 @@ public class EmployeeController {
 			@RequestParam("psw") String loginPwd, HttpSession httpSession) {
 
 		Employee result = eService.checklogin(loginAccount, loginPwd);
-		System.out.println("result: " + result);
+//		System.out.println("result: " + result);
 
 		if (result != null) {
 			EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(result);
@@ -65,8 +63,6 @@ public class EmployeeController {
 			sessionEmp.setEmpName(result.getEmployeeName());
 			sessionEmp.setEsa(esa);
 			httpSession.setAttribute("loginEmployee", sessionEmp);
-			SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
-			System.out.println("emp: " + emp);
 			return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 		}
 
@@ -133,6 +129,7 @@ public class EmployeeController {
 		if (eService.checkEmpAccountIfExist(emp.getEmployeeAccount())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("員工帳號已存在");
 		}
+		System.out.println("測試emp傳入"+emp);
 		eService.employeeAdd(emp);
 		return ResponseEntity.status(HttpStatus.CREATED).body("新增成功");
 	}
@@ -198,11 +195,7 @@ public class EmployeeController {
 	@GetMapping("/employee/dto")
 	public ResponseEntity<?> getLoginInfo(HttpSession httpSession) {
 
-		System.out.println("檢查登入 controller");
-
 		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
-
-		System.out.println("emp2: " + emp);
 
 		if (emp == null) {
 			System.out.println("session attribute 空的");
