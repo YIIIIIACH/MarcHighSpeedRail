@@ -35,7 +35,8 @@ public class Employee {
 	@Column(name = "employee_gender")
 	private String employeeGender;
 
-	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GM+8")
+//	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@Column(name = "employee_birth")
 	private Date employeeBirth;
@@ -61,7 +62,8 @@ public class Employee {
 	@Column(name = "employee_photo")
 	private String employeePhoto;// 想要在資料庫裡寫資料夾邏輯
 
-	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GM+8")
+//	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@Column(name = "employee_arrival_date")
 	private Date employeeArrivalDate;
@@ -78,18 +80,6 @@ public class Employee {
 	@Column(name = "employee_password")
 	private String employeePassword;
 
-	@Override
-	public String toString() {
-		return "Employee [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeGender="
-				+ employeeGender + ", employeeBirth=" + employeeBirth + ", employeeIdNumber=" + employeeIdNumber
-				+ ", employeePhoneNumber=" + employeePhoneNumber + ", employeeContactNumber=" + employeeContactNumber
-				+ ", employeeEmail=" + employeeEmail + ", employeeResidenceAddress=" + employeeResidenceAddress
-				+ ", employeeContactAddress=" + employeeContactAddress + ", employeePhoto=" + employeePhoto
-				+ ", employeeArrivalDate=" + employeeArrivalDate + ", employeeSalaryKind=" + employeeSalaryKind
-				+ ", employeeBasicSalary=" + employeeBasicSalary + ", employeeAccount=" + employeeAccount
-				+ ", employeePassword=" + employeePassword + "]";
-	}
-
 //	@JsonIgnore
 	@JsonManagedReference(value = "empSa")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
@@ -103,12 +93,12 @@ public class Employee {
 //	@JsonManagedReference(value = "empEwoemp")
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
-	private List<EmployeeWorkOvertime> EmployeeWorkOvertimeByEmployee = new LinkedList<EmployeeWorkOvertime>();
+	private List<EmployeeWorkOvertime> employeeWorkOvertimeByEmployee = new LinkedList<EmployeeWorkOvertime>();
 
 //	@JsonManagedReference(value = "empEwoman")
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "manager", cascade = CascadeType.ALL)
-	private List<EmployeeWorkOvertime> EmployeeWorkOvertimeByManager = new LinkedList<EmployeeWorkOvertime>();
+	private List<EmployeeWorkOvertime> employeeWorkOvertimeByManager = new LinkedList<EmployeeWorkOvertime>();
 
 //	@JsonIgnore
 	@JsonManagedReference(value = "empEeq")
@@ -130,13 +120,13 @@ public class Employee {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeHistoricalBaseSalary> employeeHistoricalBaseSalary = new LinkedList<EmployeeHistoricalBaseSalary>();
 
-	@JsonIgnore
 //	@JsonManagedReference(value = "empElemp")
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeLeave> employeeLeaveByEmployee = new LinkedList<EmployeeLeave>();
 
-	@JsonIgnore
 //	@JsonManagedReference(value = "empElman")
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "manager", cascade = CascadeType.ALL)
 	private List<EmployeeLeave> employeeLeaveByManager = new LinkedList<EmployeeLeave>();
 
@@ -144,9 +134,6 @@ public class Employee {
 	@JsonManagedReference(value = "empEt")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeTitle> employeeTitle = new LinkedList<EmployeeTitle>();
-
-	public Employee() {
-	}
 
 	public Integer getEmployeeId() {
 		return employeeId;
@@ -292,20 +279,21 @@ public class Employee {
 		this.employeeHistoricalDepartment = employeeHistoricalDepartment;
 	}
 
+
 	public List<EmployeeWorkOvertime> getEmployeeWorkOvertimeByEmployee() {
-		return EmployeeWorkOvertimeByEmployee;
+		return employeeWorkOvertimeByEmployee;
 	}
 
 	public void setEmployeeWorkOvertimeByEmployee(List<EmployeeWorkOvertime> employeeWorkOvertimeByEmployee) {
-		EmployeeWorkOvertimeByEmployee = employeeWorkOvertimeByEmployee;
+		this.employeeWorkOvertimeByEmployee = employeeWorkOvertimeByEmployee;
 	}
 
 	public List<EmployeeWorkOvertime> getEmployeeWorkOvertimeByManager() {
-		return EmployeeWorkOvertimeByManager;
+		return employeeWorkOvertimeByManager;
 	}
 
 	public void setEmployeeWorkOvertimeByManager(List<EmployeeWorkOvertime> employeeWorkOvertimeByManager) {
-		EmployeeWorkOvertimeByManager = employeeWorkOvertimeByManager;
+		this.employeeWorkOvertimeByManager = employeeWorkOvertimeByManager;
 	}
 
 	public List<EmployeeEducationalQualifications> getEmployeeEducationalQualifications() {
@@ -364,5 +352,6 @@ public class Employee {
 	public void setEmployeeTitle(List<EmployeeTitle> employeeTitle) {
 		this.employeeTitle = employeeTitle;
 	}
+
 
 }
