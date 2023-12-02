@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -64,16 +67,9 @@ public class ProductController {
 		 return pService.addAllProduct(pList);
 	}
 	
-	@GetMapping("/product")
-	public String toProduct() {
-		return "showProduct";
-	}
 	
-	@GetMapping("/product/add1")
-	public String toAddProduct() {
-		return "addProduct";
-	}
 	
+	//
 	@GetMapping("/products")
 	@ResponseBody
 	public List<DisplayProductDto> getAllproduct(){
@@ -111,16 +107,10 @@ public class ProductController {
 		 return res;
 	}
 	
-//	@GetMapping("/product/page")  //取得product (分頁)
-//	public ResponseEntity<Page<Product>> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
-//			Page<Product> products = pService.findbyPage(pageNumber);
-//			
-//			return ResponseEntity.ok(products);	
-//	}
-	
 	@GetMapping("/product/page")  //取得product (分頁)
-	public List<DisplayProductDto> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
-			List<Product> pList = pService.findbyPage(pageNumber);
+	@ResponseBody
+	public Page<DisplayProductDto> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
+			Page<Product> pList = pService.findbyPage(pageNumber);
 			List<DisplayProductDto> res= new ArrayList<DisplayProductDto>();
 			int flag =0;
 			for( Product p : pList) {
@@ -144,7 +134,10 @@ public class ProductController {
 					flag=1;
 				}
 			}
-			 return res;
+			Pageable pageable = PageRequest.of(pageNumber - 1, pList.getSize());
+			Page<DisplayProductDto> pageResult = new PageImpl<>(res, pageable, pList.getTotalElements());
+			
+			return pageResult;
 	}
 	
 	@DeleteMapping("/product/delete")  //透過id下架商品
@@ -153,23 +146,6 @@ public class ProductController {
 		pService.deleteById(id);
 		return new ResponseEntity<String>("商品移除成功",HttpStatus.OK);
 	}
-	
-//	@PutMapping("/product/update")  
-//	@ResponseBody
-//	public ResponseEntity<String> updateProductById(
-//			@RequestParam Integer id, 
-//			@RequestParam String newDesc, 
-//			@RequestParam String newName, 
-//			@RequestParam Integer newPrice,
-//			@RequestParam String newType, 
-//			@RequestParam Integer newInventory,
-//			@RequestParam String newMimeType,
-//			@RequestParam String newPhotoPath) {
-//		
-//		Product updatedProduct = pService.UpdateProduct(id, newName, newDesc, newPrice, newType, newInventory);
-//		ppService.updatePhoto(id, newMimeType, newPhotoPath);
-//		return new ResponseEntity<String>("商品更新成功，商品ID : " + updatedProduct.getProductId() ,HttpStatus.OK);
-//	}
 	
 	@PutMapping("/product/update") // 僅更新商品基本資訊
 	public ResponseEntity<String> updateProductById(@RequestBody Product p){
@@ -192,36 +168,23 @@ public class ProductController {
 				tmp.productPrice=p.getProductPrice();
 				tmp.productType=p.getProductType();
 				p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
-//				StringBuilder sb= new StringBuilder();
-//				for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-//					sb.append(pps.getPhotoSegment().toString());
-//					sb.
-//				}
+
 				StringBuilder sb = new StringBuilder();
 				for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-//					sb.concat(pps.getPhotoSegment().toString());
-//					String str = new String(byteArray1, 0, 3, StandardCharsets.UTF_8);
 					sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
 				}
 				tmp.PhotoData= sb.toString();
 				res.add(tmp);
 				if(flag==0) {
-//					System.out.println("show"+sb);
+
 					flag=1;
 				}
 			}
 			 return res;
 	}
 	
-//	@GetMapping("/product/findByType") //依種類搜尋v1
-//	@ResponseBody
-//	public List<Product> findProductByProductType(@RequestParam("selectType") String selectType){
-//		
-//		List<Product> pList = pService.findProductByProductType(selectType);
-//		return pList;
-//	}
-	
-	@GetMapping("/product/findByType") //依種類搜尋v2
+	// 依種類搜尋
+	@GetMapping("/product/findByType") 
 	@ResponseBody
 	public List<DisplayProductDto> findProductByProductType(@RequestParam("selectType") String selectType){
 		
@@ -253,14 +216,8 @@ public class ProductController {
 		
 	}
 	
-//	@GetMapping("/product/findByPrice") //依價格區間搜尋v1
-//	@ResponseBody
-//	public List<Product> findProdictByProductPrice
-//	(@RequestParam("firstPrice") Integer firstPrice, @RequestParam("secondPrice") Integer secondPrice){
-//		return pService.findProductByProductPrice(firstPrice, secondPrice);
-//	}
-	
-	@GetMapping("/product/findByPrice") //依價格區間搜尋v2
+	// 依價格區間搜尋
+	@GetMapping("/product/findByPrice")
 	@ResponseBody
 	public List<DisplayProductDto> findProdictByProductPrice
 	(@RequestParam("firstPrice") Integer firstPrice, @RequestParam("secondPrice") Integer secondPrice){
@@ -289,6 +246,16 @@ public class ProductController {
 				}
 			}
 			return res;
+	}
+	
+	@GetMapping("/product")
+	public String toProduct() {
+		return "showProduct";
+	}
+	
+	@GetMapping("/product/add1")
+	public String toAddProduct() {
+		return "addProduct";
 	}
 	
 }
