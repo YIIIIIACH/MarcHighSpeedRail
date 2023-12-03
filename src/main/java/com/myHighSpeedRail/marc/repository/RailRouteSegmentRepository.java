@@ -27,4 +27,6 @@ public interface RailRouteSegmentRepository extends JpaRepository<RailRouteSegme
 	@Query("from RailRouteSegment where railRoute.railRouteId=:rrid and startStation.stationId not in (:stStExcludeList) and endStation.stationId  not in (:endStExcludeList)")
 	public List<RailRouteSegment> findByStartEndStationExcludeRange(Integer rrid,List<Integer> stStExcludeList, List<Integer>  endStExcludeList);
 	// 20 25 , 14
+	@Query("from RailRouteSegment rrs join Schedule sch on rrs.railRoute=sch.railRoute where sch.scheduleId=:schid and rrs.startStation.stationId=:stid and rrs.endStation.stationId=:edid")
+	public List<RailRouteSegment> findByScheduleIdStstEdst(Integer schid,Integer  stid,Integer edid);
 }

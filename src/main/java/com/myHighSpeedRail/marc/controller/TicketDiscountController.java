@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myHighSpeedRail.marc.model.TicketDiscount;
@@ -29,9 +30,12 @@ public class TicketDiscountController {
 		tdServ.save(td);
 		return this.getAll();
 	}
-	@CrossOrigin
 	@GetMapping(value="/getAllTicketDiscountType")
 	public List<String> getAllType(){
 		return tdServ.getAllType();
+	}
+	@GetMapping("/getTicketDiscountByTypeName")
+	public List<TicketDiscount> getByDiscountTypeName(@RequestParam String discName){
+		return tdServ.findByDiscountType(discName);
 	}
 }

@@ -62,6 +62,9 @@ public class RailRouteSegmentService {
 	public List<RailRouteSegment> findByRailRouteIdStartStationEndStation(Integer rrId, Integer stStId, Integer edStId){
 		return rrsDao.findByRailRouteIdStartStationEndStation(rrId, stStId, edStId);
 	}
+	public List<RailRouteSegment> findByScheduleIdStstEdst(Integer schid,Integer  stid,Integer edid){
+		return rrsDao.findByScheduleIdStstEdst(schid, stid ,edid);
+	}
 	public List<RailRouteSegment> findByRouteIdStartStEndStRange(Integer  rrid,List<RailRouteStopStation> endStRange,List<RailRouteStopStation> startStRange){
 		List<Integer> backStIdList = new ArrayList<Integer>();
 		List<Integer> frontStIdList = new ArrayList<Integer>();

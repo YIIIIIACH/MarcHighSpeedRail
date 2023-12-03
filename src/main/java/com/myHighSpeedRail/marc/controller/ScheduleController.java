@@ -240,7 +240,7 @@ public class ScheduleController {
 		res.bookedSeatIdList = new ArrayList<Integer>();
 		for( ScheduleSeatStatus schss : schssList) {
 			if((schss.getScheduleStatus() & mask) >0) {
-				res.bookedSeatIdList.add(schss.getSchedule().getScheduleId());
+				res.bookedSeatIdList.add(schss.getSeat().getSeatId());
 			}
 		}
 		res.startStation= rrss1.getStopStation();
