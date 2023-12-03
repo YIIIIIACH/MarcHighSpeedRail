@@ -7,5 +7,5 @@ public class DisplayProductDto {
 	 public  String productDescription;
 	 public  String productType;
 	 public  Integer productInventory;
-	 public  String PhotoData;
+	 public  String photoData;
 }
