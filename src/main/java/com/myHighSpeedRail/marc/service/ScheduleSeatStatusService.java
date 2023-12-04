@@ -59,4 +59,10 @@ public class ScheduleSeatStatusService {
 	public List<ScheduleSeatStatus> findBySchidSeatid(Integer schid,Integer seatid){
 		return schSeatDao.findBySchidSeatid(schid, seatid);
 	}
+	public List<ScheduleSeatStatus> findBySchidInSeatid(Integer schid,List<Integer> seatidList){
+		return schSeatDao.findBySchidInSeatid(schid, seatidList);
+	}
+	public List<ScheduleSeatStatus> findBookedSeatInSegmentInRange( Integer schid, Integer stRange, Integer edRange, Long segMask){
+		return schSeatDao.findBookedSeatInSegmentInRange(schid, stRange, edRange, segMask);
+	}
 }

@@ -40,6 +40,7 @@ import com.myHighSpeedRail.marc.service.ScheduleArriveService;
 import com.myHighSpeedRail.marc.service.ScheduleRestSeatService;
 import com.myHighSpeedRail.marc.service.ScheduleSeatStatusService;
 import com.myHighSpeedRail.marc.service.ScheduleService;
+import com.myHighSpeedRail.marc.service.SeatService;
 import com.myHighSpeedRail.marc.service.TicketDiscountService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
 
@@ -66,7 +67,8 @@ public class TicketOrderController {
 	private RailRouteStopStationService schrrssServ;
 	@Autowired
 	private ScheduleSeatStatusService schssServ;
-	
+	@Autowired
+	private SeatService seatServ;
 	@Autowired
 	private PayPalUtil paypalServ;
 	
@@ -230,9 +232,12 @@ public class TicketOrderController {
 //		}
 		// temporary treatment
 		token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-		
-		RailRouteStopStation rrss1 = schrrssServ.findByRouteIdStationId(boDto.schedule.getRailRoute().getRailRouteId(), boDto.startStation.getStationId()).get(0);
-		RailRouteStopStation rrss2 = schrrssServ.findByRouteIdStationId(boDto.schedule.getRailRoute().getRailRouteId(), boDto.endStation.getStationId()).get(0);
+		// get ticketDisc id
+		Integer tkdid = tkdServ.findByDiscountType(boDto.ticketDiscountName).get(0).getTicketDiscountId();
+		Schedule sch = schServ.findById(boDto.scheduleId);
+		List<ScheduleSeatStatus> schssList = schssServ.findBySchidInSeatid(boDto.scheduleId, boDto.orderSeatIdList);
+		RailRouteStopStation rrss1 = schrrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), boDto.startStation.getStationId()).get(0);
+		RailRouteStopStation rrss2 = schrrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), boDto.endStation.getStationId()).get(0);
 		// get segment mask
 		Long mask = 0L;
 		mask |= (1L << rrss2.getRailRouteStopStationSequence())-1;
@@ -240,10 +245,10 @@ public class TicketOrderController {
 		mask <<= rrss1.getRailRouteStopStationSequence();
 		//get selected scheduleSeatStatus;
 		List<Seat> tmp = new ArrayList<Seat>();
-		for( ScheduleSeatStatus schss: boDto.orderSeatList) {
+		for( ScheduleSeatStatus schss: schssList ) {
 			tmp.add(schss.getSeat());
 		}
-		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(boDto.schedule, tmp);
+		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(sch, tmp);
 		// check seat Available
 		for( ScheduleSeatStatus schss: selectSchSeatList) {
 			if( (schss.getScheduleStatus() & mask) > 0) {
@@ -253,28 +258,27 @@ public class TicketOrderController {
 		
 		// update scheduleSeatStatus
 //		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
-		schssServ.registBookedBuinessSeat(boDto.schedule.getScheduleId(), mask, selectSchSeatList);
+		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, selectSchSeatList);
 		// update scheduleRestSeat [Ignore now ]
-		schrsServ.updateScheduleRestSeat( boDto.schedule.getScheduleId(), boDto.ticketDiscountId , boDto.schedule.getRailRoute().getRailRouteId() , boDto.startStation.getStationId() , boDto.endStation.getStationId() , boDto.orderSeatList.size() );
+		schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() , boDto.startStation.getStationId() , boDto.endStation.getStationId() , schssList.size() );
 		
 		// create order
-		Integer paymentEarlyDay = tkdServ.findById(boDto.ticketDiscountId).getPurchaseEarlyLimitDay();
-		Date deadline = schArrServ.findByScheduleIdStationId(boDto.schedule.getScheduleId(), boDto.startStation.getStationId()).getArriveTime();
+		Integer paymentEarlyDay = tkdServ.findById(tkdid).getPurchaseEarlyLimitDay();
+		Date deadline = schArrServ.findByScheduleIdStationId(sch.getScheduleId(), boDto.startStation.getStationId()).getArriveTime();
 		deadline = Date.from( deadline.toInstant().minusSeconds(paymentEarlyDay* 24*60*60));
-		Schedule sch =schServ.findById(boDto.schedule.getScheduleId());
 		RailRouteSegment rrs =rrsServ.findByStopStationId(sch.getRailRoute().getRailRouteId()
 				, boDto.startStation.getStationId(), boDto.endStation.getStationId()).get();
 		Integer originPrice =rrs.getRailRouteSegmentTicketPrice();
 		// member_token ticket_order_create_time status payment_dealine total_price
 		Integer total= 0;
-		TicketDiscount td = tkdServ.findById( boDto.ticketDiscountId) ;
-		for( int i=0 ; i< boDto.orderSeatList.size(); i++) {
+		TicketDiscount td = tkdServ.findById( tkdid) ;
+		for( int i=0 ; i< schssList .size(); i++) {
 			total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();			
 		}
 		TicketOrder tcko = tkoServ.save(new TicketOrder( token,new Date(),"已付款",deadline, total));
 		// create Booking
-		for( int i=0 ; i< boDto.orderSeatList.size(); i++) {
-			bServ.save(new Booking(token, tcko, sch, rrs,boDto.orderSeatList.get(i).getSeat(),td, "已分配座位"
+		for( int i=0 ; i< schssList.size(); i++) {
+			bServ.save(new Booking(token, tcko, sch, rrs,schssList .get(i).getSeat(),td, "已分配座位"
 					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
 					(String)null));
 		}		return new ResponseEntity<String>("book buiness",HttpStatus.OK);

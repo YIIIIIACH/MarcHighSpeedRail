@@ -60,6 +60,10 @@ public class SeatService {
 			}
 		}
 	}
+
+	public List<Seat> findByIdInList(List<Integer>seatIdList){
+		return seatDao.findByIdInList(seatIdList);
+	}
 }
 /*
 1 - 100 seats 1 to 20

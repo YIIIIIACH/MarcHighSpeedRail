@@ -10,4 +10,7 @@ import com.myHighSpeedRail.marc.model.Seat;
 public interface SeatRepository extends JpaRepository<Seat, Integer>{
 	@Query("from Seat where train.trainId=:tid")
 	public List<Seat> findByTrainId(Integer tid);
+	
+	@Query("from Seat where seatId in (:seatIdList)")
+	public List<Seat> findByIdInList(List<Integer> seatIdList);
 }
