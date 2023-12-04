@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.peter.controller;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.peter.dto.CheckLoginDTO;
+import com.myHighSpeedRail.peter.dto.EmployeeDetailDTO;
 import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
 import com.myHighSpeedRail.peter.handler.EmployeeSystemAuthor;
 import com.myHighSpeedRail.peter.handler.SystemAuthorHandler;
@@ -33,6 +36,9 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class EmployeeController {
+	
+	@Autowired
+	private PasswordEncoder pwdEncoder;
 
 	@Autowired
 	private EmployeeService eService;
@@ -68,28 +74,6 @@ public class EmployeeController {
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("帳號或密碼錯誤");
 	}
-
-//	// 登入並拿取員工資料包含權限
-//		@ResponseBody
-//		@PostMapping("/employee/login")
-//		public ResponseEntity<?> employeeLogin(@RequestBody CheckLoginDTO clDTO, HttpSession httpSession) {
-//
-//			Employee result = eService.checklogin(clDTO.getAccount(),clDTO.getPassword());
-//			System.out.println("result: " + result);
-//
-//			if (result != null) {
-//				EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(result);
-//
-//				SessionLoginEmployee sessionEmp = new SessionLoginEmployee();
-//				sessionEmp.setEmpId(result.getEmployeeId());
-//				sessionEmp.setEmpName(result.getEmployeeName());
-//				sessionEmp.setEsa(esa);
-//				httpSession.setAttribute("loginEmployee", sessionEmp);
-//				return ResponseEntity.status(HttpStatus.OK).body("登入成功");
-//			}
-//
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("帳號或密碼錯誤");
-//		}
 
 //	@PostMapping("/api/users/login")
 //	public ResponseEntity<?> loginPost(@RequestBody UserNameAndPwdDto userDTO, HttpSession httpSession) {
@@ -129,7 +113,7 @@ public class EmployeeController {
 		if (eService.checkEmpAccountIfExist(emp.getEmployeeAccount())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("員工帳號已存在");
 		}
-		System.out.println("測試emp傳入"+emp);
+		System.out.println("測試emp傳入" + emp);
 		eService.employeeAdd(emp);
 		return ResponseEntity.status(HttpStatus.CREATED).body("新增成功");
 	}
@@ -170,6 +154,22 @@ public class EmployeeController {
 	}
 
 	@ResponseBody
+	@GetMapping("/employee/session-all")
+	public List<SessionLoginEmployeeDTO> findAllInSessionEmployeeDTO() {
+		
+		List<Employee> empList = eService.EmployeefindAll();
+		LinkedList<SessionLoginEmployeeDTO> sessionEmpList = new LinkedList<SessionLoginEmployeeDTO>();
+		
+		for (Employee e : empList) {
+			SessionLoginEmployeeDTO sleDTO = new SessionLoginEmployeeDTO();
+			sleDTO.setEmpId(e.getEmployeeId());
+			sleDTO.setEmpName(e.getEmployeeName());
+			sessionEmpList.add(sleDTO);
+		}
+		return sessionEmpList;
+	}
+
+	@ResponseBody
 	@PutMapping("/employee")
 	public ResponseEntity<String> updateEmployee(@RequestBody Employee emp) {
 		Employee e = eService.findEmployeeById(emp.getEmployeeId());
@@ -182,7 +182,7 @@ public class EmployeeController {
 
 	@ResponseBody
 	@DeleteMapping("/employee/{id}")
-	public ResponseEntity<String> deleteEmployee(@PathVariable("id") Integer id) {
+	public ResponseEntity<String> deleteEmployeeById(@PathVariable("id") Integer id) {
 		Employee e = eService.findEmployeeById(id);
 		if (e != null) {
 			eService.EmployeeDeleteById(id);
@@ -214,5 +214,79 @@ public class EmployeeController {
 		return ResponseEntity.status(HttpStatus.OK).body(empDTO);
 //		return new ResponseEntity<Map<String, String>>(responseMap, HttpStatus.OK);
 	}
+	
+	@ResponseBody
+	@GetMapping("/employee/detail/{id}")
+	public EmployeeDetailDTO findEmployeeDetailById(@PathVariable("id") Integer id) {
+		
+		Employee e = eService.findEmployeeById(id);
+		EmployeeDetailDTO edDTO = new EmployeeDetailDTO();
+		
+		edDTO.setEmergencyContactPerson(e.getEmergencyContactPerson());
+		edDTO.setEmpId(e.getEmployeeId());
+		edDTO.setEmployeeArrivalDate(e.getEmployeeArrivalDate());
+		edDTO.setEmployeeBasicSalary(e.getEmployeeBasicSalary());
+		edDTO.setEmployeeBirth(e.getEmployeeBirth());
+		edDTO.setEmployeeContactAddress(e.getEmployeeContactAddress());
+		edDTO.setEmployeeContactNumber(e.getEmployeeContactNumber());
+		edDTO.setEmployeeEducationalQualifications(e.getEmployeeEducationalQualifications());
+		edDTO.setEmployeeEmail(e.getEmployeeEmail());
+		edDTO.setEmployeeGender(e.getEmployeeGender());
+		edDTO.setEmployeeHistoricalBaseSalary(e.getEmployeeHistoricalBaseSalary());
+		edDTO.setEmployeeHistoricalDepartment(e.getEmployeeHistoricalDepartment());
+		edDTO.setEmployeeIdNumber(e.getEmployeeIdNumber());
+		edDTO.setEmployeePhoneNumber(e.getEmployeePhoneNumber());
+		edDTO.setEmployeePhoto(e.getEmployeePhoto());
+		edDTO.setEmployeeResidenceAddress(e.getEmployeeResidenceAddress());
+		edDTO.setEmployeeSalaryKind(e.getEmployeeSalaryKind());
+		edDTO.setEmployeeTitle(e.getEmployeeTitle());
+		edDTO.setEmployeeWorkExperience(e.getEmployeeWorkExperience());
+		edDTO.setEmpName(e.getEmployeeName());
+		return edDTO;
+	}
+	
+	
+	@ResponseBody
+	@PutMapping("/employee/detail")
+	public ResponseEntity<String> updateEmployeeDetail(@RequestBody EmployeeDetailDTO edDTO) {
+		
+		Employee oldE = eService.findEmployeeById(edDTO.getEmpId());
+		
+		Employee e = new Employee();
+		
+		e.setEmployeeAccount(oldE.getEmployeeAccount());
+		e.setEmployeeLeaveByEmployee(oldE.getEmployeeLeaveByEmployee());
+		e.setEmployeeLeaveByManager(oldE.getEmployeeLeaveByManager());
+		e.setEmployeePassword(oldE.getEmployeePassword());
+		e.setEmployeeWorkOvertimeByEmployee(oldE.getEmployeeWorkOvertimeByEmployee());
+		e.setEmployeeWorkOvertimeByManager(oldE.getEmployeeWorkOvertimeByManager());
+		e.setSystemAuthor(oldE.getSystemAuthor());
+		
+		
+		e.setEmergencyContactPerson(edDTO.getEmergencyContactPerson());
+		e.setEmployeeId(edDTO.getEmpId());
+		e.setEmployeeArrivalDate(edDTO.getEmployeeArrivalDate());
+		e.setEmployeeBasicSalary(edDTO.getEmployeeBasicSalary());
+		e.setEmployeeBirth(edDTO.getEmployeeBirth());
+		e.setEmployeeContactAddress(edDTO.getEmployeeContactAddress());
+		e.setEmployeeContactNumber(edDTO.getEmployeeContactNumber());
+		e.setEmployeeEducationalQualifications(edDTO.getEmployeeEducationalQualifications());
+		e.setEmployeeEmail(edDTO.getEmployeeEmail());
+		e.setEmployeeGender(edDTO.getEmployeeGender());
+		e.setEmployeeHistoricalBaseSalary(edDTO.getEmployeeHistoricalBaseSalary());
+		e.setEmployeeHistoricalDepartment(edDTO.getEmployeeHistoricalDepartment());
+		e.setEmployeeIdNumber(edDTO.getEmployeeIdNumber());
+		e.setEmployeePhoneNumber(edDTO.getEmployeePhoneNumber());
+		e.setEmployeePhoto(edDTO.getEmployeePhoto());
+		e.setEmployeeResidenceAddress(edDTO.getEmployeeResidenceAddress());
+		e.setEmployeeSalaryKind(edDTO.getEmployeeSalaryKind());
+		e.setEmployeeTitle(edDTO.getEmployeeTitle());
+		e.setEmployeeWorkExperience(edDTO.getEmployeeWorkExperience());
+		e.setEmployeeName(edDTO.getEmpName());
+		eService.employeeUpdateWithoutEncodePassword(e);
+		
+		return ResponseEntity.status(HttpStatus.OK).body("更新資料成功");
+	}
+	
 
 }
