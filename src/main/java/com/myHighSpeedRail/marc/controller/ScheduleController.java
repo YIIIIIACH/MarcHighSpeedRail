@@ -131,7 +131,7 @@ public class ScheduleController {
 		pxt.setHours(Integer.valueOf( pxtStr[3]));
 		pxt.setMinutes(Integer.valueOf(pxtStr[4]));
 		// step1 List<Schedule> schList = select schArr.schedule scheduleArrive as schArr where schArr.station.stationId=:onStationId and  schArr.arriveTime between :priximateTime-offset and :proximateTime+offset;
-		System.out.println(pxt);
+//		System.out.println(pxt);
 		List<Schedule> schInTimeRangeList = schArrServ.getScheduleByArriveStationTimeRange(onStationId, pxt , Long.valueOf(120));// default set range to two hours
 		// step2 select schSeg.schedule  from ScheduleSegment  schSeg where schSeg.schedule in :schList and schSeg.endStation.stationId=offStationId
 		// check on and off station
@@ -153,6 +153,7 @@ public class ScheduleController {
 					, schArrServ.findByScheduleIdStationId( sch.getScheduleId(), offStationId).getArriveTime()
 					,  rrs.getRailRouteSegmentDurationMinute(), rrs.getRailRouteSegmentTicketPrice() 
 					, schdServ.getScheduleAllDiscountType(sch.getScheduleId())
+					, schdServ.getScheduleAllDiscount(sch.getScheduleId())
 					));
 		});
 		return searchRes;
@@ -170,6 +171,7 @@ public class ScheduleController {
 			){
 		Station onSt = sServ.findById(onStationId).get();
 		Station offSt =sServ.findById(offStationId).get();
+		
 		/*
 		 * 1.  1班次編號  2. 乘車站  3.到達乘車站時間  4. 下車站 5.下車時間 6.所花費時間 7.價格 8.可用優惠 9.該班次所有停靠站 10. 該模式下可以選擇的優惠
 		// get schedule in condition --> select on get on off station to get the route_segment of that schdule-->
@@ -185,6 +187,7 @@ public class ScheduleController {
 		pxt.setDate( Integer.valueOf( pxtStr[2]));
 		pxt.setHours(Integer.valueOf( pxtStr[3]));
 		pxt.setMinutes(Integer.valueOf(pxtStr[4]));
+		System.out.println( pxt);
 		// step1 List<Schedule> schList = select schArr.schedule scheduleArrive as schArr where schArr.station.stationId=:onStationId and  schArr.arriveTime between :priximateTime-offset and :proximateTime+offset;
 		List<Schedule> schInTimeRangeList = schArrServ.getScheduleByArriveStationTimeRangeFilterPastFilterDiscountAdvancePurchaseLimit(onStationId, pxt , Long.valueOf(120),discountType);// default set range to two hours
 		// step2 select schSeg.schedule  from ScheduleSegment  schSeg where schSeg.schedule in :schList and schSeg.endStation.stationId=offStationId
@@ -210,6 +213,7 @@ public class ScheduleController {
 					, schArrServ.findByScheduleIdStationId( sch.getScheduleId(), offStationId).getArriveTime()
 					,  rrs.getRailRouteSegmentDurationMinute(), rrs.getRailRouteSegmentTicketPrice() 
 					, schdServ.getScheduleAllDiscountType(sch.getScheduleId())
+					, schdServ.getScheduleAllDiscount(sch.getScheduleId())
 					));
 		});
 		return searchRes;

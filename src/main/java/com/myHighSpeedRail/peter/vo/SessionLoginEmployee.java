@@ -17,7 +17,7 @@ public class SessionLoginEmployee {
 	}
 
 	public void setEmpId(Integer empId) {
-		this.empId = empId;
+//		this.empId = empId;
 	}
 
 	public String getEmpName() {

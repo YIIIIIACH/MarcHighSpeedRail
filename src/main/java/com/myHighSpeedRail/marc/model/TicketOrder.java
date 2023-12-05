@@ -2,6 +2,8 @@ package com.myHighSpeedRail.marc.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,6 +28,7 @@ public class TicketOrder {
 	private String memberToken;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Column(name="ticket_order_create_time",nullable=false)
 	private Date ticketOrderCreateTime;
 	
@@ -33,6 +36,7 @@ public class TicketOrder {
 	private String status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Column(name="payment_deadline",nullable=false)
 	private Date paymentDeadline;
 	
