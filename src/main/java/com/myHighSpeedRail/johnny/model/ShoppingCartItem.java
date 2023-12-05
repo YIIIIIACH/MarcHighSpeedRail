@@ -40,6 +40,11 @@ public class ShoppingCartItem {
 		this.product = product;
 		this.member = member;
 	}
+	public ShoppingCartItem(Integer quantity, Product product, String member) {
+		this.quantity = quantity;
+		this.product = product;
+		this.member = member;
+	}
 
 	public Integer getShoppingCartItemId() {
 		return shoppingCartItemId;

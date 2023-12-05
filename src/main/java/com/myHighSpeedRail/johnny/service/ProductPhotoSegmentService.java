@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myHighSpeedRail.johnny.dto.PostProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
@@ -25,11 +26,11 @@ public class ProductPhotoSegmentService {
 		return ppsDao.getAllPhotoSegmentByProductId(id);
 	}
 	
-	public Integer savePhoto(ProductAndPhotoSegmentDto ppDto) {
+	public Integer savePhoto(PostProductDto ppDto, Integer productId) {
 		
 		byte[] photoData = ppDto.photoData.getBytes();
 		int dataLen = photoData.length;
-		Product product = pDao.findById(ppDto.productId).get();
+		Product product = pDao.findById(productId).get();
 		
 		//step 1 insert a photo to product_photo table
 		//Photo p =  new Photo();

@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.johnny.dto.PostProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
+import com.myHighSpeedRail.johnny.service.ProductPhotoSegmentService;
 import com.myHighSpeedRail.johnny.service.ProductService;
 
 
@@ -34,18 +36,21 @@ public class ProductController {
 	@Autowired
 	private ProductService pService;
 	
-	
+	@Autowired
+	private ProductPhotoSegmentService ppsServ;
 	@PostMapping("/product/add")
-	public ResponseEntity<String> addProduct(@RequestBody ProductAndPhotoSegmentDto pappDto) {	
-//	回傳是 ResponseEntity, 就不需要加@ResponseBody 
+	public ResponseEntity<String> addProduct(@RequestBody PostProductDto postDto) {	
 		try{
-//			Product p = new Product();
-//			BeanUtils.copyProperties(pappDto, p);
+//			BeanUtils.copyProperties(postDto, p);
 			
-			Product pp = pService.addProduct(pappDto);
-			return ResponseEntity.ok("商品新增成功，商品ID: " + pp.getProductId() + ", 商品名稱 : " + pp.getProductName());
+			Product addedProduct = pService.addProduct(postDto);
+			
+			ppsServ.savePhoto(postDto, addedProduct.getProductId());
+			
+			return ResponseEntity.ok("商品新增成功，商品ID: " + addedProduct.getProductId() + ", 商品名稱 : " + addedProduct.getProductName());
 		
 		}catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("新增商品失敗: " + e.getMessage());
 		}
 	}

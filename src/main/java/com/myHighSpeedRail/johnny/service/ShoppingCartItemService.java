@@ -25,20 +25,18 @@ public class ShoppingCartItemService {
 	@Autowired
 	private ProductRepository pDao;
 	
-	public ShoppingCartItem addItemToCart(Integer Id, Integer quantity, HttpServletRequest req) {
-//	public ShoppingCartItem addItemToCart(Integer Id, Integer quantity, String member) {
+	public ShoppingCartItem addItemToCart(Integer productId, Integer memberID, HttpServletRequest req) {
 		
 		String token = getTokenFromRequest(req);
 		
-		
-		Optional<Product> optional = pDao.findById(Id);
+//		Member m = findMemberById(memberID);
+		Optional<Product> optional = pDao.findById(productId);
 		
 		if(optional.isPresent()) {
 			Product product = optional.get();
 			
 			ShoppingCartItem cart = new ShoppingCartItem();
 			cart.setProduct(product);
-			cart.setQuantity(quantity);
 			cart.setMember(token);
 			
 			return cartDao.save(cart);
@@ -72,5 +70,7 @@ public class ShoppingCartItemService {
 		}
 		
 	}
-
+	public ShoppingCartItem save( ShoppingCartItem shoppingCartItem) {
+		return cartDao.save(shoppingCartItem);
+	}
 }

@@ -33,8 +33,8 @@ public class SystemAuthor {
 	private Employee employee;
 	
 
-	@JsonIgnore
-//	@JsonBackReference(value="depSa")
+//	@JsonIgnore
+	@JsonBackReference(value="depSa")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="department_id_fk")
 	private Department department;

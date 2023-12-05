@@ -1,8 +1,13 @@
 package com.myHighSpeedRail.peter.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SessionLoginEmployeeDTO {
 
+	@JsonProperty("id")
 	private Integer empId;
+	
+	@JsonProperty("name")
 	private String empName;
 
 	public SessionLoginEmployeeDTO() {

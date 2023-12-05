@@ -46,12 +46,18 @@ public class EmployeeService {
 
 	}
 
-	public void employeeAdd(Employee e){
+	public void employeeAdd(Employee e) {
 		e.setEmployeePassword(pwdEncoder.encode(e.getEmployeePassword()));
 		eDao.save(e);
 	}
+
 	public Employee employeeUpdate(Employee e) {
 		e.setEmployeePassword(pwdEncoder.encode(e.getEmployeePassword()));
+		eDao.save(e);
+		return e;
+	}
+	
+	public Employee employeeUpdateWithoutEncodePassword(Employee e) {
 		eDao.save(e);
 		return e;
 	}
@@ -90,11 +96,12 @@ public class EmployeeService {
 	public List<Employee> EmployeefindAll() {
 		return eDao.findAll();
 	}
-	
+
 	public void EmployeeDeleteById(Integer id) {
-		eDao.deleteById(id);;
+		eDao.deleteById(id);
+		;
 	}
-	
+
 	public boolean checkEmpAccountIfExist(String account) {
 		Employee emp = eDao.findByEmployeeAccount(account);
 
