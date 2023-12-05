@@ -3,7 +3,9 @@ package com.myHighSpeedRail.derekwu.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,5 +42,29 @@ public class LostPropertyController {
 	@GetMapping("/LostProperty/frontend/search/simpleOutward")
 	public List<LostPropertyGuestDTO> searchSimpleOutward(@RequestParam("simpleOutward") String simpleOutward) {
 		return lpServ.showToGuest(simpleOutward);
+	}
+	
+	//修改遺失物(員工)
+	@PostMapping("/LostProperty/backend/updateById/{lostPropertyId}")
+	public LostProperty updateLostProperty(@PathVariable("lostPropertyId")Integer lostPropertyId,@RequestBody LostProperty lostProperty) {
+		//依據ID找到遺失物資料
+		lostProperty.setLostPropertyId(lostPropertyId);
+		//設定所有遺失物資料
+		LostProperty lp = lpRepo.save(lostProperty);
+		return lp;
+	}
+	
+	//刪除遺失物(員工)
+	
+	@DeleteMapping("/LostProperty/backend/deleteByLostPropertyId")
+	public String deleteByLostPropertyId(Integer lostPropertyId) {
+		lpRepo.deleteByLostPropertyId(lostPropertyId);
+		return "刪除了LostPropertyId = "+lostPropertyId+" 的遺失物";
+	}
+	
+	//多重查詢遺失物(員工)
+	@GetMapping("/LostProperty/backend/search/detailMoreOutward")
+	public List<LostProperty> searchMoreDetailsOutward(@RequestParam("details") String details){
+		return lpServ.searchMoreDetails(details);
 	}
 }

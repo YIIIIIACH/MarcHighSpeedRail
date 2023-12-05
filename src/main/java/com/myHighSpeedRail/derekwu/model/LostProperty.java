@@ -43,12 +43,18 @@ public class LostProperty {
 	@Column(name="lost_photo",nullable=false)
 	private String lostPhoto;
 	
+	@Column(name="letter_check",nullable=false)
+	private Boolean letterCheck = false;
+	
+	@Column(name="receive_check",nullable=false)
+	private Boolean receiveCheck = false;
+	
 	public LostProperty() {
 		
 	}
 	
 	public LostProperty(Integer lostPropertyId, Integer tripId, String stationName, Date findDate, String stayStation,
-			String simpleOutward, String detailOutward, String lostPhoto) {
+			String simpleOutward, String detailOutward, String lostPhoto, Boolean letterCheck, Boolean receiveCheck) {
 		
 		this.lostPropertyId = lostPropertyId;
 		this.tripId = tripId;
@@ -58,6 +64,8 @@ public class LostProperty {
 		this.simpleOutward = simpleOutward;
 		this.detailOutward = detailOutward;
 		this.lostPhoto = lostPhoto;
+		this.letterCheck = letterCheck;
+		this.receiveCheck = receiveCheck;
 	}
 	public LostProperty(Integer tripId, String stationName, Date findDate, String stayStation,
 			String simpleOutward, String detailOutward, String lostPhoto) {
@@ -142,17 +150,26 @@ public class LostProperty {
 		this.lostPhoto = lostPhoto;
 	}
 
-	@Override
-	public String toString() {
-		return "LostProperty [lostPropertyId=" + lostPropertyId + ", tripId=" + tripId + ", stationName=" + stationName
-				+ ", findDate=" + findDate + ", stayStation=" + stayStation + ", simpleOutward=" + simpleOutward
-				+ ", detailOutward=" + detailOutward + ", lostPhoto=" + lostPhoto + "]";
+	public Boolean getLetterCheck() {
+		return letterCheck;
+	}
+
+	public void setLetterCheck(Boolean letterCheck) {
+		this.letterCheck = letterCheck;
+	}
+
+	public Boolean getReceiveCheck() {
+		return receiveCheck;
+	}
+
+	public void setReceiveCheck(Boolean receiveCheck) {
+		this.receiveCheck = receiveCheck;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(detailOutward, findDate, lostPhoto, lostPropertyId, simpleOutward, stationName, stayStation,
-				tripId);
+		return Objects.hash(detailOutward, findDate, letterCheck, lostPhoto, lostPropertyId, receiveCheck,
+				simpleOutward, stationName, stayStation, tripId);
 	}
 
 	@Override
@@ -165,10 +182,22 @@ public class LostProperty {
 			return false;
 		LostProperty other = (LostProperty) obj;
 		return Objects.equals(detailOutward, other.detailOutward) && Objects.equals(findDate, other.findDate)
-				&& Objects.equals(lostPhoto, other.lostPhoto) && Objects.equals(lostPropertyId, other.lostPropertyId)
+				&& Objects.equals(letterCheck, other.letterCheck) && Objects.equals(lostPhoto, other.lostPhoto)
+				&& Objects.equals(lostPropertyId, other.lostPropertyId)
+				&& Objects.equals(receiveCheck, other.receiveCheck)
 				&& Objects.equals(simpleOutward, other.simpleOutward) && Objects.equals(stationName, other.stationName)
 				&& Objects.equals(stayStation, other.stayStation) && Objects.equals(tripId, other.tripId);
 	}
+
+	@Override
+	public String toString() {
+		return "LostProperty [lostPropertyId=" + lostPropertyId + ", tripId=" + tripId + ", stationName=" + stationName
+				+ ", findDate=" + findDate + ", stayStation=" + stayStation + ", simpleOutward=" + simpleOutward
+				+ ", detailOutward=" + detailOutward + ", lostPhoto=" + lostPhoto + ", letterCheck=" + letterCheck
+				+ ", receiveCheck=" + receiveCheck + "]";
+	}
+
+	
 	
 	
 	
