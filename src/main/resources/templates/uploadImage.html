@@ -16,27 +16,28 @@
         const inputEl = document.getElementById('input');
         var tmp;
         let r = new FileReader()
-        var aa;
+        var photo;
         let bodycontent;
         function parseImage(){
             r.readAsDataURL(inputEl.files[0])
             r.onload = function() {
-				aa = r.result;
+				photo = r.result;
 			};
         }
         function postImage(){
-			if (aa != null) {
+			if (photo != null) {
 				bodycontent = JSON.stringify({
-					"productId":14,
-                   //"productName":'7778',
-                   //"productPrice":400,
-                   //"productDescription": '很貴',
-                   //"productType": 'dd',
-                   //"productInventory":100,
-					"photoData": r.result
+					//"productId":21,
+                    "productName":'香脆可口牛肉乾',
+                    "productPrice":120,
+                    "productDescription": '精選頂級牛肉，經特製調味料搭配，製成香脆可口的牛肉乾，回味無窮。',
+                    "productType": '精選食品',
+                    "productInventory":150,
+					"photoData": photo,
+					"buyingMethod": ["站點取貨","宅配到府"],
 				})
 				console.log(r.result)
-            	fetch('http://localhost:8080/MarcHighSpeedRail/photoSegment', {
+            	fetch('http://localhost:8080/MarcHighSpeedRail/product/add', {
                 	body: bodycontent, // must match 'Content-Type' header
                 	cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
                 	credentials: "same-origin", // include, same-origin, *omit

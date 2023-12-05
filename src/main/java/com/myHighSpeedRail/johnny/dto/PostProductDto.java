@@ -1,6 +1,10 @@
 package com.myHighSpeedRail.johnny.dto;
 
-public class ProductAndPhotoSegmentDto {
+import java.util.List;
+
+import com.myHighSpeedRail.johnny.model.ProductBuyingMethod;
+
+public class PostProductDto {
 	
 	public Integer productId;
 	
@@ -16,6 +20,6 @@ public class ProductAndPhotoSegmentDto {
 	
 	public String photoData;
 	
-	
-	
+	public List<String> buyingMethod;
+
 }

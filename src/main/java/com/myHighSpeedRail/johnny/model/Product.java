@@ -37,6 +37,7 @@ public class Product {
 
 	@Column(name = "product_inventory", nullable = false)
 	private Integer productInventory;
+	
 
 //	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private List<ProductPhoto> photoSegment;
@@ -46,6 +47,9 @@ public class Product {
 	private List<ProductPhotoSegment> photoSegment;
 	// private String photoData;
 
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ProductBuyingMethod> productBuyingMethod;
+	
 	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", productName=" + productName + ", productPrice=" + productPrice
@@ -123,5 +127,15 @@ public class Product {
 	public void setPhotoSegment(List<ProductPhotoSegment> photoSegment) {
 		this.photoSegment = photoSegment;
 	}
+
+	public List<ProductBuyingMethod> getProductBuyingMethod() {
+		return productBuyingMethod;
+	}
+
+	public void setProductBuyingMethod(List<ProductBuyingMethod> productBuyingMethod) {
+		this.productBuyingMethod = productBuyingMethod;
+	}
+	
+	
 
 }

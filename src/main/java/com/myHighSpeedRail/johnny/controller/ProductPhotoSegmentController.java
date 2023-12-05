@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.johnny.dto.PostPhotoDto;
+import com.myHighSpeedRail.johnny.dto.PostProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.service.ProductPhotoSegmentService;
@@ -28,8 +29,8 @@ public class ProductPhotoSegmentController {
 	//, consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
 	
 	@PostMapping(value = "/photoSegment")
-	public @ResponseBody ResponseEntity<String> postPhoto(@RequestBody ProductAndPhotoSegmentDto ppDto){
-		ppsServ.savePhoto(ppDto);
+	public @ResponseBody ResponseEntity<String> postPhoto(@RequestBody PostProductDto ppDto){
+//		ppsServ.savePhoto(ppDto);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	

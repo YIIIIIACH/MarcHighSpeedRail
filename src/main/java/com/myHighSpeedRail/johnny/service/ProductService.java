@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.johnny.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,8 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.myHighSpeedRail.johnny.dto.PostProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
+import com.myHighSpeedRail.johnny.model.ProductBuyingMethod;
+import com.myHighSpeedRail.johnny.repository.ProductBuyingMethodRepository;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
 
 @Service
@@ -20,22 +24,34 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository pDao;
-		
-	@Autowired
-	private ProductPhotoSegmentService ppss;
 	
-	public Product addProduct(ProductAndPhotoSegmentDto pappDto) {
+	@Autowired
+	private ProductBuyingMethodRepository pbmDao;
+	
+//	@Autowired
+//	private ProductPhotoSegmentService ppss;
+	
+	
+	public Product addProduct(PostProductDto ppDto) {
 			
 			Product product = new Product(); // 新增product
-			product.setProductName(pappDto.productName);
-			product.setProductPrice(pappDto.productPrice);
-			product.setProductDescription(pappDto.productDescription);
-			product.setProductType(pappDto.productType);
-			product.setProductInventory(pappDto.productInventory);
+			product.setProductName(ppDto.productName);
+			product.setProductPrice(ppDto.productPrice);
+			product.setProductDescription(ppDto.productDescription);
+			product.setProductType(ppDto.productType);
+			product.setProductInventory(ppDto.productInventory);
 			
 			Product savedProduct = pDao.save(product); // 儲存product
-			ppss.savePhoto(pappDto);
 			
+//			ppss.savePhoto(ppDto);
+			
+			for(String method : ppDto.buyingMethod) {
+				ProductBuyingMethod buyingMethod = new ProductBuyingMethod();
+				buyingMethod.setBuyingMethod(method);
+				buyingMethod.setProduct(savedProduct);
+				pbmDao.save(buyingMethod);
+			}
+	
 			return savedProduct;
 	}
 	
@@ -125,5 +141,8 @@ public class ProductService {
 	
 	public List<Product> findProductByProductPrice(Integer firstPrice, Integer secondPrice){
 		return pDao.findProductByPrice(firstPrice, secondPrice);
+	}
+	public Optional<Product> findById( Integer pid){
+		return pDao.findById(pid);
 	}
 }
