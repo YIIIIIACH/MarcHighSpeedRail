@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/yuhsin/test/register" method="post" id="form">
+    <p>姓名:</p>
+    <input type="text" name="user"/>
+    <br>
+    <p>密碼:</p>
+    <input type="text" name="password"/>
+    <br>
+    <p>信箱:</p>
+    <input type="email" name="email"/>
+    <br>
+    <p>電話:</p>
+    <input type="text" name="phone"/>
+    <p th:text="${msg}" />
+    <button type="submit" id="button2">送出</button>
+</form>
+</body>
+</html>

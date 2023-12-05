@@ -24,7 +24,6 @@ public class UserService {
 
     private String basic_Auth_user = "user";
     private String basic_Auth_password = "123";
-    //    private String account_url = "http://192.168.0.21:9527";
     private String account_url = "https://yuhsin.ttmcloud.stream";
 
     public LoginResponseModel login(String email, String password) {
@@ -143,39 +142,10 @@ public class UserService {
         return false;
     }
 
-
-//    private String get(String url) throws IOException {
-//        String resultContent = null;
-//        final BasicCredentialsProvider credsProvider = new BasicCredentialsProvider();
-//        credsProvider.setCredentials(
-//                new AuthScope("127.0.0.1", 9527),
-//                new UsernamePasswordCredentials(basic_Auth_user, basic_Auth_password.toCharArray()));
-//        try (final CloseableHttpClient httpclient = HttpClients.custom()
-//                .setDefaultCredentialsProvider(credsProvider)
-//                .build()) {
-//            final HttpGet httpGet = new HttpGet(url);
-//            try (final CloseableHttpResponse response = httpclient.execute(httpGet)) {
-//                if (response.getCode() == 200) {
-//                    System.out.println(response.getReasonPhrase()); // OK
-//                    HttpEntity entity = response.getEntity();
-//                    // 獲取響應信息
-//                    resultContent = EntityUtils.toString(entity, "UTF-8");
-//                } else {
-//                    resultContent = "Get fail";
-//                }
-//            } catch (IOException | ParseException e) {
-//                e.printStackTrace();
-//            }
-//            return resultContent;
-//        }
-//
-//    }
-
     private String post(String url, String jsonBody) throws IOException {
         String resultContent = null;
         final BasicCredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(
-//                new AuthScope("127.0.0.1", 9527),
                 new AuthScope("yuhsin.ttmcloud.stream", 443),
                 new UsernamePasswordCredentials(basic_Auth_user, basic_Auth_password.toCharArray()));
         try (final CloseableHttpClient httpclient = HttpClients.custom()
