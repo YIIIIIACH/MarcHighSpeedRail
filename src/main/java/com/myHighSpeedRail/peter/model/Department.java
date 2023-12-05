@@ -3,6 +3,7 @@ package com.myHighSpeedRail.peter.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -28,13 +29,13 @@ public class Department {
 	@Column(name="department_name")
 	private String departmentName;
 	
-	@JsonIgnore
-//	@JsonManagedReference(value="depSa")
+//	@JsonIgnore
+	@JsonManagedReference(value="depSa")
 	@OneToMany(fetch = FetchType.LAZY,mappedBy = "department",cascade = CascadeType.ALL)
 	private List<SystemAuthor> systemAuthor = new LinkedList<SystemAuthor>();
 	
-	@JsonIgnore
-//	@JsonManagedReference(value="depEhd") 
+//	@JsonIgnore
+	@JsonBackReference(value="depEhd") 
 	@OneToMany(fetch = FetchType.LAZY,mappedBy = "department",cascade = CascadeType.ALL)
 	private List<EmployeeHistoricalDepartment> employeeHistoricalDepartment = new LinkedList<EmployeeHistoricalDepartment>();
 

@@ -12,4 +12,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
 
 	@Query("from Department as dept left join fetch dept.systemAuthor where dept.departmentId = :id ")
 	Department findByDepartmentIdJoinSystemAuthor(@Param("id") Integer departmentId);
+	
+	@Query("from Department as dept where dept.departmentName = :name ")
+	Department findBydepartmentName(@Param("name") String departmentName);
 }

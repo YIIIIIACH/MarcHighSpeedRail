@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.marc.model.RailRouteStopStation;
+import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.ScheduleDetail;
 import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.service.RailRouteSegmentService;
+import com.myHighSpeedRail.marc.service.RailRouteStopStationService;
 import com.myHighSpeedRail.marc.service.ScheduleDetailService;
 import com.myHighSpeedRail.marc.service.ScheduleSeatStatusService;
 import com.myHighSpeedRail.marc.service.ScheduleService;
@@ -27,6 +30,8 @@ public class ScheduleSeatStatusController {
 	private ScheduleSeatStatusService schSeatServ;
 	@Autowired
 	private ScheduleService schServ;
+	@Autowired
+	private RailRouteStopStationService rrssServ;
 	@Autowired
 	private RailRouteSegmentService rrsServ;
 	@Autowired
@@ -66,8 +71,12 @@ public class ScheduleSeatStatusController {
 		return schSeatServ.findBySchidSeatid(schid, seatid);
 	}
 	// will return the booked seat id of schedule in segment
-	@GetMapping("/getScheduleBookedBuinessSeatidInSegment/{schid}/{stseq}/{edseq}")
-	public @ResponseBody List<Integer> getScheduleBookedSeatidInSegment(@PathVariable Integer schid, @PathVariable Integer stseq,@PathVariable  Integer edseq){
+	@GetMapping("/getScheduleBookedBuinessSeatidInSegment/{schid}/{ststid}/{edstid}")
+	public @ResponseBody List<Integer> getScheduleBookedSeatidInSegment(@PathVariable Integer schid, @PathVariable Integer ststid,@PathVariable  Integer edstid){
+		Schedule sch = schServ.findById(schid);
+		// get stseq edseq by stid edid and
+		Integer stseq = rrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), ststid).get(0).getRailRouteStopStationSequence();
+		Integer edseq =rrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), edstid).get(0).getRailRouteStopStationSequence();
 		// get schedule detail . and find out the buiness seat range;
 		List<ScheduleDetail> schdList = schdServ.getScheduleDiscountRange(schid, "商務票");
 		if( schdList.size()<=0 || stseq>=edseq) {

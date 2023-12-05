@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,20 +29,20 @@ public class EmployeeHistoricalDepartment {
 	private Integer employeeHistoricalDepartmentId;
 
 	// 輸入輸出都可以format
-	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GM+8")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GM+8")
 	// 只有輸入可以format
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss") // 轉換前端String日期格式到Java日期格式
 	@Column(name = "department_effective_date")
 	private Date departmentEffectiveDate;
 
 //	@JsonIgnore
-	@JsonBackReference(value = "empEhd")
+	@JsonManagedReference(value = "empEhd")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
 
-	@JsonIgnore
-//	@JsonBackReference(value = "depEhd")
+//	@JsonIgnore
+	@JsonBackReference(value = "depEhd")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id_fk")
 	private Department department;

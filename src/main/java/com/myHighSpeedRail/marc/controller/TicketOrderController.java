@@ -277,7 +277,7 @@ public class TicketOrderController {
 		}
 		TicketOrder tcko = tkoServ.save(new TicketOrder( token,new Date(),"已付款",deadline, total));
 		// create Booking
-		for( int i=0 ; i< schssList .size(); i++) {
+		for( int i=0 ; i< schssList.size(); i++) {
 			bServ.save(new Booking(token, tcko, sch, rrs,schssList .get(i).getSeat(),td, "已分配座位"
 					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
 					(String)null));

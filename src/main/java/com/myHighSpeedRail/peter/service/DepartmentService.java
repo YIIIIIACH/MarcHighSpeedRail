@@ -24,5 +24,13 @@ public class DepartmentService {
 		List<SystemAuthor> authorList = dept.getSystemAuthor();
 		return authorList.get(0);
 	}
+	
+	public List<Department> getAllDepartments() {
+		return dDao.findAll();
+	}
+	
+	public Department getDepartmentByName(String name) {
+		return dDao.findBydepartmentName(name);
+	}
 
 }
