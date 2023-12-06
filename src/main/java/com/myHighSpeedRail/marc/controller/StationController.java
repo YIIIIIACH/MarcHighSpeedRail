@@ -27,6 +27,10 @@ public class StationController {
 	public List<Station> getAllStation() {
 		return sSer.getAllStation();
 	}
+	@PostMapping(value="/getAllStation")
+	public List<Station> getPostAllStation() {
+		return sSer.getAllStation();
+	}
 	
 	@PostMapping(value="/insertStation")
 	public List<Station> insert(@RequestParam("name")String name){

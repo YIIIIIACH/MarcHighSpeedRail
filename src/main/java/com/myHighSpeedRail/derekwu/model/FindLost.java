@@ -38,13 +38,10 @@ public class FindLost {
 	@Column(name="find_lost_date",nullable=false)
 	private Date findLostDate;
 	
-	@Column(name = "letter_check",nullable=false)
-	private boolean letterCheck;
-	public FindLost(Integer findLostId, LostProperty lostPropertyId, Date findLostDate, boolean letterCheck) {
+	public FindLost(Integer findLostId, LostProperty lostPropertyId, Date findLostDate) {
 		this.findLostId = findLostId;
 		this.lostPropertyId = lostPropertyId;
 		this.findLostDate = findLostDate;
-		this.letterCheck = letterCheck;
 	}
 	public FindLost() {
 	}
@@ -66,12 +63,7 @@ public class FindLost {
 	public void setFindLostDate(Date findLostDate) {
 		this.findLostDate = findLostDate;
 	}
-	public boolean isLetterCheck() {
-		return letterCheck;
-	}
-	public void setLetterCheck(boolean letterCheck) {
-		this.letterCheck = letterCheck;
-	}
+	
 	
 	//Pre在物件轉換到Persist之前做甚麼事，例如下面在new之前
 		@PrePersist

@@ -1,9 +1,17 @@
 package com.myHighSpeedRail.marc.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import com.myHighSpeedRail.marc.dto.EmailPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.util.PayPalUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myHighSpeedRail.marc.dto.BookingDto;
 import com.myHighSpeedRail.marc.dto.DisplayMemberBookingTicketDto;
 import com.myHighSpeedRail.marc.dto.DisplayMemberTicketOrderDto;
 import com.myHighSpeedRail.marc.dto.MakeOrderBuinessSeatDto;
+import com.myHighSpeedRail.marc.dto.SeatListDto;
 import com.myHighSpeedRail.marc.dto.paypalapi.AppContext;
 import com.myHighSpeedRail.marc.dto.paypalapi.CreatePayPalOrderDto;
 import com.myHighSpeedRail.marc.dto.paypalapi.Unit;
@@ -29,8 +39,10 @@ import com.myHighSpeedRail.marc.model.Booking;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
 import com.myHighSpeedRail.marc.model.Schedule;
+import com.myHighSpeedRail.marc.model.ScheduleArrive;
 import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.Seat;
+import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.model.TicketOrder;
 import com.myHighSpeedRail.marc.service.BookingService;
@@ -41,6 +53,7 @@ import com.myHighSpeedRail.marc.service.ScheduleRestSeatService;
 import com.myHighSpeedRail.marc.service.ScheduleSeatStatusService;
 import com.myHighSpeedRail.marc.service.ScheduleService;
 import com.myHighSpeedRail.marc.service.SeatService;
+import com.myHighSpeedRail.marc.service.StationService;
 import com.myHighSpeedRail.marc.service.TicketDiscountService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
 
@@ -70,10 +83,14 @@ public class TicketOrderController {
 	@Autowired
 	private SeatService seatServ;
 	@Autowired
+	private StationService stServ;
+	@Autowired
 	private PayPalUtil paypalServ;
 	
 	@Value("${server.baseurl}")
 	private String SERVER_BASE_URL;
+	@Value("${front.end.host}")
+	private String FRONT_SERVER_URL;
 	
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
@@ -145,7 +162,7 @@ public class TicketOrderController {
 		AppContext actx= new AppContext();
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
 		actx.return_url=SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);
-		actx.cancel_url="http://google.com"; 
+		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; 
 		dto.application_context= actx;
 		// add purchase_units into dto
 		List<Unit> purUnits= new ArrayList<Unit>();
@@ -179,7 +196,7 @@ public class TicketOrderController {
 	}
 	
 	@GetMapping("registAllocateTicketOrderSeats")
-	public @ResponseBody ResponseEntity<String> allocateTicketOrdeSeat(@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
+	public String allocateTicketOrdeSeat(@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
 		
 		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
 		//List<RailRouteStopStation> findByRouteIdStationId(Integer rid, Integer sid){
@@ -210,9 +227,177 @@ public class TicketOrderController {
 		tmp.setStatus("已付款");
 		tkoServ.save(tmp );
 		//go capture the paypal token
-		return paypalServ.captureOrderUtil(paypalOrderId);
-//		return new ResponseEntity<String>( "inserted  data", HttpStatus.OK);
+		paypalServ.captureOrderUtil(paypalOrderId);
+		return "checkOutTicketReturn";
 	}
+	
+	@PostMapping("/createBuinessTicketOrder/{ststid}/{edstid}/{amount}/{schid}")
+	public @ResponseBody ResponseEntity<String> createPayPalBuinessTicketOrder(@PathVariable Integer ststid,@PathVariable Integer edstid, @PathVariable Integer amount , @PathVariable Integer schid,@RequestBody SeatListDto pickSeatIdList){
+		String token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+		// check seat was not booked by other member
+		for( Integer sid : pickSeatIdList.seatList) {
+			System.out.println(sid);
+		}
+		ScheduleArrive schArr = schArrServ.findByScheduleIdStationId(schid, ststid);
+		RailRouteSegment rrs = rrsServ.findByScheduleIdStstEdst(schid, ststid, edstid).get(0);
+		List<ScheduleSeatStatus> schssList = schssServ.findBySchidInSeatid(schid,pickSeatIdList.seatList);
+		System.out.println( schssList.size());
+		RailRouteStopStation rrss1 = schrrssServ.findByRouteIdStationId(rrs.getRailRoute().getRailRouteId(),ststid).get(0);
+		RailRouteStopStation rrss2 = schrrssServ.findByRouteIdStationId(rrs.getRailRoute().getRailRouteId(),edstid).get(0);
+		// get segment mask
+		Long mask = 0L;
+		mask |= (1L << rrss2.getRailRouteStopStationSequence())-1;
+		mask >>= rrss1.getRailRouteStopStationSequence();
+		mask <<= rrss1.getRailRouteStopStationSequence();
+		//get selected scheduleSeatStatus;
+		List<Seat> tmp = new ArrayList<Seat>();
+		for( ScheduleSeatStatus schss: schssList ) {
+			tmp.add(schss.getSeat());
+		}
+		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(schArr.getSchedule(), tmp);
+		// check seat Available
+		for( ScheduleSeatStatus schss: selectSchSeatList) {
+			if( (schss.getScheduleStatus() & mask) > 0) {
+				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
+			}
+		}
+		// end check seat was not booked by other member
+		TicketDiscount tckd = tkdServ.findByDiscountType("商務票").get(0);
+		Date deadline = Date.from( schArr.getArriveTime().toInstant().minusSeconds(tckd.getPurchaseEarlyLimitDay()* 24*60*60));
+		Integer oneTicketPrice= (rrs.getRailRouteSegmentTicketPrice()*tckd.getTicketDiscountPercentage())/100-tckd.getTicketDiscountAmount();
+		// require startStationName endStationName ticketPrice price sum
+		// get info of ticket order
+		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
+		// put info into dto
+		dto.intent="CAPTURE";
+		// add purchase_units into dto
+		List<Unit> purUnits= new ArrayList<Unit>();
+		Unit u = new Unit();
+		u.items= new ArrayList<Item>();
+		// add item 
+		Integer priceSum=0;
+		Station stst = stServ.findById(ststid).get();
+		Station edst = stServ.findById(edstid).get();
+		for(int i=0; i< amount; i++) {
+//			Booking b= bList.get(i);
+			Item item = new Item();
+			item.name= "MarcHSR_Ticket";
+			item.description=  stst.getStationName()+"-"+edst.getStationName()+"商務票";
+			item.quantity="1";
+			priceSum+= oneTicketPrice;
+			UnitAmount ua= new UnitAmount("TWD", String.valueOf(oneTicketPrice)+".00");
+			item.unit_amount=ua;
+			u.items.add(item);
+		}
+		//create Amount
+		Amount am = new Amount();
+		am.currency_code="TWD";
+		am.value= String.valueOf(priceSum)+".00";
+		am.breakdown= new Breakdown("TWD", priceSum);
+		u.amount= am;
+		purUnits.add(u);
+		dto.purchase_units=purUnits;
+		// add application context into dto
+		TicketOrder tcko = tkoServ.save(new TicketOrder( token,new Date(),"未付款",deadline, priceSum));
+		// create a bunch of not allocate seat for ticket order
+		for( int i=0 ; i< schssList.size(); i++) {
+			bServ.save(new Booking(token, tcko,schArr.getSchedule(), rrs,schssList.get(i).getSeat(),tckd, "暫時鎖定座位"
+					, ((rrs.getRailRouteSegmentTicketPrice()*tckd.getTicketDiscountPercentage())/100)-tckd.getTicketDiscountAmount(),
+					(String)null));
+		}	
+		//
+		AppContext actx= new AppContext();
+		actx.return_url=SERVER_BASE_URL+"/newBookBuinessSeat?ticketOrderId="+String.valueOf(tcko.getTicketOrderId());
+		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+tcko.getTicketOrderId(); 
+		//會redirect client 到一隻專門接收user approve 成功資訊的controller
+		dto.application_context= actx;
+//		return dto;
+//		return new ResponseEntity<String>("still in progress",HttpStatus.OK);
+		return paypalServ.createOrderUtil(dto);
+		
+//		return new ResponseEntity<String>("test test ",HttpStatus.OK);
+	}
+	@GetMapping(value="/newBookBuinessSeat")
+	public String newBookBuinessSeat(@RequestParam Integer ticketOrderId){
+		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
+//		Cookie []cookies = req.getCookies();
+		String token=null;
+//		for( Cookie ck: cookies) {
+//			if( ck.getName().equals("login-token")) {
+//				token = ck.getValue();
+//			}
+//		}
+//		if(token==null) {
+//			// redirect to MemberSystem
+//			;
+//		}else {
+//			//validate the current login token 
+//			;
+//		}
+		// temporary treatment
+		token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+		// use ticket order id to get BookList
+		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
+		TicketOrder tOrder = tkoServ.findById(ticketOrderId);
+		Station stst = bList.get(0).getRailRouteSegment().getStartStation();
+		Station edst = bList.get(0).getRailRouteSegment().getEndStation();
+		// get ticketDisc id
+		Integer tkdid = tkdServ.findByDiscountType("商務票").get(0).getTicketDiscountId();
+		Schedule sch = bList.get(0).getSchedule();
+		List<ScheduleSeatStatus> schssList = schssServ.findBySchidInSeatid(sch.getScheduleId(), bList.stream().map((b)->b.getSeat().getSeatId()).toList());
+		RailRouteStopStation rrss1 = schrrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(),stst.getStationId()).get(0);
+		RailRouteStopStation rrss2 = schrrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(),edst.getStationId()).get(0);
+		// get segment mask
+		Long mask = 0L;
+		mask |= (1L << rrss2.getRailRouteStopStationSequence())-1;
+		mask >>= rrss1.getRailRouteStopStationSequence();
+		mask <<= rrss1.getRailRouteStopStationSequence();
+		//get selected scheduleSeatStatus;
+		List<Seat> tmp = new ArrayList<Seat>();
+		for( ScheduleSeatStatus schss: schssList ) {
+			tmp.add(schss.getSeat());
+		}
+		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(sch, tmp);
+		// check seat Available
+		for( ScheduleSeatStatus schss: selectSchSeatList) {
+			if( (schss.getScheduleStatus() & mask) > 0) {
+//				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
+				return "checkOutFail";
+			}
+		}
+		
+		// update scheduleSeatStatus
+//		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
+		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, selectSchSeatList);
+		// update scheduleRestSeat [Ignore now ]
+		schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
+		
+		// create order
+		Integer paymentEarlyDay = tkdServ.findById(tkdid).getPurchaseEarlyLimitDay();
+		Date deadline = schArrServ.findByScheduleIdStationId(sch.getScheduleId(),stst.getStationId()).getArriveTime();
+		deadline = Date.from( deadline.toInstant().minusSeconds(paymentEarlyDay* 24*60*60));
+		RailRouteSegment rrs =rrsServ.findByStopStationId(sch.getRailRoute().getRailRouteId()
+				, stst.getStationId(),edst.getStationId()).get();
+		Integer originPrice =rrs.getRailRouteSegmentTicketPrice();
+		// member_token ticket_order_create_time status payment_dealine total_price
+		Integer total= 0;
+		TicketDiscount td = tkdServ.findById( tkdid) ;
+		for( int i=0 ; i< schssList .size(); i++) {
+			total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();			
+		}
+		tOrder.setStatus("已付款");
+		TicketOrder tcko = tkoServ.save(tOrder);
+		// create Booking
+		for( int i=0 ; i< schssList.size(); i++) {
+			bServ.save(new Booking(token, tcko, sch, rrs,schssList.get(i).getSeat(),td, "已分配座位"
+					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
+					(String)null));
+		}	
+//		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
+		return "checkOutTicketReturn";
+		
+	}
+	
 	@PostMapping(value="/bookBuinessSeat")
 	public @ResponseBody ResponseEntity<String> bookBuinessSeat(@RequestBody MakeOrderBuinessSeatDto boDto){
 		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
@@ -281,7 +466,10 @@ public class TicketOrderController {
 			bServ.save(new Booking(token, tcko, sch, rrs,schssList .get(i).getSeat(),td, "已分配座位"
 					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
 					(String)null));
-		}		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
+		}	
+		//checkOutTicketReturn
+		
+		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
 		
 	}
 	@GetMapping("/getAllMemberTicketOrder/{memuuid}")
@@ -304,4 +492,44 @@ public class TicketOrderController {
 		return res;
 	}
 	
+//	@GetMapping("/verifyToken")
+//	public @ResponseBody ResponseEntity<String> verifyToken( ){
+//		try {
+//			// 192.168.60.95: ?? / ???
+//		URL endpoint = new URL("http://localhost:8080/MarcHighSpeedRail/getAllStation");
+//		EmailPassword ep = new EmailPassword();
+//		ep.email = "test";
+//		ep.password = "qwer";
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String requestData = objectMapper.writeValueAsString(ep);
+//        HttpURLConnection httpUrlConn = (HttpURLConnection) endpoint.openConnection();
+//        httpUrlConn.setDoOutput(true);
+//        httpUrlConn.setRequestMethod("GET");//有修改過
+//        httpUrlConn.setRequestProperty("Content-Type", "application/json");
+//        OutputStream outputStream = httpUrlConn.getOutputStream();
+//        byte[] input = requestData.getBytes("utf-8");
+//	        outputStream.write(input, 0, input.length);
+//	        int statusCode = httpUrlConn.getResponseCode();
+//	        InputStream inputStream = null;
+//	        if (statusCode == 200) {
+//	            inputStream = httpUrlConn.getInputStream();
+//	        } else {
+//	            inputStream = httpUrlConn.getErrorStream();
+//	        }
+//	        BufferedReader bufferedReader;
+//			bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+//			StringBuilder response = new StringBuilder();
+//			String responseLine = null;
+//			while ((responseLine = bufferedReader.readLine()) != null) {
+//				response.append(responseLine.trim());
+//			}
+//			System.out.println(response.toString());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return new ResponseEntity<String>("failed ",HttpStatus.OK);
+//		}
+//        // response.toString()
+//		return new ResponseEntity<String>("go go ",HttpStatus.OK);
+//	}
 }

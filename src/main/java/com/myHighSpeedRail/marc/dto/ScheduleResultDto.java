@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myHighSpeedRail.marc.model.Station;
+import com.myHighSpeedRail.marc.model.TicketDiscount;
 
 public class ScheduleResultDto {
 	/*
@@ -24,10 +25,11 @@ public class ScheduleResultDto {
 	public Integer durationMinute;
 	public Integer originTicketPrice;  // 一般票的價格 不用計算折價
 	public List<String> containTicketDiscountName;
+	public List<TicketDiscount> containTicketDiscount;
 	public ScheduleResultDto() {;}
 	public ScheduleResultDto(Integer scheduleId, Station getOnStation, Station getOffStation, Date getOnTime,
-			Date getOffTime, Integer durationMinute, Integer originTicketPrice,
-			List<String> containTicketDiscountName) {
+			Date getOffTime, Integer durationMinute, Integer originTicketPrice, List<String> containTicketDiscountName,
+			List<TicketDiscount> containTicketDiscount) {
 		super();
 		this.scheduleId = scheduleId;
 		this.getOnStation = getOnStation;
@@ -37,6 +39,7 @@ public class ScheduleResultDto {
 		this.durationMinute = durationMinute;
 		this.originTicketPrice = originTicketPrice;
 		this.containTicketDiscountName = containTicketDiscountName;
+		this.containTicketDiscount = containTicketDiscount;
 	}
 	
 }
