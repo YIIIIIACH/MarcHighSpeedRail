@@ -1,16 +1,19 @@
 package com.myHighSpeedRail.peter.handler;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.configurationprocessor.json.JSONArray;
+//import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.stereotype.Component;
 
 import com.myHighSpeedRail.peter.model.Systems;
-import com.myHighSpeedRail.peter.service.SystemsService;
+//import com.myHighSpeedRail.peter.service.SystemsService;
 
 /**
  * 裝有員工系統權限的物件，直接new會無法使用
@@ -20,15 +23,24 @@ public class EmployeeSystemAuthor {
 
 	private Integer systemId;
 
-	private Map<Integer, JSONArray> authorJson;
+	private HashMap<Integer, JSONArray> authorJson;
 
 	private List<Systems> systemList;
 
-	@Autowired
-	private SystemsService sService;
+//	@Autowired
+//	private SystemsService sService;
 
 	public EmployeeSystemAuthor() {
 	}
+	
+
+	public EmployeeSystemAuthor(Integer systemId, HashMap<Integer, JSONArray> authorJson, List<Systems> systemList) {
+	super();
+	this.systemId = systemId;
+	this.authorJson = authorJson;
+	this.systemList = systemList;
+}
+
 
 	// 藉由systemName找systemId
 	private void getSytemId(String systemName, List<Systems> functionList) {
@@ -53,7 +65,6 @@ public class EmployeeSystemAuthor {
 		if (systemId == null) {
 			return false;
 		}
-
 		JSONArray author = authorJson.get(systemId);
 
 		try {
@@ -108,7 +119,7 @@ public class EmployeeSystemAuthor {
 		return authorJson;
 	}
 
-	void setAuthorJson(Map<Integer, JSONArray> authorJson) {
+	void setAuthorJson(HashMap<Integer, JSONArray> authorJson) {
 		this.authorJson = authorJson;
 	}
 

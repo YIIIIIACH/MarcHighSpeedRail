@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+//import org.springframework.boot.configurationprocessor.json.JSONArray;
+//import org.springframework.boot.configurationprocessor.json.JSONObject;
+// use new depedency
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import com.myHighSpeedRail.peter.model.Department;
