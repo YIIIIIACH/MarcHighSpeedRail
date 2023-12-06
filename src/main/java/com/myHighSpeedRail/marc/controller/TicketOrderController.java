@@ -388,9 +388,9 @@ public class TicketOrderController {
 //		return new ResponseEntity<String>("test test ",HttpStatus.OK);
 	}
 	@GetMapping(value="/newBookBuinessSeat")
-	public String newBookBuinessSeat(HttpServletRequest req,@RequestParam Integer ticketOrderId){
+	public String newBookBuinessSeat(HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
 		// 可能需要先檢查是否 paypal ticket order is approve
-		if( !paypalServ.captureOrderUtil( String.valueOf(ticketOrderId))) {
+		if( !paypalServ.captureOrderUtil( String.valueOf(paypalOrderId))) {
 			return "checkOutFail";
 		}
 //		Cookie []cookies = req.getCookies();
@@ -435,9 +435,9 @@ public class TicketOrderController {
 		for( ScheduleSeatStatus schss: schssList ) {
 			tmp.add(schss.getSeat());
 		}
-		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(sch, tmp);
+//		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(sch, tmp);
 		// check seat Available
-		for( ScheduleSeatStatus schss: selectSchSeatList) {
+		for( ScheduleSeatStatus schss: schssList ) { // 原本是 ：selectSchSeatList
 			if( (schss.getScheduleStatus() & mask) > 0) {
 //				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
 				return "checkOutFail";
@@ -446,7 +446,7 @@ public class TicketOrderController {
 		
 		// update scheduleSeatStatus
 //		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
-		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, selectSchSeatList);
+		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, schssList);//selectSchSeatList
 		// update scheduleRestSeat [Ignore now ]
 		schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
 		
@@ -465,12 +465,16 @@ public class TicketOrderController {
 		}
 		tOrder.setStatus("已付款");
 		TicketOrder tcko = tkoServ.save(tOrder);
-		// create Booking
-		for( int i=0 ; i< schssList.size(); i++) {
-			bServ.save(new Booking(memuuid, tcko, sch, rrs,schssList.get(i).getSeat(),td, "已分配座位"
-					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
-					(String)null));
-		}	
+		// update booking list
+		for( Booking b: bList) {
+			b.setStatus("已分配座位");
+		}
+		bServ.saveAll(bList);
+//		for( int i=0 ; i< schssList.size(); i++) {
+//			bServ.save(new Booking(memuuid, tcko, sch, rrs,schssList.get(i).getSeat(),td, "已分配座位"
+//					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
+//					(String)null));
+//		}	
 //		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
 		return "checkOutTicketReturn";
 		

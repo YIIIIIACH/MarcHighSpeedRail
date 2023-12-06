@@ -163,7 +163,7 @@ public class PayPalUtil {
 			in.close();
 
 			// Print the response
-			System.out.println(response.toString());
+//			System.out.println(response.toString());
 			return new ResponseEntity<String>(response.toString(),HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,7 +188,7 @@ public class PayPalUtil {
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
-			System.out.println( response.toString());
+//			System.out.println( response.toString());
 			JsonNode root = mapper.readTree(response.toString());
 			Map<String, String> map = new HashMap<>();
 			addKeys("", root, map, new ArrayList<>());
