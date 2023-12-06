@@ -153,26 +153,8 @@ public class ProductController {
 	@GetMapping("/api/product/{id}")
 	@ResponseBody
 	public ProductAndPhotoSegmentDto findProductById(@PathVariable("id") Integer id) {
-		Product p = pService.findProductById(id);
 		
-		ProductAndPhotoSegmentDto tmp = new ProductAndPhotoSegmentDto();
-		tmp.productDescription = p.getProductDescription();
-		tmp.productId = p.getProductId();
-		tmp.productInventory = p.getProductInventory();
-		tmp.productName = p.getProductName();
-		tmp.productPrice = p.getProductPrice();
-		tmp.productType = p.getProductType();
-		p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
-		
-		StringBuilder sb = new StringBuilder();
-		for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-			sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
-		}
-		
-		tmp.photoData = sb.toString();
-//		System.out.println(tmp.photoData);
-
-		return tmp;
+		return pService.findProductById(id);
 	}
 	
 	//透過id下架商品

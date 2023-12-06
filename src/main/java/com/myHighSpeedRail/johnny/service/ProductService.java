@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.johnny.service;
 
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import com.myHighSpeedRail.johnny.dto.PostProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductBuyingMethod;
+import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.repository.ProductBuyingMethodRepository;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
 
@@ -65,20 +67,21 @@ public class ProductService {
 		return pDao.saveAll(pList);
 	}
 	
-	public Product findProductById(Integer id) {
-		Optional<Product> optional = pDao.findById(id);
-		
-		if(optional.isPresent()) {
-			Product product = optional.get();
-			
-			return product;
-		}
-		return null;
-	}
+//	public Product findProductById(Integer id) {
+//		Optional<Product> optional = pDao.findById(id);
+//		
+//		if(optional.isPresent()) {
+//			Product product = optional.get();
+//			
+//			return product;
+//		}
+//		return null;
+//	}
 	
 	public List<Product> findAllProduct(){
 		return pDao.findAll();
 	}
+	
 	
 //	public Page<Product> findbyPage(Integer pageNumber){
 //		Pageable pgb = PageRequest.of(pageNumber-1, 10, Sort.Direction.ASC, "productId"); //分頁設定
@@ -144,5 +147,30 @@ public class ProductService {
 	}
 	public Optional<Product> findById( Integer pid){
 		return pDao.findById(pid);
+	}
+	
+	public ProductAndPhotoSegmentDto findProductById(Integer pId) {
+		
+		Product product = pDao.findById(pId).get();
+		
+		ProductAndPhotoSegmentDto temp = new ProductAndPhotoSegmentDto();
+		temp.productId = product.getProductId();
+		temp.productName = product.getProductName();
+		temp.productPrice = product.getProductPrice();
+		temp.productInventory = product.getProductInventory();
+		temp.productType = product.getProductType();
+		temp.productDescription = product.getProductDescription();
+		
+		product.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+		
+		StringBuilder sb = new StringBuilder();
+		for(ProductPhotoSegment pps: product.getPhotoSegment()) {
+
+			sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+		}
+		
+		temp.photoData= sb.toString();
+
+		return temp;
 	}
 }
