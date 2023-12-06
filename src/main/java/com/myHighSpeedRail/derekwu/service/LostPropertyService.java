@@ -21,6 +21,7 @@ public class LostPropertyService {
 	@Autowired
 	private LostPropertyRepository LPrepo;
 	
+	//自定義Query需要的Annotation
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -63,7 +64,6 @@ public class LostPropertyService {
 		List<LostProperty> resultList = new ArrayList<>();
 		try {
 			resultList = em.createNativeQuery(empMorekeywordSearch(details),LostProperty.class).getResultList();
-			
 		}catch(Exception e){
 		}
 		return resultList;

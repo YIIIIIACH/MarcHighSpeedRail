@@ -1,13 +1,17 @@
 package com.myHighSpeedRail.derekwu.model;
 
 import java.util.Date;
-import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -49,12 +53,17 @@ public class LostProperty {
 	@Column(name="receive_check",nullable=false)
 	private Boolean receiveCheck = false;
 	
+	@JsonIgnore
+	@JsonManagedReference
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "lostProperty")
+	private FindLost findlost;
+	
 	public LostProperty() {
 		
 	}
 	
 	public LostProperty(Integer lostPropertyId, Integer tripId, String stationName, Date findDate, String stayStation,
-			String simpleOutward, String detailOutward, String lostPhoto, Boolean letterCheck, Boolean receiveCheck) {
+			String simpleOutward, String detailOutward, String lostPhoto, Boolean letterCheck, Boolean receiveCheck, FindLost findlost) {
 		
 		this.lostPropertyId = lostPropertyId;
 		this.tripId = tripId;
@@ -66,6 +75,7 @@ public class LostProperty {
 		this.lostPhoto = lostPhoto;
 		this.letterCheck = letterCheck;
 		this.receiveCheck = receiveCheck;
+		this.findlost = findlost;
 	}
 	public LostProperty(Integer tripId, String stationName, Date findDate, String stayStation,
 			String simpleOutward, String detailOutward, String lostPhoto) {
@@ -166,27 +176,12 @@ public class LostProperty {
 		this.receiveCheck = receiveCheck;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(detailOutward, findDate, letterCheck, lostPhoto, lostPropertyId, receiveCheck,
-				simpleOutward, stationName, stayStation, tripId);
+	public FindLost getFindlost() {
+		return findlost;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LostProperty other = (LostProperty) obj;
-		return Objects.equals(detailOutward, other.detailOutward) && Objects.equals(findDate, other.findDate)
-				&& Objects.equals(letterCheck, other.letterCheck) && Objects.equals(lostPhoto, other.lostPhoto)
-				&& Objects.equals(lostPropertyId, other.lostPropertyId)
-				&& Objects.equals(receiveCheck, other.receiveCheck)
-				&& Objects.equals(simpleOutward, other.simpleOutward) && Objects.equals(stationName, other.stationName)
-				&& Objects.equals(stayStation, other.stayStation) && Objects.equals(tripId, other.tripId);
+	public void setFindlost(FindLost findlost) {
+		this.findlost = findlost;
 	}
 
 	@Override
@@ -194,8 +189,9 @@ public class LostProperty {
 		return "LostProperty [lostPropertyId=" + lostPropertyId + ", tripId=" + tripId + ", stationName=" + stationName
 				+ ", findDate=" + findDate + ", stayStation=" + stayStation + ", simpleOutward=" + simpleOutward
 				+ ", detailOutward=" + detailOutward + ", lostPhoto=" + lostPhoto + ", letterCheck=" + letterCheck
-				+ ", receiveCheck=" + receiveCheck + "]";
+				+ ", receiveCheck=" + receiveCheck + ", findlost=" + findlost + "]";
 	}
+
 
 	
 	

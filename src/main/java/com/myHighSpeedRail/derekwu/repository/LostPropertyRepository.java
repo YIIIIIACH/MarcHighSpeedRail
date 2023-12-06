@@ -35,10 +35,6 @@ public interface LostPropertyRepository extends JpaRepository<LostProperty, Long
 	@Query(value = "select * from lost_property where lost_property_id = :lost_property_id", nativeQuery = true)
 	public LostProperty findByLostPropertyId(@Param("lost_property_id") Integer LostPropertyId);
 	
-//	@Transactional
-//	@Modifying
-//	@Query(value = "select * from lost_property where simple_outward like %:simple_outward%", nativeQuery = true)
-//	public LostProperty updateByLostPropertyId(int LostPropertyId);
 
 
 }
