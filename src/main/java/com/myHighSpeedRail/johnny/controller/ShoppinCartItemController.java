@@ -33,9 +33,7 @@ public class ShoppinCartItemController {
 	public ResponseEntity<String> addToCart(  // 商品加入購物車
 			@RequestParam(value = "productId") Integer productId,
 			@RequestParam(value = "memberId") String memberId 
-			,HttpServletRequest req){
-			
-			
+			,HttpServletRequest req){		
 //		Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
 //		Cookie []cookies = req.getCookies();
 //		String token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
@@ -61,7 +59,7 @@ public class ShoppinCartItemController {
 		
 		if(optional.isPresent()) {	
 			Product product = optional.get();
-			ShoppingCartItem cartItem = new ShoppingCartItem(null, 1, product, memberId );
+			ShoppingCartItem cartItem = new ShoppingCartItem(1, product, memberId );
 			if( cartService.save(cartItem) == null) {
 				return new ResponseEntity<String> ("failed",HttpStatus.BAD_REQUEST);
 			}
@@ -71,7 +69,8 @@ public class ShoppinCartItemController {
 	
 	@GetMapping("/ShoppinCart")
 	@ResponseBody
-	public List<ShoppingCartItem> showAllCartItemsByMemberId(){
+	public List<ShoppingCartItem> showAllCartItemsByMemberId(@RequestParam("memberId") String memberId){
+		
 		return cartService.showAllCartItems();
 	}
 	

@@ -36,13 +36,13 @@ public class EmployeeHistoricalDepartment {
 	private Date departmentEffectiveDate;
 
 //	@JsonIgnore
-	@JsonManagedReference(value = "empEhd")
+	@JsonBackReference(value = "empEhd")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id_fk")
 	private Employee employee;
 
 //	@JsonIgnore
-	@JsonBackReference(value = "depEhd")
+//	@JsonManagedReference(value = "ehdDep")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id_fk")
 	private Department department;

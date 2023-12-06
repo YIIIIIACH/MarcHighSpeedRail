@@ -3,8 +3,8 @@ package com.myHighSpeedRail.peter.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,11 +29,45 @@ public class Title {
 	private String titleName;
 
 	@JsonIgnore
-//	@JsonManagedReference(value = "titEt")
+//	@JsonBackReference(value = "titEt")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "title", cascade = CascadeType.ALL)
 	private List<EmployeeTitle> employeeTitle = new LinkedList<EmployeeTitle>();
 
 	public Title() {
+	}
+	
+	public Title(Integer titleId) {
+		super();
+		this.titleId = titleId;
+	}
+
+	public Integer getTitleId() {
+		return titleId;
+	}
+
+	public void setTitleId(Integer titleId) {
+		this.titleId = titleId;
+	}
+
+	public String getTitleName() {
+		return titleName;
+	}
+
+	public void setTitleName(String titleName) {
+		this.titleName = titleName;
+	}
+
+	public List<EmployeeTitle> getEmployeeTitle() {
+		return employeeTitle;
+	}
+
+	public void setEmployeeTitle(List<EmployeeTitle> employeeTitle) {
+		this.employeeTitle = employeeTitle;
+	}
+
+	@Override
+	public String toString() {
+		return "Title [titleId=" + titleId + ", titleName=" + titleName + ", employeeTitle=" + employeeTitle + "]";
 	}
 
 }
