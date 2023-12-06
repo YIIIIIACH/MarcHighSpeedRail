@@ -61,6 +61,7 @@ public class EmployeeDetailDTO {
 
 	@JsonProperty("historicalDepartment")
 	private List<EmployeeHistoricalDepartment> employeeHistoricalDepartment = new LinkedList<EmployeeHistoricalDepartment>();
+	
 
 	@JsonProperty("educationalQualifications")
 	private List<EmployeeEducationalQualifications> employeeEducationalQualifications = new LinkedList<EmployeeEducationalQualifications>();
@@ -74,7 +75,7 @@ public class EmployeeDetailDTO {
 	@JsonProperty("historicalBaseSalary")
 	private List<EmployeeHistoricalBaseSalary> employeeHistoricalBaseSalary = new LinkedList<EmployeeHistoricalBaseSalary>();
 
-	@JsonProperty("title")
+	@JsonProperty("empTitle")
 	private List<EmployeeTitle> employeeTitle = new LinkedList<EmployeeTitle>();
 
 	public Integer getEmpId() {

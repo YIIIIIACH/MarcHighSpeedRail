@@ -42,4 +42,45 @@ public class EmergencyContactPerson {
 	public EmergencyContactPerson() {
 	}
 
+	public Integer getEmergencyContactPersonId() {
+		return emergencyContactPersonId;
+	}
+
+	public void setEmergencyContactPersonId(Integer emergencyContactPersonId) {
+		this.emergencyContactPersonId = emergencyContactPersonId;
+	}
+
+	public String getEmergencyContactPersonName() {
+		return emergencyContactPersonName;
+	}
+
+	public void setEmergencyContactPersonName(String emergencyContactPersonName) {
+		this.emergencyContactPersonName = emergencyContactPersonName;
+	}
+
+	public String getEmergencyContactPersonRelationship() {
+		return emergencyContactPersonRelationship;
+	}
+
+	public void setEmergencyContactPersonRelationship(String emergencyContactPersonRelationship) {
+		this.emergencyContactPersonRelationship = emergencyContactPersonRelationship;
+	}
+
+	public String getEmergencyContactPersonPhoneNumber() {
+		return emergencyContactPersonPhoneNumber;
+	}
+
+	public void setEmergencyContactPersonPhoneNumber(String emergencyContactPersonPhoneNumber) {
+		this.emergencyContactPersonPhoneNumber = emergencyContactPersonPhoneNumber;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	
+
 }

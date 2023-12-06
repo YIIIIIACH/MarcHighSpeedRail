@@ -49,4 +49,60 @@ public class EmployeeWorkExperience {
 	public EmployeeWorkExperience() {
 	}
 
+	public Integer getEmployeeWorkExperienceId() {
+		return employeeWorkExperienceId;
+	}
+
+	public void setEmployeeWorkExperienceId(Integer employeeWorkExperienceId) {
+		this.employeeWorkExperienceId = employeeWorkExperienceId;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public Date getEmploymentDate() {
+		return employmentDate;
+	}
+
+	public void setEmploymentDate(Date employmentDate) {
+		this.employmentDate = employmentDate;
+	}
+
+	public Date getResignationDate() {
+		return resignationDate;
+	}
+
+	public void setResignationDate(Date resignationDate) {
+		this.resignationDate = resignationDate;
+	}
+
+	public Integer getSalaryAmount() {
+		return salaryAmount;
+	}
+
+	public void setSalaryAmount(Integer salaryAmount) {
+		this.salaryAmount = salaryAmount;
+	}
+
+	public String getSalaryKind() {
+		return salaryKind;
+	}
+
+	public void setSalaryKind(String salaryKind) {
+		this.salaryKind = salaryKind;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
 }

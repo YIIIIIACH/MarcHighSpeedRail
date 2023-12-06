@@ -18,25 +18,25 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="department")
+@Table(name = "department")
 public class Department {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="department_id")
+	@Column(name = "department_id")
 	private Integer departmentId;
-	
-	@Column(name="department_name")
+
+	@Column(name = "department_name")
 	private String departmentName;
-	
+
 //	@JsonIgnore
-	@JsonManagedReference(value="depSa")
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "department",cascade = CascadeType.ALL)
+	@JsonManagedReference(value = "depSa")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "department", cascade = CascadeType.ALL)
 	private List<SystemAuthor> systemAuthor = new LinkedList<SystemAuthor>();
-	
-//	@JsonIgnore
-	@JsonBackReference(value="depEhd") 
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "department",cascade = CascadeType.ALL)
+
+	@JsonIgnore
+//	@JsonBackReference(value = "ehdDep")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "department", cascade = CascadeType.ALL)
 	private List<EmployeeHistoricalDepartment> employeeHistoricalDepartment = new LinkedList<EmployeeHistoricalDepartment>();
 
 	public Department() {
@@ -73,7 +73,5 @@ public class Department {
 	public void setEmployeeHistoricalDepartment(List<EmployeeHistoricalDepartment> employeeHistoricalDepartment) {
 		this.employeeHistoricalDepartment = employeeHistoricalDepartment;
 	}
-	
-	
 
 }
