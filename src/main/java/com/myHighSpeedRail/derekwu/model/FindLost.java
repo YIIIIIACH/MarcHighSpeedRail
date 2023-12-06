@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +31,7 @@ public class FindLost {
 	
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="lost_property_id_fk",nullable = false)
-	private LostProperty lostPropertyId;
+	private LostProperty lostProperty;
 	
 	@JsonFormat(pattern="yyyy/MM/dd HH:mm:ss" ,timezone= "GMT+8")//傳JSON字串時會用到的固定時間格式
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss") // 轉換前端 String 日期到 Java 端日期格式
@@ -38,12 +39,19 @@ public class FindLost {
 	@Column(name="find_lost_date",nullable=false)
 	private Date findLostDate;
 	
-	public FindLost(Integer findLostId, LostProperty lostPropertyId, Date findLostDate) {
-		this.findLostId = findLostId;
-		this.lostPropertyId = lostPropertyId;
-		this.findLostDate = findLostDate;
-	}
+	
+	
+	
+	
+	
 	public FindLost() {
+		super();
+	}
+	public FindLost(Integer findLostId, LostProperty lostProperty, Date findLostDate) {
+		super();
+		this.findLostId = findLostId;
+		this.lostProperty = lostProperty;
+		this.findLostDate = findLostDate;
 	}
 	public Integer getFindLostId() {
 		return findLostId;
@@ -51,11 +59,11 @@ public class FindLost {
 	public void setFindLostId(Integer findLostId) {
 		this.findLostId = findLostId;
 	}
-	public LostProperty getLostPropertyId() {
-		return lostPropertyId;
+	public LostProperty getLostProperty() {
+		return lostProperty;
 	}
-	public void setLostPropertyId(LostProperty lostPropertyId) {
-		this.lostPropertyId = lostPropertyId;
+	public void setLostProperty(LostProperty lostProperty) {
+		this.lostProperty = lostProperty;
 	}
 	public Date getFindLostDate() {
 		return findLostDate;
@@ -63,15 +71,19 @@ public class FindLost {
 	public void setFindLostDate(Date findLostDate) {
 		this.findLostDate = findLostDate;
 	}
-	
-	
-	//Pre在物件轉換到Persist之前做甚麼事，例如下面在new之前
+		//Pre在物件轉換到Persist之前做甚麼事，例如下面在new之前
 		@PrePersist
 		public void onCreate() {
 			if(findLostDate==null) {
 				findLostDate = new Date();
 			}
 		}
+		@Override
+		public String toString() {
+			return "FindLost [findLostId=" + findLostId + ", lostProperty=" + lostProperty + ", findLostDate="
+					+ findLostDate + "]";
+		}
+		
 	
 
 }
