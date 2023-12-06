@@ -19,6 +19,9 @@ import com.myHighSpeedRail.marc.model.TicketOrder;
 import com.myHighSpeedRail.marc.service.BookingService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class BookingController {
 	@Autowired
@@ -26,8 +29,30 @@ public class BookingController {
 	@Autowired
 	private TicketOrderService tckodServ;
 	
-	@GetMapping("/getBookingByTicketOrder/{memuuid}/{tckodId}")// 用作查詢訂票紀錄使用
-	public @ResponseBody DisplayMemberBookingTicketDto getBookingByTicketOrder(@PathVariable String memuuid, @PathVariable Integer tckodId) {
+	@GetMapping("/getBookingByTicketOrder/{tckodId}")// 用作查詢訂票紀錄使用
+	public @ResponseBody DisplayMemberBookingTicketDto getBookingByTicketOrder(@PathVariable Integer tckodId,HttpServletRequest req) {
+//		Cookie []cookies = req.getCookies();
+//		String token=null;
+//		String uuid=null;
+//		for( Cookie ck: cookies) {
+//			if( ck.getName().equals("login-token")) {
+//				token = ck.getValue();
+//			}
+//		}
+//		if(token==null) {
+//			// redirect to MemberSystem
+//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
+//		}
+//		else{
+//			//validate the current login token 
+//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
+//		}
+//		if(uuid==null) {
+//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+//		}
+		
+		// 暫時的 member uuid 等待userSerivce merge 上來
+		String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
 		// verify memuuid and tckodId
 		TicketOrder tckod = tckodServ.findById(tckodId);
 		if( !tckod.getMemberToken().equals(memuuid)) {
@@ -56,8 +81,29 @@ public class BookingController {
 		return res; 
 	}
 	
-	@GetMapping("/getMemberOwnBooking/{memuuid}")  //用作在會員中心點擊車票訂單 就可以查看該訂單所購買的車票
-	public @ResponseBody DisplayMemberBookingTicketDto getMemeberOwnedBooking( @PathVariable String memuuid) {
+	@GetMapping("/getMemberOwnBooking")  //用作在會員中心點擊車票訂單 就可以查看該訂單所購買的車票
+	public @ResponseBody DisplayMemberBookingTicketDto getMemeberOwnedBooking(HttpServletRequest req) {
+//		Cookie []cookies = req.getCookies();
+//		String token=null;
+//		String uuid=null;
+//		for( Cookie ck: cookies) {
+//			if( ck.getName().equals("login-token")) {
+//				token = ck.getValue();
+//			}
+//		}
+//		if(token==null) {
+//			// redirect to MemberSystem
+//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
+//		}
+//		else{
+//			//validate the current login token 
+//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
+//		}
+//		if(uuid==null) {
+//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+//		}
+		// 暫時的 member uuid 等待userSerivce merge 上來
+		String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
 		List<Booking> bList  = bServ.findByMember(memuuid);
 		DisplayMemberBookingTicketDto res = new DisplayMemberBookingTicketDto();
 		res.ticketRailRouteSegment=bList.get(0).getRailRouteSegment();
@@ -80,7 +126,26 @@ public class BookingController {
 	}
 	
 	@PostMapping("/allocateBooking")
-	public @ResponseBody ResponseEntity<String> allocateBooking(@RequestBody AllocateTicketDto dto){
+	public @ResponseBody ResponseEntity<String> allocateBooking(@RequestBody AllocateTicketDto dto,HttpServletRequest req){
+//		Cookie []cookies = req.getCookies();
+//		String token=null;
+//		String uuid=null;
+//		for( Cookie ck: cookies) {
+//			if( ck.getName().equals("login-token")) {
+//				token = ck.getValue();
+//			}
+//		}
+//		if(token==null) {
+//			// redirect to MemberSystem
+//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
+//		}
+//		else{
+//			//validate the current login token 
+//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
+//		}
+//		if(uuid==null) {
+//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+//		}
 		// check desMemberToken is valid;
 		 // to be continue
 		//
