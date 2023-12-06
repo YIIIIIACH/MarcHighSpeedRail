@@ -38,6 +38,7 @@ public class BookingController {
 		DisplayMemberBookingTicketDto res = new DisplayMemberBookingTicketDto();
 		res.ticketRailRouteSegment=bList.get(0).getRailRouteSegment();
 		res.ticketSchedule= bList.get(0).getSchedule();
+		System.out.println(bList.get(0).getSchedule().getDepartTime());
 		res.bookingIdList = new ArrayList<>();
 		res.seatList = new ArrayList<>();
 		res.ticketDiscountList = new ArrayList<>();

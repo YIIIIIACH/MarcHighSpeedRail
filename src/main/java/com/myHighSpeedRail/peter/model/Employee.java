@@ -110,7 +110,7 @@ public class Employee {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmergencyContactPerson> emergencyContactPerson = new LinkedList<EmergencyContactPerson>();
 
-//	@JsonIgnore
+	//	@JsonIgnore
 	@JsonManagedReference(value = "empEwe")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<EmployeeWorkExperience> employeeWorkExperience = new LinkedList<EmployeeWorkExperience>();

@@ -128,10 +128,10 @@ public class PayPalUtil {
 	
 	public @ResponseBody ResponseEntity<String>createOrderUtil(@RequestBody CreatePayPalOrderDto dto){
 		getTokenUtil();// will refresh the bearer token and update Date;
-		System.out.println("get token");
-		System.out.println(basicToken);
-		System.out.println(bearerToken);
-		System.out.println(latestTokenUpdate);
+//		System.out.println("get token");
+//		System.out.println(basicToken);
+//		System.out.println(bearerToken);
+//		System.out.println(latestTokenUpdate);
 		try {
 			String url = "https://api.sandbox.paypal.com/v2/checkout/orders";
 			URL obj = new URL(url);

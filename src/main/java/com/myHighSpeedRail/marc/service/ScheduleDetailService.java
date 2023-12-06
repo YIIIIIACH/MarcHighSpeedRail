@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.ScheduleDetail;
+import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.repository.ScheduleDetailRepository;
 
 @Service
@@ -46,8 +47,13 @@ public class ScheduleDetailService {
 	public List<String> getScheduleAllDiscountType( Integer schId){
 		return schdDao.getScheduleAllDiscountType( schId);
 	}
+	public List<TicketDiscount> getScheduleAllDiscount( Integer schid){
+		return schdDao.getScheduleAllTicketDiscount(schid);
+	}
 	public Boolean conainDiscountType(Integer schid, String discType) {
-		return (schdDao.getScheduleDetailCountByScheduelId(schid,discType)>0)? true: false;
+		Boolean res = (schdDao.getScheduleDetailCountByScheduelId(schid,discType)>0)? true: false;
+		System.out.println( res.toString() + schid +" " + discType);
+		return res;
 	}
 	public List<ScheduleDetail> getScheduleDiscountRange(Integer schid, String discType){
 		return schdDao.getScheduleDiscountRange(schid, discType);

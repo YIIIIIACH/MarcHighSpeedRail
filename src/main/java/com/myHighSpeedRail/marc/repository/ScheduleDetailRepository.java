@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.myHighSpeedRail.marc.model.ScheduleDetail;
+import com.myHighSpeedRail.marc.model.TicketDiscount;
 
 public interface ScheduleDetailRepository extends JpaRepository<ScheduleDetail , Integer> {
 	@Query("from ScheduleDetail where schedule.scheduleId=:schid")
@@ -17,4 +18,6 @@ public interface ScheduleDetailRepository extends JpaRepository<ScheduleDetail ,
 	@Query("from ScheduleDetail schd where schd.ticketDiscount.ticketDiscountType=:dname"+
 	" and schd.schedule.scheduleId=:schid")
 	public List<ScheduleDetail> getScheduleDiscountRange(Integer schid , String dname);
+	@Query("select ticketDiscount from ScheduleDetail where schedule.scheduleId=:schid")
+	public List<TicketDiscount> getScheduleAllTicketDiscount(Integer schid);
 }

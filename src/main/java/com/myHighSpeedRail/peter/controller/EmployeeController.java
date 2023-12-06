@@ -26,8 +26,11 @@ import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
 import com.myHighSpeedRail.peter.handler.EmployeeSystemAuthor;
 import com.myHighSpeedRail.peter.handler.SystemAuthorHandler;
 import com.myHighSpeedRail.peter.model.Department;
+import com.myHighSpeedRail.peter.model.EmergencyContactPerson;
 import com.myHighSpeedRail.peter.model.Employee;
+import com.myHighSpeedRail.peter.model.EmployeeEducationalQualifications;
 import com.myHighSpeedRail.peter.model.EmployeeHistoricalDepartment;
+import com.myHighSpeedRail.peter.model.EmployeeTitle;
 import com.myHighSpeedRail.peter.service.EmployeeService;
 import com.myHighSpeedRail.peter.service.SystemsService;
 import com.myHighSpeedRail.peter.vo.SessionLoginEmployee;
@@ -36,7 +39,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class EmployeeController {
-	
+
 	@Autowired
 	private PasswordEncoder pwdEncoder;
 
@@ -114,6 +117,21 @@ public class EmployeeController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("員工帳號已存在");
 		}
 		System.out.println("測試emp傳入" + emp);
+		List<EmergencyContactPerson> ecList = emp.getEmergencyContactPerson();
+		ecList.forEach(emergencyContactPerson -> {
+			emergencyContactPerson.setEmployee(emp);
+		});
+
+		List<EmployeeEducationalQualifications> eqList = emp.getEmployeeEducationalQualifications();
+		eqList.forEach(employeeEducationalQualifications -> {
+			employeeEducationalQualifications.setEmployee(emp);
+		});
+
+		List<EmployeeTitle> tList = emp.getEmployeeTitle();
+		eqList.forEach(employeeTitle -> {
+			employeeTitle.setEmployee(emp);
+		});
+
 		eService.employeeAdd(emp);
 		return ResponseEntity.status(HttpStatus.CREATED).body("新增成功");
 	}
@@ -156,10 +174,10 @@ public class EmployeeController {
 	@ResponseBody
 	@GetMapping("/employee/session-all")
 	public List<SessionLoginEmployeeDTO> findAllInSessionEmployeeDTO() {
-		
+
 		List<Employee> empList = eService.EmployeefindAll();
 		LinkedList<SessionLoginEmployeeDTO> sessionEmpList = new LinkedList<SessionLoginEmployeeDTO>();
-		
+
 		for (Employee e : empList) {
 			SessionLoginEmployeeDTO sleDTO = new SessionLoginEmployeeDTO();
 			sleDTO.setEmpId(e.getEmployeeId());
@@ -214,14 +232,14 @@ public class EmployeeController {
 		return ResponseEntity.status(HttpStatus.OK).body(empDTO);
 //		return new ResponseEntity<Map<String, String>>(responseMap, HttpStatus.OK);
 	}
-	
+
 	@ResponseBody
 	@GetMapping("/employee/detail/{id}")
 	public EmployeeDetailDTO findEmployeeDetailById(@PathVariable("id") Integer id) {
-		
+
 		Employee e = eService.findEmployeeById(id);
 		EmployeeDetailDTO edDTO = new EmployeeDetailDTO();
-		
+
 		edDTO.setEmergencyContactPerson(e.getEmergencyContactPerson());
 		edDTO.setEmpId(e.getEmployeeId());
 		edDTO.setEmployeeArrivalDate(e.getEmployeeArrivalDate());
@@ -233,7 +251,13 @@ public class EmployeeController {
 		edDTO.setEmployeeEmail(e.getEmployeeEmail());
 		edDTO.setEmployeeGender(e.getEmployeeGender());
 		edDTO.setEmployeeHistoricalBaseSalary(e.getEmployeeHistoricalBaseSalary());
-		edDTO.setEmployeeHistoricalDepartment(e.getEmployeeHistoricalDepartment());
+		List<EmployeeHistoricalDepartment> eList = e.getEmployeeHistoricalDepartment();
+		eList.forEach(employeeHistoricalDepartment -> {
+			employeeHistoricalDepartment.getDepartment().setSystemAuthor(null);
+		});
+
+		edDTO.setEmployeeHistoricalDepartment(eList);
+
 		edDTO.setEmployeeIdNumber(e.getEmployeeIdNumber());
 		edDTO.setEmployeePhoneNumber(e.getEmployeePhoneNumber());
 		edDTO.setEmployeePhoto(e.getEmployeePhoto());
@@ -244,16 +268,15 @@ public class EmployeeController {
 		edDTO.setEmpName(e.getEmployeeName());
 		return edDTO;
 	}
-	
-	
+
 	@ResponseBody
 	@PutMapping("/employee/detail")
 	public ResponseEntity<String> updateEmployeeDetail(@RequestBody EmployeeDetailDTO edDTO) {
-		
+
 		Employee oldE = eService.findEmployeeById(edDTO.getEmpId());
-		
+
 		Employee e = new Employee();
-		
+
 		e.setEmployeeAccount(oldE.getEmployeeAccount());
 		e.setEmployeeLeaveByEmployee(oldE.getEmployeeLeaveByEmployee());
 		e.setEmployeeLeaveByManager(oldE.getEmployeeLeaveByManager());
@@ -261,32 +284,55 @@ public class EmployeeController {
 		e.setEmployeeWorkOvertimeByEmployee(oldE.getEmployeeWorkOvertimeByEmployee());
 		e.setEmployeeWorkOvertimeByManager(oldE.getEmployeeWorkOvertimeByManager());
 		e.setSystemAuthor(oldE.getSystemAuthor());
-		
-		
-		e.setEmergencyContactPerson(edDTO.getEmergencyContactPerson());
+
 		e.setEmployeeId(edDTO.getEmpId());
+		System.out.println("edDTOID" + edDTO.getEmpId());
 		e.setEmployeeArrivalDate(edDTO.getEmployeeArrivalDate());
 		e.setEmployeeBasicSalary(edDTO.getEmployeeBasicSalary());
 		e.setEmployeeBirth(edDTO.getEmployeeBirth());
 		e.setEmployeeContactAddress(edDTO.getEmployeeContactAddress());
 		e.setEmployeeContactNumber(edDTO.getEmployeeContactNumber());
-		e.setEmployeeEducationalQualifications(edDTO.getEmployeeEducationalQualifications());
 		e.setEmployeeEmail(edDTO.getEmployeeEmail());
 		e.setEmployeeGender(edDTO.getEmployeeGender());
 		e.setEmployeeHistoricalBaseSalary(edDTO.getEmployeeHistoricalBaseSalary());
-		e.setEmployeeHistoricalDepartment(edDTO.getEmployeeHistoricalDepartment());
+
+		List<EmployeeHistoricalDepartment> edList = edDTO.getEmployeeHistoricalDepartment();
+		edList.forEach(employeeHistoricalDepartment -> {
+			employeeHistoricalDepartment.setEmployee(e);
+		});
+		e.setEmployeeHistoricalDepartment(edList);
+
+		List<EmergencyContactPerson> ecList = edDTO.getEmergencyContactPerson();
+		ecList.forEach(emergencyContactPerson -> {
+			emergencyContactPerson.setEmployee(e);
+		});
+		e.setEmergencyContactPerson(ecList);
+
+		List<EmployeeEducationalQualifications> eqList = edDTO.getEmployeeEducationalQualifications();
+		eqList.forEach(employeeEducationalQualifications -> {
+			employeeEducationalQualifications.setEmployee(e);
+		});
+		e.setEmployeeEducationalQualifications(eqList);
+		
+		List<EmployeeTitle> tList = edDTO.getEmployeeTitle();
+		tList.forEach(employeeTitle -> {
+			employeeTitle.setEmployee(e);
+		});
+		e.setEmployeeTitle(tList);
+
+//		System.out.println(edDTO.getEmployeeHistoricalDepartment());
+//		e.setEmployeeHistoricalDepartment(edDTO.getEmployeeHistoricalDepartment());
+
 		e.setEmployeeIdNumber(edDTO.getEmployeeIdNumber());
 		e.setEmployeePhoneNumber(edDTO.getEmployeePhoneNumber());
 		e.setEmployeePhoto(edDTO.getEmployeePhoto());
 		e.setEmployeeResidenceAddress(edDTO.getEmployeeResidenceAddress());
 		e.setEmployeeSalaryKind(edDTO.getEmployeeSalaryKind());
-		e.setEmployeeTitle(edDTO.getEmployeeTitle());
 		e.setEmployeeWorkExperience(edDTO.getEmployeeWorkExperience());
 		e.setEmployeeName(edDTO.getEmpName());
 		eService.employeeUpdateWithoutEncodePassword(e);
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body("更新資料成功");
 	}
-	
 
 }
