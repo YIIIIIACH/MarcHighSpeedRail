@@ -1,5 +1,7 @@
 package com.myHighSpeedRail.johnny.controller;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartResponseDto;
 import com.myHighSpeedRail.johnny.model.Product;
+import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 import com.myHighSpeedRail.johnny.service.ProductService;
 import com.myHighSpeedRail.johnny.service.ShoppingCartItemService;
@@ -28,7 +32,7 @@ public class ShoppinCartItemController {
 	@Autowired
 	private ShoppingCartItemService cartService;
 	@Autowired
-	private ProductService pServ;
+	private ProductService pService;
 	
 	//加入商品到購物車
 	@PostMapping("/ShoppinCart/addProductToCart")
@@ -58,7 +62,7 @@ public class ShoppinCartItemController {
 		 */
 //		String memberUUID = "xxxxxxxxxxxxxxxxxxxx";
 		
-		Optional<Product> optional = pServ.findById(productId);
+		Optional<Product> optional = pService.findById(productId);
 		
 		if(optional.isPresent()) {	
 			Product product = optional.get();
@@ -70,21 +74,45 @@ public class ShoppinCartItemController {
 		return ResponseEntity.ok("商品已成功加入購物車");	
 	}
 	
+//	@GetMapping("/ShoppinCart")
+//	@ResponseBody
+//	public List<ShoppingCartItem> showAllCartItems(@RequestParam("memberId") String memberId){
+//		return cartService.showAllCartItems(memberId);
+//	}
+	
 	//顯示會員所有購物車品項
-	@GetMapping("/ShoppinCart")
+	@GetMapping("/ShoppingCart")
 	@ResponseBody
-	public ShoppingCartResponseDto  showAllCartItems(@RequestParam("memberId") String memberId){
+	public List<ShoppingCartResponseDto> showAllCartItems(@RequestParam("memberId") String memberId){
 		
-		ShoppingCartResponseDto res = new ShoppingCartResponseDto();
+		//要回應的內容
+		List<ShoppingCartResponseDto> res = new ArrayList<>();
 		
+		// cartItemList 會員的所有購物車品項
 		List<ShoppingCartItem> cartItems = cartService.showAllCartItems(memberId);
-		if(cartItems != null) {
-			res.cartItems = cartItems;
-		}else {
-			res.message = "您的購物車是空的。";
-		}
-		return res;
-			
+		
+			for(ShoppingCartItem item : cartItems) {
+				
+				ShoppingCartResponseDto temp = new ShoppingCartResponseDto();
+				
+				temp.shoppingCartItemId = item.getShoppingCartItemId();
+				temp.productName = item.getProduct().getProductName();
+				temp.productDescription = item.getProduct().getProductDescription();
+				temp.productPrice = item.getProduct().getProductPrice();
+				temp.productType = item.getProduct().getProductType();
+				temp.quantity = item.getQuantity();
+				temp.checkoutPrice = item.getQuantity() * item.getProduct().getProductPrice();
+				
+				item.getProduct().getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+				
+				StringBuilder sb = new StringBuilder();
+				for(ProductPhotoSegment pps: item.getProduct().getPhotoSegment()) {
+					sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+				}
+				temp.photoData = sb.toString();	
+				res.add(temp);
+			}
+			return res;
 	}
 	
 	//刪除會員的單一購物車品項

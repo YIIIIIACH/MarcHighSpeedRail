@@ -81,38 +81,7 @@ public class ProductController {
 	@GetMapping("/products")
 	@ResponseBody
 	public List<ProductAndPhotoSegmentDto> getAllproduct(){
-		// return List<ProductAndPhotoSegmentDto> 
-		List<Product> pList = pService.findAllProduct();
-		List<ProductAndPhotoSegmentDto> res= new ArrayList<ProductAndPhotoSegmentDto>();
-//		int flag =0;
-		for( Product p : pList) {
-			ProductAndPhotoSegmentDto tmp = new ProductAndPhotoSegmentDto();
-			tmp.productDescription= p.getProductDescription();
-			tmp.productId= p.getProductId();
-			tmp.productInventory= p.getProductInventory();
-			tmp.productName=p.getProductName();
-			tmp.productPrice=p.getProductPrice();
-			tmp.productType=p.getProductType();
-			p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
-//			StringBuilder sb= new StringBuilder();
-//			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-//				sb.append(pps.getPhotoSegment().toString());
-//				sb.
-//			}
-			StringBuilder sb = new StringBuilder();
-			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-//				sb.concat(pps.getPhotoSegment().toString());
-//				String str = new String(byteArray1, 0, 3, StandardCharsets.UTF_8);
-				sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
-			}
-			tmp.photoData= sb.toString();
-			res.add(tmp);
-//			if(flag==0) {
-//				System.out.println("show"+sb);
-//				flag=1;
-//			}
-		}
-		 return res;
+		return pService.findAllProduct();	
 	}
 	
 	//取得product (分頁)

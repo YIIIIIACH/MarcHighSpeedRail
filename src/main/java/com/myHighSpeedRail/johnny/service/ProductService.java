@@ -78,10 +78,34 @@ public class ProductService {
 //		return null;
 //	}
 	
-	public List<Product> findAllProduct(){
-		return pDao.findAll();
-	}
+//	public List<Product> findAllProduct(){
+//		
+//		return pDao.findAll();
+//	}
 	
+	public List<ProductAndPhotoSegmentDto> findAllProduct(){
+		List<Product> pList = pDao.findAll();
+		List<ProductAndPhotoSegmentDto> res = new ArrayList<ProductAndPhotoSegmentDto>();
+		
+		for( Product p : pList) {
+			ProductAndPhotoSegmentDto tmp = new ProductAndPhotoSegmentDto();
+			tmp.productDescription= p.getProductDescription();
+			tmp.productId= p.getProductId();
+			tmp.productInventory= p.getProductInventory();
+			tmp.productName=p.getProductName();
+			tmp.productPrice=p.getProductPrice();
+			tmp.productType=p.getProductType();
+			p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+			
+			StringBuilder sb = new StringBuilder();
+			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+				sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+			}
+			tmp.photoData= sb.toString();
+			res.add(tmp);
+		}	
+		return res;
+	}
 	
 //	public Page<Product> findbyPage(Integer pageNumber){
 //		Pageable pgb = PageRequest.of(pageNumber-1, 10, Sort.Direction.ASC, "productId"); //分頁設定

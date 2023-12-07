@@ -6,7 +6,14 @@ import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 
 public class ShoppingCartResponseDto {
 	
-	public List<ShoppingCartItem> cartItems;
-    public String message;
+	public Integer shoppingCartItemId;
+	public String productName;
+	public Integer productPrice;
+	public String productType;
+	public String productDescription;
+	public Integer quantity;
+	public String photoData;
+	public Integer checkoutPrice;
+    
 
 }
