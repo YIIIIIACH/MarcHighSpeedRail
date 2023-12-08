@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/yuhsin/test/signin" method="post" id="form">
+    <input type="text" name="user"/>
+    <input type="text" name="password"/>
+    <p th:text="${msg}"/>
+    <button type="submit" id="button2">登入</button>
+</form>
+<br>
+<a href="/yuhsin/test/register">註冊使用者</a>
+</body>
+</html>
