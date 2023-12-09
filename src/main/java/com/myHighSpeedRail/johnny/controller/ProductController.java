@@ -43,9 +43,8 @@ public class ProductController {
 		try{
 //			BeanUtils.copyProperties(postDto, p);
 			
-			Product addedProduct = pService.addProduct(postDto);
-			
-			ppsServ.savePhoto(postDto, addedProduct.getProductId());
+			Product addedProduct = pService.addProduct(postDto);// 先儲存商品, identity建立一個productId
+			ppsServ.savePhoto(postDto, addedProduct.getProductId()); //呼叫photoService, 傳入DTO & 建立好的productId
 			
 			return ResponseEntity.ok("商品新增成功，商品ID: " + addedProduct.getProductId() + ", 商品名稱 : " + addedProduct.getProductName());
 		

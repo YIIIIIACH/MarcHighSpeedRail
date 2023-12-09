@@ -57,11 +57,6 @@ public class ProductService {
 			return savedProduct;
 	}
 	
-//	public Product addProduct(Product p) {
-//		
-//		return pDao.save(p); 
-//	}
-	
 	public List<Product> addAllProduct(List<Product> pList){
 			
 		return pDao.saveAll(pList);
@@ -76,11 +71,6 @@ public class ProductService {
 //			return product;
 //		}
 //		return null;
-//	}
-	
-//	public List<Product> findAllProduct(){
-//		
-//		return pDao.findAll();
 //	}
 	
 	public List<ProductAndPhotoSegmentDto> findAllProduct(){

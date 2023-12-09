@@ -27,7 +27,7 @@ public class ShoppingCartItemService {
 //	}
 //	
 	//商品加入購物車
-	public ShoppingCartItem addItemToCart(Integer productId, String memberID, HttpServletRequest req) {
+	public ShoppingCartItem addItemToCartWithQuantity(Integer productId, String memberID, Integer quantity) {
 //		String token = getTokenFromRequest(req);	
 //		Member m = mDao.findMemberById(memberID);
 		
@@ -39,6 +39,7 @@ public class ShoppingCartItemService {
 			ShoppingCartItem cart = new ShoppingCartItem();
 			cart.setProduct(product);
 			cart.setmemberId(memberID);
+			cart.setQuantity(quantity);
 			
 			return cartDao.save(cart);
 			
@@ -46,6 +47,31 @@ public class ShoppingCartItemService {
 			throw new RuntimeException("商品不存在");
 		}
 	}
+	
+	public ShoppingCartItem addItemToCart(Integer productId, String memberID) {
+		
+		Optional<Product> optional = pDao.findById(productId);
+		
+		if(optional.isPresent()) {
+			Product product = optional.get();
+			
+			ShoppingCartItem cart = new ShoppingCartItem();
+			cart.setProduct(product);
+			cart.setmemberId(memberID);
+			cart.setQuantity(1);
+			
+			return cartDao.save(cart);
+			
+		}else {
+			throw new RuntimeException("商品不存在");
+		}
+	}
+	
+	
+	
+//	public ShoppingCartItem save( ShoppingCartItem shoppingCartItem) {
+//		return cartDao.save(shoppingCartItem);
+//	}
 	
 	//	展示會員所有購物車商品
 	public List<ShoppingCartItem> showAllCartItems(String memberId){
@@ -62,7 +88,7 @@ public class ShoppingCartItemService {
 	//	刪除全部購物車品項
 	public String deleteAllItems(String memberId) {
 		cartDao.deleteAllShoppingCartItemByMemberId(memberId);
-		return "全部刪除成功";
+		return "已清空購物車";
 	}
 	
 	// 	更新購物車品項數量
@@ -71,7 +97,11 @@ public class ShoppingCartItemService {
 		return "更新成功";
 	}
 	
-	public ShoppingCartItem save( ShoppingCartItem shoppingCartItem) {
-		return cartDao.save(shoppingCartItem);
+	
+	public boolean isProductInCart(String memberId, Integer productId) {
+		
+		Optional<ShoppingCartItem> shoppingCartItem = cartDao.findByProductIdAndMemberId(memberId, productId);
+		
+		return shoppingCartItem.isPresent();
 	}
 }
