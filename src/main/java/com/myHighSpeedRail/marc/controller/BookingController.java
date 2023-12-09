@@ -35,14 +35,18 @@ public class BookingController {
 	private UserService uServ;
 	@GetMapping("/getBookingByTicketOrder/{tckodId}")// 用作查詢訂票紀錄使用
 	public @ResponseBody DisplayMemberBookingTicketDto getBookingByTicketOrder(@PathVariable Integer tckodId,HttpServletRequest req) {
-		Cookie []cookies = req.getCookies();
-		String token=null;
-		LoginResponseModel userDetail = null;
-		for( Cookie ck: cookies) {
-			if( ck.getName().equals("login-token")) {
-				token = ck.getValue();
+		String token = null;
+		Cookie[] cks = req.getCookies();
+		if(cks==null) {
+			System.out.print("not cookie found");
+		}else {
+			for( Cookie c: cks) {
+				if(c.getName().equals("login-token")) {
+					token = c.getValue();
+				}
 			}
 		}
+		LoginResponseModel userDetail = null;
 		if(token==null) {
 			// redirect to MemberSystem
 			return new DisplayMemberBookingTicketDto();
@@ -126,24 +130,31 @@ public class BookingController {
 	
 	@PostMapping("/allocateBooking")
 	public @ResponseBody ResponseEntity<String> allocateBooking(@RequestBody AllocateTicketDto dto,HttpServletRequest req){
-		Cookie []cookies = req.getCookies();
-		String token=null;
-		LoginResponseModel userDetail = null;
-		for( Cookie ck: cookies) {
-			if( ck.getName().equals("login-token")) {
-				token = ck.getValue();
-			}
-		}
-		if(token==null) {
+		String srcToken=dto.srcMemberToken;
+		String desToken =dto.desMemberToken;
+		LoginResponseModel srcUserDetail = null;
+		LoginResponseModel desUserDetail = null;
+		if(srcToken==null) {
 			// redirect to MemberSystem
 			return new ResponseEntity<String>("查無login-token",HttpStatus.UNAUTHORIZED);
 		}
 		else{
 			//validate the current login token 
-			userDetail = uServ.tokenlogin(UUID.fromString(token));
+			srcUserDetail = uServ.tokenlogin(UUID.fromString(srcToken));
 		}
-		if(userDetail==null) {
-			return new ResponseEntity<String>("login-token驗證失敗",HttpStatus.UNAUTHORIZED);
+		if(srcUserDetail==null) {
+			return new ResponseEntity<String>("des login-token驗證失敗",HttpStatus.UNAUTHORIZED);
+		}
+		if(desToken==null) {
+			// redirect to MemberSystem
+			return new ResponseEntity<String>("查無login-token",HttpStatus.UNAUTHORIZED);
+		}
+		else{
+			//validate the current login token 
+			desUserDetail = uServ.tokenlogin(UUID.fromString(desToken));
+		}
+		if(desUserDetail==null) {
+			return new ResponseEntity<String>("des login-token驗證失敗",HttpStatus.UNAUTHORIZED);
 		}
 		int resStatus = bServ.allocateBooking(dto.srcMemberToken, dto.desMemberToken, dto.bookingId);
 		if( resStatus > 0) {

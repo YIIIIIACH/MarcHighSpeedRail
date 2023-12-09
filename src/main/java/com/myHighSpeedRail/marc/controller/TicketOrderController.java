@@ -86,22 +86,21 @@ public class TicketOrderController {
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
 		try {
-			Cookie []cookies = req.getCookies();
-			String token=null;
-			LoginResponseModel userDetail = null;
-			for( Cookie ck: cookies) {
-				if( ck.getName().equals("login-token")) {
-					token = ck.getValue();
+			String loginToken = null;
+			Cookie[] cks = req.getCookies();
+			if(cks==null) {
+				System.out.print("not cookie found");
+			}else {
+				for( Cookie c: cks) {
+					if(c.getName().equals("login-token")) {
+						loginToken = c.getValue();
+					}
 				}
 			}
-			if(token==null) {
-				// redirect to MemberSystem
-				return new ResponseEntity<String> ("failed login token not found",HttpStatus.UNAUTHORIZED);
-			}
-			else{
-				//validate the current login token 
-				userDetail = uServ.tokenlogin(UUID.fromString(token));
-			}
+			String token=loginToken;
+			
+			LoginResponseModel userDetail = null;
+			userDetail = uServ.tokenlogin(UUID.fromString(token));
 			if(userDetail==null) {
 				return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
 			}
@@ -119,6 +118,10 @@ public class TicketOrderController {
 				 TicketDiscount td = tkdServ.findById( tdid) ;
 				total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();
 			}
+			Boolean lockSeatSuccess =schrsServ.updateScheduleRestSeat(sch.getScheduleId(), bookingDto.ticketDiscountId , rrs.getRailRoute().getRailRouteId() , bookingDto.startStationId , bookingDto.endStationId , bookingDto.chooseDiscounts.size() );
+			if( lockSeatSuccess==false) {
+				return new ResponseEntity<String>("did not have enought seat",HttpStatus.BAD_REQUEST);
+			}
 			TicketOrder tcko = tkoServ.save(new TicketOrder( userDetail.getMember_id().toString(),new Date(),"未付款",deadline, total));
 			if( tcko==null) {
 				return new ResponseEntity<String>("booking failed at making order",HttpStatus.BAD_REQUEST);
@@ -135,7 +138,6 @@ public class TicketOrderController {
 			}
 			
 			// reduce the amount of schedule_rest_seat 
-			schrsServ.updateScheduleRestSeat(sch.getScheduleId(), bookingDto.ticketDiscountId , rrs.getRailRoute().getRailRouteId() , bookingDto.startStationId , bookingDto.endStationId , bookingDto.chooseDiscounts.size() );
 			return new ResponseEntity<String>("booking success ,ticketOrderId:"+tcko.getTicketOrderId(),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -145,14 +147,18 @@ public class TicketOrderController {
 	
 	@PostMapping("/createTicketOrder")
 	public @ResponseBody ResponseEntity<String> createPayPalTicketOrder(HttpServletRequest req,@RequestParam Integer ticketOrderId){
-		Cookie []cookies = req.getCookies();
-		String token=null;
-		LoginResponseModel userDetail = null;
-		for( Cookie ck: cookies) {
-			if( ck.getName().equals("login-token")) {
-				token = ck.getValue();
+		String token = null;
+		Cookie[] cks = req.getCookies();
+		if(cks==null) {
+			System.out.print("not cookie found");
+		}else {
+			for( Cookie c: cks) {
+				if(c.getName().equals("login-token")) {
+					token = c.getValue();
+				}
 			}
 		}
+		LoginResponseModel userDetail = null;
 		if(token==null) {
 			// redirect to MemberSystem
 			return new ResponseEntity<String> ("failed login token not found",HttpStatus.UNAUTHORIZED);
@@ -244,14 +250,18 @@ public class TicketOrderController {
 	
 	@PostMapping("/createBuinessTicketOrder/{ststid}/{edstid}/{amount}/{schid}")
 	public @ResponseBody ResponseEntity<String> createPayPalBuinessTicketOrder(HttpServletRequest req,@PathVariable Integer ststid,@PathVariable Integer edstid, @PathVariable Integer amount , @PathVariable Integer schid,@RequestBody SeatListDto pickSeatIdList){
-		Cookie []cookies = req.getCookies();
-		String token=null;
-		LoginResponseModel userDetail = null;
-		for( Cookie ck: cookies) {
-			if( ck.getName().equals("login-token")) {
-				token = ck.getValue();
+		String token = null;
+		Cookie[] cks = req.getCookies();
+		if(cks==null) {
+			System.out.print("not cookie found");
+		}else {
+			for( Cookie c: cks) {
+				if(c.getName().equals("login-token")) {
+					token = c.getValue();
+				}
 			}
 		}
+		LoginResponseModel userDetail = null;
 		if(token==null) {
 			// redirect to MemberSystem
 			return new ResponseEntity<String> ("failed login token not found",HttpStatus.UNAUTHORIZED);
