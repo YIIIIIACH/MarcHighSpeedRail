@@ -34,44 +34,47 @@ public class ShoppinCartItemController {
 	@Autowired
 	private ProductService pService;
 	
-	//加入商品到購物車
-	@PostMapping("/ShoppinCart/addProductToCart")
+	//加入商品到購物車(指定數量)
+	@PostMapping("/ShoppingCart/addProducts")
+	@ResponseBody
+	public ResponseEntity<String> addToCart(
+			@RequestParam(value = "productId") Integer productId,
+			@RequestParam(value = "memberId") String memberId, 
+			@RequestParam(value = "quantity") Integer quantity
+			,HttpServletRequest req){		
+		
+		
+		boolean isProductInCart = cartService.isProductInCart(memberId, productId);
+		
+		if(isProductInCart) {
+			//如存在,則回傳已存在
+			return new ResponseEntity<String> ("商品已在購物車內",HttpStatus.OK);
+		}else {
+			cartService.addItemToCartWithQuantity(productId, memberId, quantity);
+			return ResponseEntity.ok("商品已成功加入購物車");
+		}
+			
+	}
+	
+	//加入商品到購物車(數量預設1)
+	@PostMapping("/ShoppingCart/addProduct")
 	@ResponseBody
 	public ResponseEntity<String> addToCart(  // 商品加入購物車
 			@RequestParam(value = "productId") Integer productId,
-			@RequestParam(value = "memberId") String memberId 
-			,HttpServletRequest req){		
-//		Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
-//		Cookie []cookies = req.getCookies();
-//		String token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-//		for(Cookie ck : cookies) {
-//			if(ck.getName().equals("login-token")) {
-//				token = ck.getValue();
-//			}
-//		}
-//		if(token==null) {
-//			// redirect to MemberSystem
-//		}
-		// 驗證會員token存在不 by member system
-//		cartService.addItemToCart(productId);
-		/*
-		 * private Integer shoppingCartItemId;
-			private Integer quantity;
-			private Product product;
-			private String member;
-		 */
-//		String memberUUID = "xxxxxxxxxxxxxxxxxxxx";
+			@RequestParam(value = "memberId") String memberId, 
+			HttpServletRequest req){		
 		
-		Optional<Product> optional = pService.findById(productId);
 		
-		if(optional.isPresent()) {	
-			Product product = optional.get();
-			ShoppingCartItem cartItem = new ShoppingCartItem(1, product, memberId);
-			if( cartService.save(cartItem) == null) {
-				return new ResponseEntity<String> ("failed",HttpStatus.BAD_REQUEST);
-			}
+		boolean isProductInCart = cartService.isProductInCart(memberId, productId);
+		
+		if(isProductInCart) {
+			//如存在,則回傳已存在
+			return new ResponseEntity<String> ("商品已在購物車中。",HttpStatus.OK);
+		}else {
+			cartService.addItemToCart(productId, memberId);
+			return ResponseEntity.ok("商品成功加入購物車。");
 		}
-		return ResponseEntity.ok("商品已成功加入購物車");	
+			
 	}
 	
 //	@GetMapping("/ShoppinCart")
@@ -95,14 +98,15 @@ public class ShoppinCartItemController {
 				
 				ShoppingCartResponseDto temp = new ShoppingCartResponseDto();
 				
+				temp.productId = item.getProduct().getProductId();
 				temp.shoppingCartItemId = item.getShoppingCartItemId();
 				temp.productName = item.getProduct().getProductName();
 				temp.productDescription = item.getProduct().getProductDescription();
 				temp.productPrice = item.getProduct().getProductPrice();
 				temp.productType = item.getProduct().getProductType();
 				temp.quantity = item.getQuantity();
-				temp.checkoutPrice = item.getQuantity() * item.getProduct().getProductPrice();
-				
+				temp.totalPrice = item.getQuantity() * item.getProduct().getProductPrice();
+				temp.isSelected = false;
 				item.getProduct().getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
 				
 				StringBuilder sb = new StringBuilder();
@@ -116,7 +120,7 @@ public class ShoppinCartItemController {
 	}
 	
 	//刪除會員的單一購物車品項
-	@DeleteMapping("/ShoppinCart/delete")
+	@DeleteMapping("/ShoppingCart/delete")
 	public ResponseEntity<String> removeCartItem(
 			@RequestParam("memberId") String memberId, 
 			@RequestParam("itemId") Integer itemId){
@@ -127,24 +131,19 @@ public class ShoppinCartItemController {
 			return ResponseEntity.ok("商品刪除成功");// 狀態碼需不需要改成noContent
 			
 		}else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("商品已不存在");
 		}
 	}
 	
 	//清空會員的所有購物車品項
 	@DeleteMapping("/ShoppingCart/deleteAll")
 	public ResponseEntity<String> removeAllCartItem(@RequestParam("memberId") String memberId){
-		String result = cartService.deleteAllItems(memberId);
-		if("全部刪除成功".equals(result))
-		{
-			return ResponseEntity.ok("已清空購物車");	
-		}else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-		}
+		String result = cartService.deleteAllItems(memberId);	
+		return ResponseEntity.ok(result);		
 	}
 	
 	//更新品項數量
-	@PutMapping("/ShoppinCart/updataQuantity")
+	@PutMapping("/ShoppingCart/updataQuantity")
 	@ResponseBody
 	public String updateQuantity(
 			@RequestParam("memberId") String memberId, 

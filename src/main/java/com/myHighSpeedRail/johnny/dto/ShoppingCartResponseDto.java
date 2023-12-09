@@ -13,7 +13,8 @@ public class ShoppingCartResponseDto {
 	public String productDescription;
 	public Integer quantity;
 	public String photoData;
-	public Integer checkoutPrice;
-    
-
+	public Integer totalPrice;
+	public boolean isSelected;
+	
+	public Integer productId;
 }
