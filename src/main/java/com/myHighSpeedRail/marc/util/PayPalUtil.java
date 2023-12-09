@@ -161,9 +161,6 @@ public class PayPalUtil {
 				response.append(inputLine);
 			}
 			in.close();
-
-			// Print the response
-//			System.out.println(response.toString());
 			return new ResponseEntity<String>(response.toString(),HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
