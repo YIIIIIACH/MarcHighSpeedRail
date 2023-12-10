@@ -1,22 +1,16 @@
 package com.myHighSpeedRail.marc.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import com.myHighSpeedRail.marc.dto.EmailPassword;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.util.PayPalUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myHighSpeedRail.yuhsin.Models.LoginResponseModel;
+import com.myHighSpeedRail.yuhsin.Services.UserService;
 import com.myHighSpeedRail.marc.dto.BookingDto;
-import com.myHighSpeedRail.marc.dto.DisplayMemberBookingTicketDto;
 import com.myHighSpeedRail.marc.dto.DisplayMemberTicketOrderDto;
-import com.myHighSpeedRail.marc.dto.MakeOrderBuinessSeatDto;
 import com.myHighSpeedRail.marc.dto.SeatListDto;
 import com.myHighSpeedRail.marc.dto.paypalapi.AppContext;
 import com.myHighSpeedRail.marc.dto.paypalapi.CreatePayPalOrderDto;
@@ -52,7 +45,6 @@ import com.myHighSpeedRail.marc.service.ScheduleArriveService;
 import com.myHighSpeedRail.marc.service.ScheduleRestSeatService;
 import com.myHighSpeedRail.marc.service.ScheduleSeatStatusService;
 import com.myHighSpeedRail.marc.service.ScheduleService;
-import com.myHighSpeedRail.marc.service.SeatService;
 import com.myHighSpeedRail.marc.service.StationService;
 import com.myHighSpeedRail.marc.service.TicketDiscountService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
@@ -81,12 +73,11 @@ public class TicketOrderController {
 	@Autowired
 	private ScheduleSeatStatusService schssServ;
 	@Autowired
-	private SeatService seatServ;
-	@Autowired
 	private StationService stServ;
 	@Autowired
 	private PayPalUtil paypalServ;
-	
+	@Autowired
+	private UserService uServ;
 	@Value("${server.baseurl}")
 	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
@@ -95,28 +86,24 @@ public class TicketOrderController {
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
 		try {
-	//		Cookie []cookies = req.getCookies();
-	//		String token=null;
-	//		String uuid=null;
-	//		for( Cookie ck: cookies) {
-	//			if( ck.getName().equals("login-token")) {
-	//				token = ck.getValue();
-	//			}
-	//		}
-	//		if(token==null) {
-	//			// redirect to MemberSystem
-	//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-	//		}
-	//		else{
-	//			//validate the current login token 
-	//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-	//		}
-	//		if(uuid==null) {
-	//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-	//		}
-			// 暫時的 member uuid 等待userSerivce merge 上來
-			String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-			
+			String loginToken = null;
+			Cookie[] cks = req.getCookies();
+			if(cks==null) {
+				System.out.print("not cookie found");
+			}else {
+				for( Cookie c: cks) {
+					if(c.getName().equals("login-token")) {
+						loginToken = c.getValue();
+					}
+				}
+			}
+			String token=loginToken;
+			System.out.println( token);
+			LoginResponseModel userDetail = null;
+			userDetail = uServ.tokenlogin(UUID.fromString(token));
+			if(userDetail==null) {
+				return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+			}
 			//create an ticket order and set order status to 未付款
 			Integer paymentEarlyDay = tkdServ.findById(bookingDto.ticketDiscountId).getPurchaseEarlyLimitDay();
 			Date deadline = schArrServ.findByScheduleIdStationId(bookingDto.scheduleId, bookingDto.startStationId).getArriveTime();
@@ -131,7 +118,11 @@ public class TicketOrderController {
 				 TicketDiscount td = tkdServ.findById( tdid) ;
 				total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();
 			}
-			TicketOrder tcko = tkoServ.save(new TicketOrder( memuuid,new Date(),"未付款",deadline, total));
+			Boolean lockSeatSuccess =schrsServ.updateScheduleRestSeat(sch.getScheduleId(), bookingDto.ticketDiscountId , rrs.getRailRoute().getRailRouteId() , bookingDto.startStationId , bookingDto.endStationId , bookingDto.chooseDiscounts.size() );
+			if( lockSeatSuccess==false) {
+				return new ResponseEntity<String>("did not have enought seat",HttpStatus.BAD_REQUEST);
+			}
+			TicketOrder tcko = tkoServ.save(new TicketOrder( userDetail.getMember_id().toString(),new Date(),"未付款",deadline, total));
 			if( tcko==null) {
 				return new ResponseEntity<String>("booking failed at making order",HttpStatus.BAD_REQUEST);
 			}
@@ -141,13 +132,12 @@ public class TicketOrderController {
 			//rail_route_segment(rrs)	seat_id_fk(null)	ticket_discount_id_fk	status(未付款)	ticket_price	ticket_qrcode_url(null)
 			for( Integer tdid: bookingDto.chooseDiscounts) {
 				TicketDiscount td = tkdServ.findById(tdid);
-				bServ.save(new Booking(memuuid, tcko, sch, rrs,(Seat)null, td, "未分配"
+				bServ.save(new Booking(userDetail.getMember_id().toString(), tcko, sch, rrs,(Seat)null, td, "未分配"
 						, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
 						(String)null));
 			}
 			
 			// reduce the amount of schedule_rest_seat 
-			schrsServ.updateScheduleRestSeat(sch.getScheduleId(), bookingDto.ticketDiscountId , rrs.getRailRoute().getRailRouteId() , bookingDto.startStationId , bookingDto.endStationId , bookingDto.chooseDiscounts.size() );
 			return new ResponseEntity<String>("booking success ,ticketOrderId:"+tcko.getTicketOrderId(),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -157,27 +147,29 @@ public class TicketOrderController {
 	
 	@PostMapping("/createTicketOrder")
 	public @ResponseBody ResponseEntity<String> createPayPalTicketOrder(HttpServletRequest req,@RequestParam Integer ticketOrderId){
-//		Cookie []cookies = req.getCookies();
-//		String token=null;
-//		String uuid=null;
-//		for( Cookie ck: cookies) {
-//			if( ck.getName().equals("login-token")) {
-//				token = ck.getValue();
-//			}
-//		}
-//		if(token==null) {
-//			// redirect to MemberSystem
-//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-//		}
-//		else{
-//			//validate the current login token 
-//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-//		}
-//		if(uuid==null) {
-//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-//		}
-		// 暫時的 member uuid 等待userSerivce merge 上來
-		String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+		String token = null;
+		Cookie[] cks = req.getCookies();
+		if(cks==null) {
+			System.out.print("not cookie found");
+		}else {
+			for( Cookie c: cks) {
+				if(c.getName().equals("login-token")) {
+					token = c.getValue();
+				}
+			}
+		}
+		LoginResponseModel userDetail = null;
+		if(token==null) {
+			// redirect to MemberSystem
+			return new ResponseEntity<String> ("failed login token not found",HttpStatus.UNAUTHORIZED);
+		}
+		else{
+			//validate the current login token 
+			userDetail = uServ.tokenlogin(UUID.fromString(token));
+		}
+		if(userDetail==null) {
+			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+		}
 		// get info of ticket order
 		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
 		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
@@ -215,39 +207,14 @@ public class TicketOrderController {
 		u.amount= am;
 		purUnits.add(u);
 		dto.purchase_units=purUnits;
-		
-//		return dto;
-//		return new ResponseEntity<String>("still in progress",HttpStatus.OK);
 		return paypalServ.createOrderUtil(dto);
 	}
 	
 	@GetMapping("registAllocateTicketOrderSeats")
-	public String allocateTicketOrdeSeat(HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
+	public String allocateTicketOrdeSeat(Model model,HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
 		if(!paypalServ.captureOrderUtil(paypalOrderId)) {
 			return "checkOutFail";
 		}
-//		Cookie []cookies = req.getCookies();
-//		String token=null;
-//		String uuid=null;
-//		for( Cookie ck: cookies) {
-//			if( ck.getName().equals("login-token")) {
-//				token = ck.getValue();
-//			}
-//		}
-//		if(token==null) {
-//			// redirect to MemberSystem
-//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-//		}
-//		else{
-//			//validate the current login token 
-//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-//		}
-//		if(uuid==null) {
-//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-//		}
-		// 暫時的 member uuid 等待userSerivce merge 上來
-		String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-		
 		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
 		//List<RailRouteStopStation> findByRouteIdStationId(Integer rid, Integer sid){
 		RailRouteStopStation stopst1 = schrrssServ.findByRouteIdStationId(
@@ -277,33 +244,35 @@ public class TicketOrderController {
 		tmp.setStatus("已付款");
 		tkoServ.save(tmp );
 		//go capture the paypal token
-		
+		model.addAttribute("msg","恭喜付款成功");
 		return "checkOutTicketReturn";
 	}
 	
 	@PostMapping("/createBuinessTicketOrder/{ststid}/{edstid}/{amount}/{schid}")
 	public @ResponseBody ResponseEntity<String> createPayPalBuinessTicketOrder(HttpServletRequest req,@PathVariable Integer ststid,@PathVariable Integer edstid, @PathVariable Integer amount , @PathVariable Integer schid,@RequestBody SeatListDto pickSeatIdList){
-//		Cookie []cookies = req.getCookies();
-//		String token=null;
-//		String uuid=null;
-//		for( Cookie ck: cookies) {
-//			if( ck.getName().equals("login-token")) {
-//				token = ck.getValue();
-//			}
-//		}
-//		if(token==null) {
-//			// redirect to MemberSystem
-//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-//		}
-//		else{
-//			//validate the current login token 
-//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-//		}
-//		if(uuid==null) {
-//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-//		}
-		// 暫時的 member uuid 等待userSerivce merge 上來
-		String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+		String token = null;
+		Cookie[] cks = req.getCookies();
+		if(cks==null) {
+			System.out.print("not cookie found");
+		}else {
+			for( Cookie c: cks) {
+				if(c.getName().equals("login-token")) {
+					token = c.getValue();
+				}
+			}
+		}
+		LoginResponseModel userDetail = null;
+		if(token==null) {
+			// redirect to MemberSystem
+			return new ResponseEntity<String> ("failed login token not found",HttpStatus.UNAUTHORIZED);
+		}
+		else{
+			//validate the current login token 
+			userDetail = uServ.tokenlogin(UUID.fromString(token));
+		}
+		if(userDetail==null) {
+			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+		}
 		// check seat was not booked by other member
 		for( Integer sid : pickSeatIdList.seatList) {
 			System.out.println(sid);
@@ -331,8 +300,16 @@ public class TicketOrderController {
 				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
 			}
 		}
+		
 		// end check seat was not booked by other member
 		TicketDiscount tckd = tkdServ.findByDiscountType("商務票").get(0);
+		// 先檢查 剩餘座位數量
+		Boolean lockSeatSuccess =schrsServ.updateScheduleRestSeat(schid, tckd.getTicketDiscountId() , rrs.getRailRoute().getRailRouteId() , ststid , edstid , amount );
+		if( lockSeatSuccess==false) {
+			return new ResponseEntity<String>("did not have enought seat",HttpStatus.BAD_REQUEST);
+		}
+		schssServ.registBookedBuinessSeat(schid, mask, schssList);//selectSchSeatList
+		
 		Date deadline = Date.from( schArr.getArriveTime().toInstant().minusSeconds(tckd.getPurchaseEarlyLimitDay()* 24*60*60));
 		Integer oneTicketPrice= (rrs.getRailRouteSegmentTicketPrice()*tckd.getTicketDiscountPercentage())/100-tckd.getTicketDiscountAmount();
 		// require startStationName endStationName ticketPrice price sum
@@ -368,10 +345,10 @@ public class TicketOrderController {
 		purUnits.add(u);
 		dto.purchase_units=purUnits;
 		// add application context into dto
-		TicketOrder tcko = tkoServ.save(new TicketOrder( memuuid,new Date(),"未付款",deadline, priceSum));
+		TicketOrder tcko = tkoServ.save(new TicketOrder( userDetail.getMember_id().toString(),new Date(),"未付款",deadline, priceSum));
 		// create a bunch of not allocate seat for ticket order
 		for( int i=0 ; i< schssList.size(); i++) {
-			bServ.save(new Booking(memuuid, tcko,schArr.getSchedule(), rrs,schssList.get(i).getSeat(),tckd, "暫時鎖定座位"
+			bServ.save(new Booking(userDetail.getMember_id().toString(), tcko,schArr.getSchedule(), rrs,schssList.get(i).getSeat(),tckd, "暫時鎖定座位"
 					, ((rrs.getRailRouteSegmentTicketPrice()*tckd.getTicketDiscountPercentage())/100)-tckd.getTicketDiscountAmount(),
 					(String)null));
 		}	
@@ -381,39 +358,14 @@ public class TicketOrderController {
 		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+tcko.getTicketOrderId(); 
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
 		dto.application_context= actx;
-//		return dto;
-//		return new ResponseEntity<String>("still in progress",HttpStatus.OK);
 		return paypalServ.createOrderUtil(dto);
-		
-//		return new ResponseEntity<String>("test test ",HttpStatus.OK);
 	}
 	@GetMapping(value="/newBookBuinessSeat")
-	public String newBookBuinessSeat(HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
+	public String newBookBuinessSeat(Model model,HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
 		// 可能需要先檢查是否 paypal ticket order is approve
 		if( !paypalServ.captureOrderUtil( String.valueOf(paypalOrderId))) {
 			return "checkOutFail";
 		}
-//		Cookie []cookies = req.getCookies();
-//		String token=null;
-//		String uuid=null;
-//		for( Cookie ck: cookies) {
-//			if( ck.getName().equals("login-token")) {
-//				token = ck.getValue();
-//			}
-//		}
-//		if(token==null) {
-//			// redirect to MemberSystem
-//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-//		}
-//		else{
-//			//validate the current login token 
-//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-//		}
-//		if(uuid==null) {
-//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-//		}
-		// 暫時的 member uuid 等待userSerivce merge 上來
-		String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
 		// use ticket order id to get BookList
 		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
 		TicketOrder tOrder = tkoServ.findById(ticketOrderId);
@@ -439,16 +391,18 @@ public class TicketOrderController {
 		// check seat Available
 		for( ScheduleSeatStatus schss: schssList ) { // 原本是 ：selectSchSeatList
 			if( (schss.getScheduleStatus() & mask) > 0) {
-//				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
+				model.addAttribute("msg","座位分配失敗請重新嘗試");
 				return "checkOutFail";
 			}
 		}
 		
 		// update scheduleSeatStatus
+		//策略改動在會員付款前要先分配好座位
 //		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
-		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, schssList);//selectSchSeatList
+//		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, schssList);//selectSchSeatList
 		// update scheduleRestSeat [Ignore now ]
-		schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
+		//策略改動在會員付款前要先分配好座位
+		//schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
 		
 		// create order
 		Integer paymentEarlyDay = tkdServ.findById(tkdid).getPurchaseEarlyLimitDay();
@@ -464,175 +418,57 @@ public class TicketOrderController {
 			total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();			
 		}
 		tOrder.setStatus("已付款");
-		TicketOrder tcko = tkoServ.save(tOrder);
+		tkoServ.save(tOrder);
 		// update booking list
 		for( Booking b: bList) {
 			b.setStatus("已分配座位");
 		}
 		bServ.saveAll(bList);
-//		for( int i=0 ; i< schssList.size(); i++) {
-//			bServ.save(new Booking(memuuid, tcko, sch, rrs,schssList.get(i).getSeat(),td, "已分配座位"
-//					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
-//					(String)null));
-//		}	
-//		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
+		model.addAttribute("msg","座位分配成功");
+
 		return "checkOutTicketReturn";
 		
 	}
-//	
-//	@PostMapping(value="/bookBuinessSeat")
-//	public @ResponseBody ResponseEntity<String> bookBuinessSeat(HttpServletRequest req,@RequestBody MakeOrderBuinessSeatDto boDto){
-//		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
-////		Cookie []cookies = req.getCookies();
-//		String token=null;
-////		for( Cookie ck: cookies) {
-////			if( ck.getName().equals("login-token")) {
-////				token = ck.getValue();
-////			}
-////		}
-////		if(token==null) {
-////			// redirect to MemberSystem
-////			;
-////		}else {
-////			//validate the current login token 
-////			;
-////		}
-//		// temporary treatment
-//		token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-//		// get ticketDisc id
-//		Integer tkdid = tkdServ.findByDiscountType(boDto.ticketDiscountName).get(0).getTicketDiscountId();
-//		Schedule sch = schServ.findById(boDto.scheduleId);
-//		List<ScheduleSeatStatus> schssList = schssServ.findBySchidInSeatid(boDto.scheduleId, boDto.orderSeatIdList);
-//		RailRouteStopStation rrss1 = schrrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), boDto.startStation.getStationId()).get(0);
-//		RailRouteStopStation rrss2 = schrrssServ.findByRouteIdStationId(sch.getRailRoute().getRailRouteId(), boDto.endStation.getStationId()).get(0);
-//		// get segment mask
-//		Long mask = 0L;
-//		mask |= (1L << rrss2.getRailRouteStopStationSequence())-1;
-//		mask >>= rrss1.getRailRouteStopStationSequence();
-//		mask <<= rrss1.getRailRouteStopStationSequence();
-//		//get selected scheduleSeatStatus;
-//		List<Seat> tmp = new ArrayList<Seat>();
-//		for( ScheduleSeatStatus schss: schssList ) {
-//			tmp.add(schss.getSeat());
-//		}
-//		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(sch, tmp);
-//		// check seat Available
-//		for( ScheduleSeatStatus schss: selectSchSeatList) {
-//			if( (schss.getScheduleStatus() & mask) > 0) {
-//				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
-//			}
-//		}
-//		
-//		// update scheduleSeatStatus
-////		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
-//		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, selectSchSeatList);
-//		// update scheduleRestSeat [Ignore now ]
-//		schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() , boDto.startStation.getStationId() , boDto.endStation.getStationId() , schssList.size() );
-//		
-//		// create order
-//		Integer paymentEarlyDay = tkdServ.findById(tkdid).getPurchaseEarlyLimitDay();
-//		Date deadline = schArrServ.findByScheduleIdStationId(sch.getScheduleId(), boDto.startStation.getStationId()).getArriveTime();
-//		deadline = Date.from( deadline.toInstant().minusSeconds(paymentEarlyDay* 24*60*60));
-//		RailRouteSegment rrs =rrsServ.findByStopStationId(sch.getRailRoute().getRailRouteId()
-//				, boDto.startStation.getStationId(), boDto.endStation.getStationId()).get();
-//		Integer originPrice =rrs.getRailRouteSegmentTicketPrice();
-//		// member_token ticket_order_create_time status payment_dealine total_price
-//		Integer total= 0;
-//		TicketDiscount td = tkdServ.findById( tkdid) ;
-//		for( int i=0 ; i< schssList .size(); i++) {
-//			total+= ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount();			
-//		}
-//		TicketOrder tcko = tkoServ.save(new TicketOrder( token,new Date(),"已付款",deadline, total));
-//		// create Booking
-//		for( int i=0 ; i< schssList.size(); i++) {
-//			bServ.save(new Booking(token, tcko, sch, rrs,schssList .get(i).getSeat(),td, "已分配座位"
-//					, ((originPrice*td.getTicketDiscountPercentage())/100)-td.getTicketDiscountAmount(),
-//					(String)null));
-//		}	
-//		//checkOutTicketReturn
-//		
-//		return new ResponseEntity<String>("book buiness",HttpStatus.OK);
-//		
-//	}
 	@GetMapping("/getAllMemberTicketOrder")
 	public @ResponseBody DisplayMemberTicketOrderDto getAllMemberTicketOrder(HttpServletRequest req) {
-//		Cookie []cookies = req.getCookies();
-//		String token=null;
-//		String uuid=null;
-//		for( Cookie ck: cookies) {
-//			if( ck.getName().equals("login-token")) {
-//				token = ck.getValue();
-//			}
-//		}
-//		if(token==null) {
-//			// redirect to MemberSystem
-//			return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-//		}
-//		else{
-//			//validate the current login token 
-//			uuid= uServ.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-//		}
-//		if(uuid==null) {
-//			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-//		}
-		// 暫時的 member uuid 等待userSerivce merge 上來
-		String memuuid = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-		List<TicketOrder> tckorList  = tkoServ.findByMember(memuuid);
+		Cookie []cookies = req.getCookies();
+		String token=null;
+		LoginResponseModel userDetail = null;
+		for( Cookie ck: cookies) {
+			if( ck.getName().equals("login-token")) {
+				token = ck.getValue();
+			}
+		}
+		if(token==null) {
+			DisplayMemberTicketOrderDto res = new DisplayMemberTicketOrderDto();
+			res.displayStatus="查無 login-token";
+			return res;
+		}
+		else{
+			//validate the current login token 
+			userDetail = uServ.tokenlogin(UUID.fromString(token));
+		}
+		if(userDetail==null) {
+			DisplayMemberTicketOrderDto res = new DisplayMemberTicketOrderDto();
+			res.displayStatus="登入token失效";
+			return res;
+		}
+		List<TicketOrder> tckorList  = tkoServ.findByMember(userDetail.getMember_id().toString());
 		DisplayMemberTicketOrderDto res = new DisplayMemberTicketOrderDto();
 		res.orderCreateTimes= new ArrayList<Date>();
 		res.orderStatuses = new ArrayList<String>();
 		res.paymentDeadlines= new ArrayList<Date>();
 		res.ticketOrderIds = new ArrayList<Integer>();
 		res.totalPrices= new ArrayList<Integer>();
-		res.memberToken= memuuid;
+		res.memberToken= userDetail.getMember_id().toString();
 		for( TicketOrder tckod : tckorList) {
 			res.orderCreateTimes.add(tckod.getTicketOrderCreateTime());
 			res.orderStatuses.add(tckod.getStatus());
 			res.paymentDeadlines.add( tckod.getPaymentDeadline());
 			res.ticketOrderIds.add(tckod.getTicketOrderId());
 			res.totalPrices.add(tckod.getTotalPrice());
+			res.displayStatus= "查詢成功";
 		}
 		return res;
 	}
-	
-//	@GetMapping("/verifyToken")
-//	public @ResponseBody ResponseEntity<String> verifyToken( ){
-//		try {
-//			// 192.168.60.95: ?? / ???
-//		URL endpoint = new URL("http://localhost:8080/MarcHighSpeedRail/getAllStation");
-//		EmailPassword ep = new EmailPassword();
-//		ep.email = "test";
-//		ep.password = "qwer";
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String requestData = objectMapper.writeValueAsString(ep);
-//        HttpURLConnection httpUrlConn = (HttpURLConnection) endpoint.openConnection();
-//        httpUrlConn.setDoOutput(true);
-//        httpUrlConn.setRequestMethod("GET");//有修改過
-//        httpUrlConn.setRequestProperty("Content-Type", "application/json");
-//        OutputStream outputStream = httpUrlConn.getOutputStream();
-//        byte[] input = requestData.getBytes("utf-8");
-//	        outputStream.write(input, 0, input.length);
-//	        int statusCode = httpUrlConn.getResponseCode();
-//	        InputStream inputStream = null;
-//	        if (statusCode == 200) {
-//	            inputStream = httpUrlConn.getInputStream();
-//	        } else {
-//	            inputStream = httpUrlConn.getErrorStream();
-//	        }
-//	        BufferedReader bufferedReader;
-//			bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
-//			StringBuilder response = new StringBuilder();
-//			String responseLine = null;
-//			while ((responseLine = bufferedReader.readLine()) != null) {
-//				response.append(responseLine.trim());
-//			}
-//			System.out.println(response.toString());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return new ResponseEntity<String>("failed ",HttpStatus.OK);
-//		}
-//        // response.toString()
-//		return new ResponseEntity<String>("go go ",HttpStatus.OK);
-//	}
 }

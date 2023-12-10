@@ -14,4 +14,5 @@ public class DisplayMemberTicketOrderDto {
 	public List<Date> paymentDeadlines;
 	public List<String> orderStatuses;
 	public List<Integer> totalPrices;
+	public String displayStatus;
 }
