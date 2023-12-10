@@ -38,9 +38,7 @@ public class CorsConfigFilter implements Filter {
 	    } else if (backStage.equals(request.getHeader("Origin"))) {
 	        response.setHeader("Access-Control-Allow-Origin", backStage);
 	    }
-		
 		// addAllowedOrigin 不能設定為* 因為與 allowCredential 衝突
-//		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE, PUT");
 		response.setHeader("Access-Control-Max-Age", "3600");

@@ -98,7 +98,7 @@ public class TicketOrderController {
 				}
 			}
 			String token=loginToken;
-			
+			System.out.println( token);
 			LoginResponseModel userDetail = null;
 			userDetail = uServ.tokenlogin(UUID.fromString(token));
 			if(userDetail==null) {
@@ -300,8 +300,16 @@ public class TicketOrderController {
 				return new ResponseEntity<String>("seat was Booked",HttpStatus.OK);
 			}
 		}
+		
 		// end check seat was not booked by other member
 		TicketDiscount tckd = tkdServ.findByDiscountType("商務票").get(0);
+		// 先檢查 剩餘座位數量
+		Boolean lockSeatSuccess =schrsServ.updateScheduleRestSeat(schid, tckd.getTicketDiscountId() , rrs.getRailRoute().getRailRouteId() , ststid , edstid , amount );
+		if( lockSeatSuccess==false) {
+			return new ResponseEntity<String>("did not have enought seat",HttpStatus.BAD_REQUEST);
+		}
+		schssServ.registBookedBuinessSeat(schid, mask, schssList);//selectSchSeatList
+		
 		Date deadline = Date.from( schArr.getArriveTime().toInstant().minusSeconds(tckd.getPurchaseEarlyLimitDay()* 24*60*60));
 		Integer oneTicketPrice= (rrs.getRailRouteSegmentTicketPrice()*tckd.getTicketDiscountPercentage())/100-tckd.getTicketDiscountAmount();
 		// require startStationName endStationName ticketPrice price sum
@@ -389,10 +397,12 @@ public class TicketOrderController {
 		}
 		
 		// update scheduleSeatStatus
+		//策略改動在會員付款前要先分配好座位
 //		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
-		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, schssList);//selectSchSeatList
+//		schssServ.registBookedBuinessSeat(sch.getScheduleId(), mask, schssList);//selectSchSeatList
 		// update scheduleRestSeat [Ignore now ]
-		schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
+		//策略改動在會員付款前要先分配好座位
+		//schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
 		
 		// create order
 		Integer paymentEarlyDay = tkdServ.findById(tkdid).getPurchaseEarlyLimitDay();

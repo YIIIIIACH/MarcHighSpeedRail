@@ -40,17 +40,37 @@ public class BookingMemberLoginController {
 //				}
 //			}
 //		}
+
+		String currOrigin = ((HttpServletRequest)req).getHeader("Origin");
 		LoginResponseModel loginRes = uServ.login(ep.email,ep.password);
 		if(loginRes==null) {
 			System.out.println( " user not found");
 			return new ResponseEntity<LoginResponseModel> (new LoginResponseModel(),HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println( loginRes.getMember_id().toString());
-		Cookie c = new Cookie("login-token",loginRes.getLogin_token().toString());
-		res.addCookie(c);
-		Cookie c2 = new Cookie("member-name",loginRes.getMember_name());
-		res.addCookie(c);
-		res.addCookie(c2);
+//		Cookie c = new Cookie("login-token",loginRes.getLogin_token().toString());
+//		c.setMaxAge(3600);
+//		c.setPath("/;");
+//		c.setSecure(false);
+//		c.setHttpOnly(false);
+//		c.setPath(c.getPath().concat("SameSite=None;"));
+//		res.addCookie(c);
+//		Cookie c2 = new Cookie("member-name",loginRes.getMember_name());
+//		c2.setMaxAge(3600);
+//		c2.setPath("/;");
+//		c2.setSecure(false);
+//		c2.setHttpOnly(false);
+//		c2.setPath(c2.getPath().concat("SameSite=None;"));
+//		res.addCookie(c2);
+		res.setHeader("Access-Control-Allow-Credentials", "true");
+		res.setHeader("Access-Control-Allow-Origin", currOrigin==null? "true":currOrigin);
+		res.setHeader("Access-Control-Allow-Headers", "access-control-allow-origin, authority, content-type,version-info, X-Request-With");
+		res.setContentType("application/json;charset=UTF-8");
+		res.addHeader("Set-Cookie","login-token="+loginRes.getLogin_token().toString()+";Path=/;HttpOnly;Secure;SameSite=None");
+//		res.addHeader("Set-Cookie","login-token="+loginRes.getLogin_token().toString()+";Path=/;SameSite=None;Secure");
+		res.addHeader("Set-Cookie","member-name=test_member_name;Path=/;HttpOnly;Secure;SameSite=None");
+//		res.addHeader("Set-Cookie","member-name=test_member_name;Path=/;SameSite=None;Secure");
+
 		return new ResponseEntity<LoginResponseModel> (loginRes,HttpStatus.OK);
 	}
 	
@@ -73,7 +93,7 @@ public class BookingMemberLoginController {
 			if( userDetail != null) {
 				return new ResponseEntity<String> (userDetail.getMember_name(),HttpStatus.OK);						
 			}else {
-				return new ResponseEntity<String> ("failed",HttpStatus.OK);				
+				return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);				
 			}
 		}
 		return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
