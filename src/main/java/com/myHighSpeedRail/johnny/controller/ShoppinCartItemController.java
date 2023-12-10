@@ -13,17 +13,21 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
+import com.myHighSpeedRail.johnny.dto.ShoppingCartQuantityUpdateDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartResponseDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 import com.myHighSpeedRail.johnny.service.ProductService;
 import com.myHighSpeedRail.johnny.service.ShoppingCartItemService;
+import com.myHighSpeedRail.yuhsin.Services.UserService;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -33,6 +37,8 @@ public class ShoppinCartItemController {
 	private ShoppingCartItemService cartService;
 	@Autowired
 	private ProductService pService;
+	@Autowired
+	private UserService uService;
 	
 	//加入商品到購物車(指定數量)
 	@PostMapping("/ShoppingCart/addProducts")
@@ -41,9 +47,30 @@ public class ShoppinCartItemController {
 			@RequestParam(value = "productId") Integer productId,
 			@RequestParam(value = "memberId") String memberId, 
 			@RequestParam(value = "quantity") Integer quantity
-			,HttpServletRequest req){		
+			,HttpServletRequest req){	
+//		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
+//        Cookie []cookies = req.getCookies();
+//        String token = null;
+//        String uuid = null;
+////        token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
+//        for( Cookie ck: cookies) {
+//            if( ck.getName().equals("login-token")) {
+//                token = ck.getValue();
+//            }
+//        }
+//        if(token == null) {
+//            // redirect to MemberSystem
+//            return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
+//        }
+//        else{
+//            //validate the current login token 
+//            uuid = uService.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
+//        }
+//        if(uuid == null) {
+//            return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+//        }
 		
-		
+		//判斷商品是否已存在購物車
 		boolean isProductInCart = cartService.isProductInCart(memberId, productId);
 		
 		if(isProductInCart) {
@@ -143,7 +170,7 @@ public class ShoppinCartItemController {
 	}
 	
 	//更新品項數量
-	@PutMapping("/ShoppingCart/updataQuantity")
+	@PutMapping("/ShoppingCart/updata")
 	@ResponseBody
 	public String updateQuantity(
 			@RequestParam("memberId") String memberId, 
@@ -151,4 +178,11 @@ public class ShoppinCartItemController {
 			@RequestParam("itemId") Integer itemId) {
 		return cartService.updateQuantity(memberId, quantity, itemId);
 	}
+	
+//	//更新品項數量
+//	@PutMapping("/ShoppingCart/updataQuantity")
+//	@ResponseBody
+//	public String updateQuantity(@RequestBody ShoppingCartQuantityUpdateDto scquDto) {
+//		return cartService.updateQuantity(scquDto);
+//	}
 }

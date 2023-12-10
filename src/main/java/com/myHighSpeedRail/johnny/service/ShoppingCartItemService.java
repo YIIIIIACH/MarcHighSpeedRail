@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myHighSpeedRail.johnny.dto.ShoppingCartQuantityUpdateDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
@@ -91,11 +92,16 @@ public class ShoppingCartItemService {
 		return "已清空購物車";
 	}
 	
-	// 	更新購物車品項數量
+//	 	更新購物車品項數量
 	public String updateQuantity( String memberId, Integer quantity, Integer cartItemId) {
 		cartDao.updateCartItemQuantity(memberId, cartItemId, quantity);
 		return "更新成功";
 	}
+	
+//	public String updateQuantity(ShoppingCartQuantityUpdateDto scquDto) {
+//		cartDao.updateCartItemQuantity(scquDto);
+//		return "更新成功";
+//	}
 	
 	
 	public boolean isProductInCart(String memberId, Integer productId) {
