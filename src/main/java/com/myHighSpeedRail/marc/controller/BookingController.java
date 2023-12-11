@@ -14,19 +14,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.marc.dto.AllocateTicketDto;
+import com.myHighSpeedRail.marc.dto.CreateBookingQRDto;
 import com.myHighSpeedRail.marc.dto.DisplayMemberBookingTicketDto;
 import com.myHighSpeedRail.marc.model.Booking;
+import com.myHighSpeedRail.marc.model.ScheduleArrive;
 import com.myHighSpeedRail.marc.model.TicketOrder;
 import com.myHighSpeedRail.marc.service.BookingService;
+import com.myHighSpeedRail.marc.service.ScheduleArriveService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
 import com.myHighSpeedRail.yuhsin.Models.LoginResponseModel;
 import com.myHighSpeedRail.yuhsin.Services.UserService;
 
+import jakarta.persistence.PersistenceException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class BookingController {
+	@Autowired
+	private ScheduleArriveService scharrServ;
 	@Autowired
 	private BookingService bServ;
 	@Autowired
@@ -63,11 +69,13 @@ public class BookingController {
 		if( !tckod.getMemberToken().equals(userDetail.getMember_id().toString() )) {
 			 return new DisplayMemberBookingTicketDto();
 		}
-		
 		List<Booking> bList = bServ.findByTicketOrderId(tckodId);
 		DisplayMemberBookingTicketDto res = new DisplayMemberBookingTicketDto();
+		res.startArrive = scharrServ.findByScheduleIdStationId(bList.get(0).getSchedule().getScheduleId(), bList.get(0).getRailRouteSegment().getStartStation().getStationId());
+		res.endArrive= scharrServ.findByScheduleIdStationId(bList.get(0).getSchedule().getScheduleId(), bList.get(0).getRailRouteSegment().getEndStation().getStationId());
 		res.ticketRailRouteSegment=bList.get(0).getRailRouteSegment();
 		res.ticketSchedule= bList.get(0).getSchedule();
+		
 		System.out.println(bList.get(0).getSchedule().getDepartTime());
 		res.bookingIdList = new ArrayList<>();
 		res.seatList = new ArrayList<>();
@@ -91,6 +99,9 @@ public class BookingController {
 		Cookie []cookies = req.getCookies();
 		String token=null;
 		LoginResponseModel userDetail = null;
+		if(cookies==null) {
+			return new DisplayMemberBookingTicketDto();
+		}
 		for( Cookie ck: cookies) {
 			if( ck.getName().equals("login-token")) {
 				token = ck.getValue();
@@ -156,12 +167,23 @@ public class BookingController {
 		if(desUserDetail==null) {
 			return new ResponseEntity<String>("des login-token驗證失敗",HttpStatus.UNAUTHORIZED);
 		}
-		int resStatus = bServ.allocateBooking(dto.srcMemberToken, dto.desMemberToken, dto.bookingId);
-		if( resStatus > 0) {
-			return new ResponseEntity<String> ("allocate success",HttpStatus.OK);			
-		}else if (resStatus< 0) {
-			return new ResponseEntity<String>("server error",HttpStatus.INTERNAL_SERVER_ERROR);
+		try {
+			bServ.allocateBooking(dto.srcMemberToken, dto.desMemberToken, dto.bookingId);
+			return new ResponseEntity<String> ("success",HttpStatus.OK);			
+		}catch( PersistenceException pex) {
+			pex.printStackTrace();
 		}
-		return new ResponseEntity<String>("target booking or user not found",HttpStatus.OK);
+		return new ResponseEntity<String>("failed",HttpStatus.OK);
+	}
+	
+	@PostMapping("/createTicketQRCode")
+	public @ResponseBody ResponseEntity<String> createTicketQRCode(@RequestBody CreateBookingQRDto dto){
+		try {
+			bServ.createBookingQRcode(dto.bookingId, dto.url);
+			return new ResponseEntity<String>("success",HttpStatus.OK);
+		}catch( PersistenceException pex) {
+			pex.printStackTrace();
+		}
+		return new ResponseEntity<String>("failed",HttpStatus.CONFLICT);
 	}
 }

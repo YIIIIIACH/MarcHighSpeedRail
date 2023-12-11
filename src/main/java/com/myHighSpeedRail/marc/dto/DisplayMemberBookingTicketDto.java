@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.Schedule;
+import com.myHighSpeedRail.marc.model.ScheduleArrive;
 import com.myHighSpeedRail.marc.model.Seat;
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 
@@ -16,4 +17,6 @@ public class DisplayMemberBookingTicketDto {
 	public List<String> ticketStatusList;
 	public List<Integer> ticketPriceList;
 	public List<String> ticketQRcodeList;
+	public ScheduleArrive startArrive;
+	public ScheduleArrive endArrive;
 }

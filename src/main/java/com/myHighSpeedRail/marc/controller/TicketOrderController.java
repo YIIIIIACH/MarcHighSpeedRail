@@ -387,15 +387,6 @@ public class TicketOrderController {
 		for( ScheduleSeatStatus schss: schssList ) {
 			tmp.add(schss.getSeat());
 		}
-//		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(sch, tmp);
-		// check seat Available
-		for( ScheduleSeatStatus schss: schssList ) { // 原本是 ：selectSchSeatList
-			if( (schss.getScheduleStatus() & mask) > 0) {
-				model.addAttribute("msg","座位分配失敗請重新嘗試");
-				return "checkOutFail";
-			}
-		}
-		
 		// update scheduleSeatStatus
 		//策略改動在會員付款前要先分配好座位
 //		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
