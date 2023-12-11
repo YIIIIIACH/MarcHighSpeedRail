@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.peter.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class DepartmentService {
 
 	@Autowired
 	public DepartmentRepository dDao;
-	
+
 	@Autowired
 	public EmployeeHistoricalDepartmentRepository ehdDao;
 
@@ -24,13 +25,21 @@ public class DepartmentService {
 		List<SystemAuthor> authorList = dept.getSystemAuthor();
 		return authorList.get(0);
 	}
-	
+
 	public List<Department> getAllDepartments() {
 		return dDao.findAll();
 	}
-	
+
 	public Department getDepartmentByName(String name) {
 		return dDao.findBydepartmentName(name);
+	}
+
+	public Department findDepartmentById(Integer id) {
+		Optional<Department> d = dDao.findById(id);
+		if (d.isPresent()) {
+			return d.get();
+		}
+		return null;
 	}
 
 }

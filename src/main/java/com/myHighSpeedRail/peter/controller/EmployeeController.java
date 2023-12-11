@@ -65,7 +65,7 @@ public class EmployeeController {
 //		System.out.println("result: " + result);
 
 		if (result != null) {
-			EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(result);
+			EmployeeSystemAuthor esa = sahService.getEmpSystemAuthor(result);
 
 			SessionLoginEmployee sessionEmp = new SessionLoginEmployee();
 			sessionEmp.setEmpId(result.getEmployeeId());
@@ -77,25 +77,6 @@ public class EmployeeController {
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("帳號或密碼錯誤");
 	}
-
-//	@PostMapping("/api/users/login")
-//	public ResponseEntity<?> loginPost(@RequestBody UserNameAndPwdDto userDTO, HttpSession httpSession) {
-//
-//		Users result = uService.checkLogin(userDTO.getUsername(), userDTO.getPwd());
-//
-//		if (result != null) {
-//			System.out.println("資料庫帳號密碼正確");
-//
-//			LoginUserDTO loginUser = new LoginUserDTO(result.getId(), result.getUsername(), Boolean.TRUE);
-//
-//			httpSession.setAttribute("loginUser", loginUser);
-//
-//			return new ResponseEntity<String>("登入成功", HttpStatus.OK); // 200
-//		} else {
-//			System.out.println("帳號密碼錯誤");
-//			return new ResponseEntity<String>("帳號密碼錯誤", HttpStatus.UNAUTHORIZED); // 401
-//		}
-//	}
 
 	@ResponseBody
 	@GetMapping("/test/map")
@@ -142,7 +123,7 @@ public class EmployeeController {
 
 		Employee emp = eService.findEmployeeById(id);
 		if (id != null) {
-			EmployeeSystemAuthor esa = sahService.getEmpSystemAccess(emp);
+			EmployeeSystemAuthor esa = sahService.getEmpSystemAuthor(emp);
 
 			Boolean access = esa.rightsOfView(id, "測試系統一");
 

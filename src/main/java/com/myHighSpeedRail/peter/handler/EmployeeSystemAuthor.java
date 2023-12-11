@@ -1,12 +1,16 @@
 package com.myHighSpeedRail.peter.handler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
+//import org.springframework.boot.configurationprocessor.json.JSONArray;
+//import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.json.*;
 import org.springframework.stereotype.Component;
 
 import com.myHighSpeedRail.peter.model.Systems;
@@ -15,12 +19,13 @@ import com.myHighSpeedRail.peter.service.SystemsService;
 /**
  * 裝有員工系統權限的物件，直接new會無法使用
  */
-@Component
+//@Component
 public class EmployeeSystemAuthor {
 
 	private Integer systemId;
 
-	private Map<Integer, JSONArray> authorJson;
+//	private Map<Integer, JSONArray> authorJson;
+	private HashMap<Integer, ArrayList<Integer>> authorJson;
 
 	private List<Systems> systemList;
 
@@ -54,7 +59,8 @@ public class EmployeeSystemAuthor {
 			return false;
 		}
 
-		JSONArray author = authorJson.get(systemId);
+//		JSONArray author = authorJson.get(systemId);
+		ArrayList<Integer> author = authorJson.get(systemId);
 
 		try {
 			if (author.get(judgeKind).equals(1)) {
@@ -102,22 +108,26 @@ public class EmployeeSystemAuthor {
 		return result;
 	}
 
-	
-	
-	public Map<Integer, JSONArray> getAuthorJson() {
-		return authorJson;
-	}
-
-	void setAuthorJson(Map<Integer, JSONArray> authorJson) {
-		this.authorJson = authorJson;
-	}
-
 	public List<Systems> getSystemList() {
 		return systemList;
 	}
 
 	void setSystemList(List<Systems> systemList) {
 		this.systemList = systemList;
+	}
+
+	public HashMap<Integer, ArrayList<Integer>> getAuthorJson() {
+		return authorJson;
+	}
+
+	public void setAuthorJson(HashMap<Integer, ArrayList<Integer>> authorJson) {
+		this.authorJson = authorJson;
+	}
+
+	@Override
+	public String toString() {
+		return "EmployeeSystemAuthor [systemId=" + systemId + ", authorJson=" + authorJson + ", systemList="
+				+ systemList + ", sService=" + sService + "]";
 	}
 
 }
