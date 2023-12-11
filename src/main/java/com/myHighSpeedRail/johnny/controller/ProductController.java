@@ -43,9 +43,8 @@ public class ProductController {
 		try{
 //			BeanUtils.copyProperties(postDto, p);
 			
-			Product addedProduct = pService.addProduct(postDto);
-			
-			ppsServ.savePhoto(postDto, addedProduct.getProductId());
+			Product addedProduct = pService.addProduct(postDto);// 先儲存商品, identity建立一個productId
+			ppsServ.savePhoto(postDto, addedProduct.getProductId()); //呼叫photoService, 傳入DTO & 建立好的productId
 			
 			return ResponseEntity.ok("商品新增成功，商品ID: " + addedProduct.getProductId() + ", 商品名稱 : " + addedProduct.getProductName());
 		
@@ -81,38 +80,7 @@ public class ProductController {
 	@GetMapping("/products")
 	@ResponseBody
 	public List<ProductAndPhotoSegmentDto> getAllproduct(){
-		// return List<ProductAndPhotoSegmentDto> 
-		List<Product> pList = pService.findAllProduct();
-		List<ProductAndPhotoSegmentDto> res= new ArrayList<ProductAndPhotoSegmentDto>();
-//		int flag =0;
-		for( Product p : pList) {
-			ProductAndPhotoSegmentDto tmp = new ProductAndPhotoSegmentDto();
-			tmp.productDescription= p.getProductDescription();
-			tmp.productId= p.getProductId();
-			tmp.productInventory= p.getProductInventory();
-			tmp.productName=p.getProductName();
-			tmp.productPrice=p.getProductPrice();
-			tmp.productType=p.getProductType();
-			p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
-//			StringBuilder sb= new StringBuilder();
-//			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-//				sb.append(pps.getPhotoSegment().toString());
-//				sb.
-//			}
-			StringBuilder sb = new StringBuilder();
-			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-//				sb.concat(pps.getPhotoSegment().toString());
-//				String str = new String(byteArray1, 0, 3, StandardCharsets.UTF_8);
-				sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
-			}
-			tmp.photoData= sb.toString();
-			res.add(tmp);
-//			if(flag==0) {
-//				System.out.println("show"+sb);
-//				flag=1;
-//			}
-		}
-		 return res;
+		return pService.findAllProduct();	
 	}
 	
 	//取得product (分頁)
@@ -153,26 +121,8 @@ public class ProductController {
 	@GetMapping("/api/product/{id}")
 	@ResponseBody
 	public ProductAndPhotoSegmentDto findProductById(@PathVariable("id") Integer id) {
-		Product p = pService.findProductById(id);
 		
-		ProductAndPhotoSegmentDto tmp = new ProductAndPhotoSegmentDto();
-		tmp.productDescription = p.getProductDescription();
-		tmp.productId = p.getProductId();
-		tmp.productInventory = p.getProductInventory();
-		tmp.productName = p.getProductName();
-		tmp.productPrice = p.getProductPrice();
-		tmp.productType = p.getProductType();
-		p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
-		
-		StringBuilder sb = new StringBuilder();
-		for(ProductPhotoSegment pps: p.getPhotoSegment()) {
-			sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
-		}
-		
-		tmp.photoData = sb.toString();
-//		System.out.println(tmp.photoData);
-
-		return tmp;
+		return pService.findProductById(id);
 	}
 	
 	//透過id下架商品

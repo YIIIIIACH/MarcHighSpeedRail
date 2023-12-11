@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.myHighSpeedRail.derekwu.dto.LostPropertyGuestDTO;
 import com.myHighSpeedRail.derekwu.model.LostProperty;
 import com.myHighSpeedRail.derekwu.repository.LostPropertyRepository;
+import com.myHighSpeedRail.derekwu.service.FindLostService;
 import com.myHighSpeedRail.derekwu.service.LostPropertyService;
 
 @RestController
@@ -25,6 +26,10 @@ public class LostPropertyController {
 	
 	@Autowired
 	private LostPropertyService lpServ;
+	
+	@Autowired
+	private FindLostService flServ;
+	
 	
 	//新增登記遺失物
 	@PostMapping("/LostProperty/add")
@@ -51,6 +56,10 @@ public class LostPropertyController {
 		lostProperty.setLostPropertyId(lostPropertyId);
 		//設定所有遺失物資料
 		LostProperty lp = lpRepo.save(lostProperty);
+		//若找到的話
+		if(lp.getReceiveCheck()==true) {
+			flServ.addNewFindLost(lostPropertyId,lp);
+		}
 		return lp;
 	}
 	

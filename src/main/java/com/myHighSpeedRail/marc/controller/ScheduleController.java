@@ -29,6 +29,7 @@ import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.model.ScheduleDetail;
+import com.myHighSpeedRail.marc.model.ScheduleRestSeat;
 import com.myHighSpeedRail.marc.service.RailRouteSegmentService;
 import com.myHighSpeedRail.marc.service.RailRouteStopStationService;
 import com.myHighSpeedRail.marc.service.ScheduleArriveService;
@@ -202,10 +203,12 @@ public class ScheduleController {
 			}
 			return false;
 		}).collect( Collectors.toList() );
+		List<ScheduleRestSeat> schrsList = schrsServ.segmentDiscountRestSeatInSchedule(resSch.stream().map((s)->s.getScheduleId()).toList(), onStationId, offStationId, discountType);
+		schrsList= schrsList.stream().filter((schrs)->schrs.getRestSeatAmount()>0).toList();
 		// step3 getAll DiscountType of schedule in scheduleList 
 		// pack search schedule on ScheduleResultDto
 		List<ScheduleResultDto> searchRes = new ArrayList<ScheduleResultDto>();
-		resSch.stream().forEach((sch)->{
+		schrsList.stream().map(schrs->schrs.getSchedule()).forEach((sch)->{
 			RailRouteSegment rrs = rrsServ.findByRailRouteIdStartStationEndStation( sch.getRailRoute().getRailRouteId(),
 					onStationId, offStationId).get(0);
 			searchRes.add( new ScheduleResultDto( sch.getScheduleId(), onSt, offSt 

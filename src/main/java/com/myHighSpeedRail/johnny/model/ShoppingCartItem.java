@@ -19,7 +19,7 @@ public class ShoppingCartItem {
 	@Column(name = "shopping_cart_item_id")
 	private Integer shoppingCartItemId;
 	
-	@Column(name = "quantity")
+	@Column(name = "quantity", nullable = false)
 	private Integer quantity;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -27,23 +27,23 @@ public class ShoppingCartItem {
 	private Product product;
 	
     @Column(name = "member_uuid", nullable = false)
-	private String member;
+	private String memberId;
 
 	public ShoppingCartItem() {
 		super();
 	}
 
-	public ShoppingCartItem(Integer shoppingCartItemId, Integer quantity, Product product, String member) {
+	public ShoppingCartItem(Integer shoppingCartItemId, Integer quantity, Product product, String memberId) {
 		super();
 		this.shoppingCartItemId = shoppingCartItemId;
 		this.quantity = quantity;
 		this.product = product;
-		this.member = member;
+		this.memberId = memberId;
 	}
-	public ShoppingCartItem(Integer quantity, Product product, String member) {
+	public ShoppingCartItem(Integer quantity, Product product, String memberId) {
 		this.quantity = quantity;
 		this.product = product;
-		this.member = member;
+		this.memberId = memberId;
 	}
 
 	public Integer getShoppingCartItemId() {
@@ -70,12 +70,12 @@ public class ShoppingCartItem {
 		this.product = product;
 	}
 
-	public String getMember() {
-		return member;
+	public String getmemberId() {
+		return memberId;
 	}
 
-	public void setMember(String member) {
-		this.member = member;
+	public void setmemberId(String memberId) {
+		this.memberId = memberId;
 	}  
     
 }

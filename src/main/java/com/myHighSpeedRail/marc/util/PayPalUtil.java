@@ -161,19 +161,17 @@ public class PayPalUtil {
 				response.append(inputLine);
 			}
 			in.close();
-
-			// Print the response
-//			System.out.println(response.toString());
-			return new ResponseEntity<String>("success "+response.toString(),HttpStatus.OK);
+			return new ResponseEntity<String>(response.toString(),HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
 	}
 	
-	public @ResponseBody ResponseEntity<String> captureOrderUtil( @RequestParam String orderid){
+	public Boolean captureOrderUtil(String orderid){
 		getTokenUtil();
 		try {
+			ObjectMapper mapper = new ObjectMapper();
 			String url = "https://api.sandbox.paypal.com/v2/checkout/orders/"+orderid+"/capture";
 			URL obj = new URL(url);
 			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
@@ -187,15 +185,20 @@ public class PayPalUtil {
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
+//			System.out.println( response.toString());
+			JsonNode root = mapper.readTree(response.toString());
+			Map<String, String> map = new HashMap<>();
+			addKeys("", root, map, new ArrayList<>());
+			String status = map.get("status");
 			in.close();
-
-			// Print the response
-//			System.out.println(response.toString());
-			return new ResponseEntity<String> ("success :"+response.toString(),HttpStatus.BAD_REQUEST);
+			if(status.equals("COMPLETED")) {
+				System.out.println("status is completed");
+				return true;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String> ("not work",HttpStatus.BAD_REQUEST);
+		return false;
 	}
 }
 

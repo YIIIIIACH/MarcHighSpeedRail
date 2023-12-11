@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>恭喜高鐵訂票成功</title>
 </head>
 <body>
 	<h2>畫面將於5秒內從新導向到高鐵訂票首頁</h2>
+	<p th:text="${msg}"/>
 <script>
 	setTimeout(()=>{
 		window.location.replace('http://localhost:5173/')

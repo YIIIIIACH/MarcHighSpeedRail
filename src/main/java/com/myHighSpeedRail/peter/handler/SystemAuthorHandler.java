@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.configurationprocessor.json.JSONArray;
 //import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import com.myHighSpeedRail.peter.model.Department;

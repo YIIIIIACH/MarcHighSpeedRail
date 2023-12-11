@@ -30,7 +30,7 @@ public class ProductPhotoSegmentController {
 	
 	@PostMapping(value = "/photoSegment")
 	public @ResponseBody ResponseEntity<String> postPhoto(@RequestBody PostProductDto ppDto){
-//		ppsServ.savePhoto(ppDto);
+		ppsServ.savePhoto(ppDto, ppDto.productId);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 	

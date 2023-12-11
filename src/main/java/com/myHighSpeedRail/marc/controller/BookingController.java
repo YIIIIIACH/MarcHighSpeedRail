@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.marc.controller;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,11 @@ import com.myHighSpeedRail.marc.model.Booking;
 import com.myHighSpeedRail.marc.model.TicketOrder;
 import com.myHighSpeedRail.marc.service.BookingService;
 import com.myHighSpeedRail.marc.service.TicketOrderService;
+import com.myHighSpeedRail.yuhsin.Models.LoginResponseModel;
+import com.myHighSpeedRail.yuhsin.Services.UserService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class BookingController {
@@ -25,12 +31,36 @@ public class BookingController {
 	private BookingService bServ;
 	@Autowired
 	private TicketOrderService tckodServ;
-	
-	@GetMapping("/getBookingByTicketOrder/{memuuid}/{tckodId}")// 用作查詢訂票紀錄使用
-	public @ResponseBody DisplayMemberBookingTicketDto getBookingByTicketOrder(@PathVariable String memuuid, @PathVariable Integer tckodId) {
+	@Autowired
+	private UserService uServ;
+	@GetMapping("/getBookingByTicketOrder/{tckodId}")// 用作查詢訂票紀錄使用
+	public @ResponseBody DisplayMemberBookingTicketDto getBookingByTicketOrder(@PathVariable Integer tckodId,HttpServletRequest req) {
+		String token = null;
+		Cookie[] cks = req.getCookies();
+		if(cks==null) {
+			System.out.print("not cookie found");
+		}else {
+			for( Cookie c: cks) {
+				if(c.getName().equals("login-token")) {
+					token = c.getValue();
+				}
+			}
+		}
+		LoginResponseModel userDetail = null;
+		if(token==null) {
+			// redirect to MemberSystem
+			return new DisplayMemberBookingTicketDto();
+		}
+		else{
+			//validate the current login token 
+			userDetail = uServ.tokenlogin(UUID.fromString(token));
+		}
+		if(userDetail==null) {
+			return new DisplayMemberBookingTicketDto();
+		}
 		// verify memuuid and tckodId
 		TicketOrder tckod = tckodServ.findById(tckodId);
-		if( !tckod.getMemberToken().equals(memuuid)) {
+		if( !tckod.getMemberToken().equals(userDetail.getMember_id().toString() )) {
 			 return new DisplayMemberBookingTicketDto();
 		}
 		
@@ -56,9 +86,28 @@ public class BookingController {
 		return res; 
 	}
 	
-	@GetMapping("/getMemberOwnBooking/{memuuid}")  //用作在會員中心點擊車票訂單 就可以查看該訂單所購買的車票
-	public @ResponseBody DisplayMemberBookingTicketDto getMemeberOwnedBooking( @PathVariable String memuuid) {
-		List<Booking> bList  = bServ.findByMember(memuuid);
+	@GetMapping("/getMemberOwnBooking")  //用作在會員中心點擊車票訂單 就可以查看該訂單所購買的車票
+	public @ResponseBody DisplayMemberBookingTicketDto getMemeberOwnedBooking(HttpServletRequest req) {
+		Cookie []cookies = req.getCookies();
+		String token=null;
+		LoginResponseModel userDetail = null;
+		for( Cookie ck: cookies) {
+			if( ck.getName().equals("login-token")) {
+				token = ck.getValue();
+			}
+		}
+		if(token==null) {
+			// redirect to MemberSystem
+			return new DisplayMemberBookingTicketDto();
+		}
+		else{
+			//validate the current login token 
+			userDetail = uServ.tokenlogin(UUID.fromString(token));
+		}
+		if(userDetail==null) {
+			return new DisplayMemberBookingTicketDto();
+		}
+		List<Booking> bList  = bServ.findByMember( userDetail.getMember_id().toString() );
 		DisplayMemberBookingTicketDto res = new DisplayMemberBookingTicketDto();
 		res.ticketRailRouteSegment=bList.get(0).getRailRouteSegment();
 		res.ticketSchedule= bList.get(0).getSchedule();
@@ -80,10 +129,33 @@ public class BookingController {
 	}
 	
 	@PostMapping("/allocateBooking")
-	public @ResponseBody ResponseEntity<String> allocateBooking(@RequestBody AllocateTicketDto dto){
-		// check desMemberToken is valid;
-		 // to be continue
-		//
+	public @ResponseBody ResponseEntity<String> allocateBooking(@RequestBody AllocateTicketDto dto,HttpServletRequest req){
+		String srcToken=dto.srcMemberToken;
+		String desToken =dto.desMemberToken;
+		LoginResponseModel srcUserDetail = null;
+		LoginResponseModel desUserDetail = null;
+		if(srcToken==null) {
+			// redirect to MemberSystem
+			return new ResponseEntity<String>("查無login-token",HttpStatus.UNAUTHORIZED);
+		}
+		else{
+			//validate the current login token 
+			srcUserDetail = uServ.tokenlogin(UUID.fromString(srcToken));
+		}
+		if(srcUserDetail==null) {
+			return new ResponseEntity<String>("des login-token驗證失敗",HttpStatus.UNAUTHORIZED);
+		}
+		if(desToken==null) {
+			// redirect to MemberSystem
+			return new ResponseEntity<String>("查無login-token",HttpStatus.UNAUTHORIZED);
+		}
+		else{
+			//validate the current login token 
+			desUserDetail = uServ.tokenlogin(UUID.fromString(desToken));
+		}
+		if(desUserDetail==null) {
+			return new ResponseEntity<String>("des login-token驗證失敗",HttpStatus.UNAUTHORIZED);
+		}
 		int resStatus = bServ.allocateBooking(dto.srcMemberToken, dto.desMemberToken, dto.bookingId);
 		if( resStatus > 0) {
 			return new ResponseEntity<String> ("allocate success",HttpStatus.OK);			

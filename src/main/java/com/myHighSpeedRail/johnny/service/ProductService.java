@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.johnny.service;
 
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import com.myHighSpeedRail.johnny.dto.PostProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductBuyingMethod;
+import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.repository.ProductBuyingMethodRepository;
 import com.myHighSpeedRail.johnny.repository.ProductRepository;
 
@@ -55,29 +57,44 @@ public class ProductService {
 			return savedProduct;
 	}
 	
-//	public Product addProduct(Product p) {
-//		
-//		return pDao.save(p); 
-//	}
-	
 	public List<Product> addAllProduct(List<Product> pList){
 			
 		return pDao.saveAll(pList);
 	}
 	
-	public Product findProductById(Integer id) {
-		Optional<Product> optional = pDao.findById(id);
-		
-		if(optional.isPresent()) {
-			Product product = optional.get();
-			
-			return product;
-		}
-		return null;
-	}
+//	public Product findProductById(Integer id) {
+//		Optional<Product> optional = pDao.findById(id);
+//		
+//		if(optional.isPresent()) {
+//			Product product = optional.get();
+//			
+//			return product;
+//		}
+//		return null;
+//	}
 	
-	public List<Product> findAllProduct(){
-		return pDao.findAll();
+	public List<ProductAndPhotoSegmentDto> findAllProduct(){
+		List<Product> pList = pDao.findAll();
+		List<ProductAndPhotoSegmentDto> res = new ArrayList<ProductAndPhotoSegmentDto>();
+		
+		for( Product p : pList) {
+			ProductAndPhotoSegmentDto tmp = new ProductAndPhotoSegmentDto();
+			tmp.productDescription= p.getProductDescription();
+			tmp.productId= p.getProductId();
+			tmp.productInventory= p.getProductInventory();
+			tmp.productName=p.getProductName();
+			tmp.productPrice=p.getProductPrice();
+			tmp.productType=p.getProductType();
+			p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+			
+			StringBuilder sb = new StringBuilder();
+			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+				sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+			}
+			tmp.photoData= sb.toString();
+			res.add(tmp);
+		}	
+		return res;
 	}
 	
 //	public Page<Product> findbyPage(Integer pageNumber){
@@ -144,5 +161,30 @@ public class ProductService {
 	}
 	public Optional<Product> findById( Integer pid){
 		return pDao.findById(pid);
+	}
+	
+	public ProductAndPhotoSegmentDto findProductById(Integer pId) {
+		
+		Product product = pDao.findById(pId).get();
+		
+		ProductAndPhotoSegmentDto temp = new ProductAndPhotoSegmentDto();
+		temp.productId = product.getProductId();
+		temp.productName = product.getProductName();
+		temp.productPrice = product.getProductPrice();
+		temp.productInventory = product.getProductInventory();
+		temp.productType = product.getProductType();
+		temp.productDescription = product.getProductDescription();
+		
+		product.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+		
+		StringBuilder sb = new StringBuilder();
+		for(ProductPhotoSegment pps: product.getPhotoSegment()) {
+
+			sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+		}
+		
+		temp.photoData= sb.toString();
+
+		return temp;
 	}
 }
