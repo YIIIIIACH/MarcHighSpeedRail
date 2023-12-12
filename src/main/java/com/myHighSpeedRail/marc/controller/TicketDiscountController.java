@@ -14,12 +14,11 @@ import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.repository.TicketDiscountRepository;
 import com.myHighSpeedRail.marc.service.TicketDiscountService;
 
-
+@CrossOrigin
 @RestController
 public class TicketDiscountController {
 	@Autowired
 	private TicketDiscountService tdServ;
-	@CrossOrigin
 	@GetMapping(value="/getAllDiscount")
 	public List<TicketDiscount> getAll(){
 		return tdServ.findAll();

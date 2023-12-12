@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.myHighSpeedRail.marc.model.RailRouteCmpsPK;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
-
+@Repository
 public interface RailRouteStopStationRepository extends JpaRepository<RailRouteStopStation, RailRouteCmpsPK>{
 	@Query("from RailRouteStopStation where railRoute.railRouteId=:rid")
 	public List<RailRouteStopStation>findByRouteId(Integer rid);

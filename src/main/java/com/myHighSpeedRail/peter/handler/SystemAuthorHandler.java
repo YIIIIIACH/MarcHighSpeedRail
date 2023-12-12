@@ -1,8 +1,11 @@
 package com.myHighSpeedRail.peter.handler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.configurationprocessor.json.JSONArray;
 //import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -35,17 +38,19 @@ public class SystemAuthorHandler {
 	@Autowired
 	private SystemsService sService;
 
-	private HashMap<Integer, JSONArray> authorJsonMap;
+//	private HashMap<Integer, JSONArray> authorJsonMap;
+	private HashMap<Integer, ArrayList<Integer>> authorJsonMap;
 
 	private List<Systems> systemList;
+
+	private int count;
 
 	// 現有系統個數
 	private Long SystemNumber;
 
-	public EmployeeSystemAuthor getEmpSystemAccess(Employee e) {
+	public EmployeeSystemAuthor getEmpSystemAuthor(Employee e) {
 		// 找到現有系統個數
 		SystemNumber = sService.findSystemCount();
-		System.out.println("number of systems: " + sService.findSystemCount());
 
 		// 把所有系統放進List存起來
 		systemList = sService.findAllSystems();
@@ -68,13 +73,11 @@ public class SystemAuthorHandler {
 
 			encapsulateJsonToMap(empAuthorJson);
 
-//			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
 			EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
 			esa.setAuthorJson(authorJsonMap);
 			esa.setSystemList(systemList);
 
 			return esa;
-//			JSONArray author = getSystemById(empSystemAuthor.getAuthorJson(), system.getSystemId());
 
 		} else {
 			Department dept = eService.findLatestDepartment(e.getEmployeeId());
@@ -90,7 +93,6 @@ public class SystemAuthorHandler {
 
 			encapsulateJsonToMap(deptAuthorJson);
 
-//			EmployeeSystemAuthor esa = new EmployeeSystemAuthor(authorJsonMap, systemList);
 			EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
 			esa.setAuthorJson(authorJsonMap);
 			esa.setSystemList(systemList);
@@ -101,23 +103,236 @@ public class SystemAuthorHandler {
 
 	}
 
+	public HashMap<Integer, EmployeeSystemAuthor> getAllEmployeeSystemAccess() {
+		// 找到現有系統個數
+		SystemNumber = sService.findSystemCount();
+
+		// 把所有系統放進List存起來
+		systemList = sService.findAllSystems();
+
+		List<SystemAuthor> saList = sService.findAllSystemAuthors();
+		HashMap<Integer, EmployeeSystemAuthor> esaMap = new HashMap<Integer, EmployeeSystemAuthor>();
+
+		saList.forEach(sa -> {
+			System.out.println(sa.getEmployee());
+			if (sa.getEmployee() != null) {
+				String authorJson = sa.getAuthorJson();
+
+				encapsulateJsonToMap(authorJson);
+
+				EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+				esa.setAuthorJson(authorJsonMap);
+				esa.setSystemList(systemList);
+				esaMap.put(sa.getEmployee().getEmployeeId(), esa);
+
+			}
+		});
+		return esaMap;
+	}
+
+	public HashMap<Integer, EmployeeSystemAuthor> getAllDepartmentSystemAccess() {
+		// 找到現有系統個數
+		SystemNumber = sService.findSystemCount();
+
+		// 把所有系統放進List存起來
+		systemList = sService.findAllSystems();
+
+		List<SystemAuthor> saList = sService.findAllSystemAuthors();
+		HashMap<Integer, EmployeeSystemAuthor> dsaMap = new HashMap<Integer, EmployeeSystemAuthor>();
+
+		saList.forEach(sa -> {
+			System.out.println(sa.getDepartment());
+			if (sa.getDepartment() != null) {
+				String authorJson = sa.getAuthorJson();
+
+				encapsulateJsonToMap(authorJson);
+
+				EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+				esa.setAuthorJson(authorJsonMap);
+				esa.setSystemList(systemList);
+				dsaMap.put(sa.getDepartment().getDepartmentId(), esa);
+
+			}
+		});
+		return dsaMap;
+	}
+
+	public HashMap<Integer, EmployeeSystemAuthor> getSystemAccessByEmployeeId(Integer id) {
+		// 找到現有系統個數
+		SystemNumber = sService.findSystemCount();
+
+		// 把所有系統放進List存起來
+		systemList = sService.findAllSystems();
+
+		SystemAuthor sa = sService.findSystemAuthorByEmployeeId(id);
+
+		HashMap<Integer, EmployeeSystemAuthor> esaMap = new HashMap<Integer, EmployeeSystemAuthor>();
+
+		String authorJson = sa.getAuthorJson();
+
+		encapsulateJsonToMap(authorJson);
+
+		EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+
+		esa.setAuthorJson(authorJsonMap);
+		esa.setSystemList(systemList);
+
+		// 測試這個function
+		encapsulateMapToJson(authorJsonMap);
+
+		esaMap.put(sa.getEmployee().getEmployeeId(), esa);
+
+		return esaMap;
+
+	}
+
+	public void updateSystemAccessByEmployeeId(Integer id, EmployeeSystemAuthor esa) {
+
+		HashMap<Integer, ArrayList<Integer>> authorJson = esa.getAuthorJson();
+
+		Employee e = new Employee();
+		e.setEmployeeId(id);
+
+		String authorJsonString = encapsulateMapToJson(authorJson);
+		SystemAuthor sa = new SystemAuthor();
+
+		sa.setAuthorJson(authorJsonString);
+		sa.setEmployee(e);
+
+		sService.updateEmployeeSystemAuthor(sa);
+
+	}
+
+	public HashMap<Integer, EmployeeSystemAuthor> getSystemAccessByDeaprtmentId(Integer id) {
+		// 找到現有系統個數
+		SystemNumber = sService.findSystemCount();
+
+		// 把所有系統放進List存起來
+		systemList = sService.findAllSystems();
+
+		SystemAuthor sa = sService.findSystemAuthorByDepartmentId(id);
+
+		HashMap<Integer, EmployeeSystemAuthor> dsaMap = new HashMap<Integer, EmployeeSystemAuthor>();
+
+		String authorJson = sa.getAuthorJson();
+
+		encapsulateJsonToMap(authorJson);
+
+		EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+
+		esa.setAuthorJson(authorJsonMap);
+		esa.setSystemList(systemList);
+
+		// 測試這個function
+		encapsulateMapToJson(authorJsonMap);
+
+		dsaMap.put(sa.getDepartment().getDepartmentId(), esa);
+
+		return dsaMap;
+
+	}
+
+	public void updateSystemAccessByDepartmentId(Integer id, EmployeeSystemAuthor esa) {
+
+		System.out.println("id: " + id);
+		System.out.println("esa: " + esa);
+
+		HashMap<Integer, ArrayList<Integer>> authorJson = esa.getAuthorJson();
+
+		Department d = new Department();
+		d.setDepartmentId(id);
+
+		String authorJsonString = encapsulateMapToJson(authorJson);
+		SystemAuthor sa = new SystemAuthor();
+
+		sa.setAuthorJson(authorJsonString);
+		sa.setDepartment(d);
+
+		sService.updateDepartmentSystemAuthor(sa);
+		;
+
+	}
+
+	public void addEmployeeSystemAuthor(Integer id, EmployeeSystemAuthor esa) {
+
+		HashMap<Integer, ArrayList<Integer>> authorJson = esa.getAuthorJson();
+
+		String authorString = encapsulateMapToJson(authorJson);
+
+		SystemAuthor sa = new SystemAuthor();
+		Employee e = new Employee();
+		e.setEmployeeId(id);
+
+		sa.setAuthorJson(authorString);
+		sa.setEmployee(e);
+		
+		sService.addSystemAuthor(sa);
+	}
+
+	public void addDepartmentSystemAuthor(Integer id, EmployeeSystemAuthor esa) {
+
+		HashMap<Integer, ArrayList<Integer>> authorJson = esa.getAuthorJson();
+
+		String authorString = encapsulateMapToJson(authorJson);
+
+		SystemAuthor sa = new SystemAuthor();
+		Department d = new Department();
+		d.setDepartmentId(id);
+
+		sa.setAuthorJson(authorString);
+		sa.setDepartment(d);
+		
+		sService.addSystemAuthor(sa);
+	}
+
+	// 把權限裝進Map裡面
 	private void encapsulateJsonToMap(String authorJSON) {
-		// 把權限裝進Map裡面
-		authorJsonMap = new HashMap<Integer, JSONArray>();
+
+		authorJsonMap = new HashMap<Integer, ArrayList<Integer>>();
+
 		for (int i = 1; i <= SystemNumber; i++) {
 			try {
 				String s = String.valueOf(i);
-//				System.out.println("i: " + s);
 				JSONObject jsonObj = new JSONObject(authorJSON);
 				JSONArray jsonArray = jsonObj.getJSONObject("authorJson").getJSONArray(s);
-				System.out.println("jsonArray: " + jsonArray);
-				authorJsonMap.put(i, jsonArray);
+				ArrayList<Integer> jsonList = new ArrayList<Integer>();
+				jsonArray.forEach(sa -> {
+					jsonList.add((Integer) sa);
+				});
+				authorJsonMap.put(i, jsonList);
 
 			} catch (Exception e) {
-//				e.printStackTrace();
 				System.out.println("未設定系統權限，系統ID: " + i);
 			}
 		}
+	}
+
+	// 把Map裡面的權限建成字串
+	private String encapsulateMapToJson(HashMap<Integer, ArrayList<Integer>> saMap) {
+
+		count = 1;
+
+//		{"authorJson":{"1":[1,0,1,0,0],"2":[1,1,1,1,0]}}
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("{\"authorJson\":{\"");
+
+		saMap.forEach((k, v) -> {
+			sb.append(k);
+			sb.append("\":");
+			sb.append(v);
+			if (count != SystemNumber) {
+				sb.append(",\"");
+				count = count + 1;
+			} else if (count == SystemNumber) {
+				count = 1;
+				sb.append("}}");
+				return;
+			}
+		});
+
+		return sb.toString();
 	}
 
 }

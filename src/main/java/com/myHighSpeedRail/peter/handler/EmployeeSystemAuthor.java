@@ -1,14 +1,12 @@
 package com.myHighSpeedRail.peter.handler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.configurationprocessor.json.JSONArray;
-//import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.myHighSpeedRail.peter.model.Systems;
@@ -22,7 +20,7 @@ public class EmployeeSystemAuthor {
 
 	private Integer systemId;
 
-	private Map<Integer, JSONArray> authorJson;
+	private HashMap<Integer, ArrayList<Integer>> authorJson;
 
 	private List<Systems> systemList;
 
@@ -56,7 +54,8 @@ public class EmployeeSystemAuthor {
 			return false;
 		}
 
-		JSONArray author = authorJson.get(systemId);
+//		JSONArray author = authorJson.get(systemId);
+		ArrayList<Integer> author = authorJson.get(systemId);
 
 		try {
 			if (author.get(judgeKind).equals(1)) {
@@ -104,13 +103,12 @@ public class EmployeeSystemAuthor {
 		return result;
 	}
 
-	
-	
-	public Map<Integer, JSONArray> getAuthorJson() {
+
+	public HashMap<Integer, ArrayList<Integer>> getAuthorJson() {
 		return authorJson;
 	}
 
-	void setAuthorJson(Map<Integer, JSONArray> authorJson) {
+	public void setAuthorJson(HashMap<Integer, ArrayList<Integer>> authorJson) {
 		this.authorJson = authorJson;
 	}
 
@@ -120,6 +118,12 @@ public class EmployeeSystemAuthor {
 
 	void setSystemList(List<Systems> systemList) {
 		this.systemList = systemList;
+	}
+
+	@Override
+	public String toString() {
+		return "EmployeeSystemAuthor [systemId=" + systemId + ", authorJson=" + authorJson + ", systemList="
+				+ systemList + ", sService=" + sService + "]";
 	}
 
 }

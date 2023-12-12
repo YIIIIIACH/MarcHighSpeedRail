@@ -193,7 +193,7 @@ public class UserController {
                              @CookieValue(value = "logintoken", defaultValue = "") String token,
                              HttpServletResponse response) {
         if (token.isEmpty()) {
-            return "redirect:/yuhsin/test/signin";
+            return "redirect/yuhsin/test/signin";
         }
         var getmemberid = _userService.tokenlogin(UUID.fromString(token));
         if (getmemberid == null) {

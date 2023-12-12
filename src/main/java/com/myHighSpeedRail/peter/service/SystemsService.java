@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,30 @@ public class SystemsService {
 
 	public List<Systems> findAllSystems() {
 		return sDao.findAll();		
+	}
+	
+	public List<SystemAuthor> findAllSystemAuthors(){
+		return saDao.findAll();
+	}
+	
+	public SystemAuthor findSystemAuthorByEmployeeId(Integer id) {
+		return saDao.findByEmployeeId(id);
+	}
+	
+	public SystemAuthor findSystemAuthorByDepartmentId(Integer id) {
+		return saDao.findByDepartmentId(id);
+	}
+	
+	public void updateEmployeeSystemAuthor(SystemAuthor sa) {
+		String authorJson = sa.getAuthorJson();
+		Integer id = sa.getEmployee().getEmployeeId();
+		saDao.updateByEmployeeId(id,authorJson);
+	}
+	
+	public void updateDepartmentSystemAuthor(SystemAuthor sa) {
+		String authorJson = sa.getAuthorJson();
+		Integer id = sa.getDepartment().getDepartmentId();
+		saDao.updateByDepartmentId(id, authorJson);;
 	}
 
 }
