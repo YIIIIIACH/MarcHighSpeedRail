@@ -41,4 +41,5 @@ public interface ShoppingCartItemRepository extends JpaRepository<ShoppingCartIt
 	
 	@Query("from ShoppingCartItem where memberId = :memberId and product.productId = :productId")
 	public Optional<ShoppingCartItem> findByProductIdAndMemberId(String memberId, Integer productId);
+	
 }

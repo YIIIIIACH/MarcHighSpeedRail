@@ -110,4 +110,5 @@ public class ShoppingCartItemService {
 		
 		return shoppingCartItem.isPresent();
 	}
+	
 }

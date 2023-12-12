@@ -17,19 +17,18 @@ public class OrderService {
 	private OrderRepository orderDao;
 	
 	
-	public Order createOrder(List<ShoppingCartItem> cartItems) {
-		
-		Order o = new Order();
-		
-		for(ShoppingCartItem cartItem : cartItems) {
-			o.setMember(cartItem.getmemberId());
+//	public Order createOrder(ShoppingCartItem cartItem) {
+//		
+//		Order newOrder = new Order();
+//		newOrder.setMember(null);
+//
+//		o.setMember(cartItem.getmemberId());
 //			o.setOrderCreationDate(new Date());
-			o.setOrderStatus("Pending");
+//		o.setOrderStatus("Pending");
 //			o.setStation(cartItem.getProduct());
-
-			o.setTotalPrice(cartItem.getProduct().getProductPrice() * cartItem.getQuantity());
-		}
-		
-		return o;
-	}
+//
+//		o.setTotalPrice(cartItem.getProduct().getProductPrice() * cartItem.getQuantity();
+//		
+//		return o;
+//	}
 }

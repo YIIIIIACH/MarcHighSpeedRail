@@ -17,4 +17,5 @@ public class ShoppingCartResponseDto {
 	public boolean isSelected;
 	
 	public Integer productId;
+	
 }

@@ -1,8 +1,8 @@
 package com.myHighSpeedRail.marc.dto.paypalapi;
 
 public class UnitAmount {
-	public String currency_code;
-	public String value;
+	public String currency_code;// TWD
+	public String value; // 20.00 
 	
 	public UnitAmount() {;}
 	public UnitAmount(String currCode, String value) {
