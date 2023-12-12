@@ -38,6 +38,7 @@ public class ProductController {
 	
 	@Autowired
 	private ProductPhotoSegmentService ppsServ;
+	
 	@PostMapping("/product/add")
 	public ResponseEntity<String> addProduct(@RequestBody PostProductDto postDto) {	
 		try{

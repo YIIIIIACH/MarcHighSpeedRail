@@ -10,10 +10,8 @@ import com.myHighSpeedRail.johnny.service.OrderService;
 public class OrderController {
 	
 	@Autowired
-	private OrderService os;
+	private OrderService oService;
 	
-//	public Order createOrder() {
-//		
-//	}
+	
 
 }

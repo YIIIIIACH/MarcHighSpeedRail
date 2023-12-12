@@ -171,42 +171,42 @@ public class TicketOrderController {
 			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
 		}
 		// get info of ticket order
-		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
+		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();// pack paypal order dto
 		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
 //		bList.get(0).getTicketOrder();
 		// put info into dto
-		dto.intent="CAPTURE";
+		dto.intent="CAPTURE"; // pack paypal order dto
 		// add application context into dto
-		AppContext actx= new AppContext();
+		AppContext actx= new AppContext();// pack paypal order dto
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
-		actx.return_url=SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);
-		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; 
-		dto.application_context= actx;
+		actx.return_url=SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);// pack paypal order dto
+		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; // pack paypal order dto
+		dto.application_context= actx; // pack paypal order dto
 		// add purchase_units into dto
-		List<Unit> purUnits= new ArrayList<Unit>();
-		Unit u = new Unit();
-		u.items= new ArrayList<Item>();
+		List<Unit> purUnits= new ArrayList<Unit>();// pack paypal order dto
+		Unit u = new Unit();// pack paypal order dto
+		u.items= new ArrayList<Item>();// pack paypal order dto
 		// add item 
-		Integer priceSum=0;
+		Integer priceSum=0;// pack paypal order dto
 		for(int i=0; i<bList.size(); i++) {
 			Booking b= bList.get(i);
-			Item tmp = new Item();
-			tmp.name= "MarcHSR_Ticket";
-			tmp.description=  b.getRailRouteSegment().getStartStation().getStationName()+"-"+b.getRailRouteSegment().getEndStation().getStationName()+b.getTicketDiscount().getTicketDiscountName();
-			tmp.quantity="1";
-			priceSum+= b.getTicketPrice();
-			UnitAmount ua= new UnitAmount("TWD", String.valueOf(b.getTicketPrice())+".00");
-			tmp.unit_amount=ua;
-			u.items.add(tmp);
+			Item tmp = new Item();// pack paypal order dto
+			tmp.name= "MarcHSR_Ticket";// pack paypal order dto
+			tmp.description=  b.getRailRouteSegment().getStartStation().getStationName()+"-"+b.getRailRouteSegment().getEndStation().getStationName()+b.getTicketDiscount().getTicketDiscountName();// pack paypal order dto
+			tmp.quantity="1";// pack paypal order dto
+			priceSum+= b.getTicketPrice();// pack paypal order dto
+			UnitAmount ua= new UnitAmount("TWD", String.valueOf(b.getTicketPrice())+".00");// pack paypal order dto
+			tmp.unit_amount=ua;// pack paypal order dto
+			u.items.add(tmp);// pack paypal order dto
 		}
 		//create Amount
-		Amount am = new Amount();
-		am.currency_code="TWD";
-		am.value= String.valueOf(priceSum)+".00";
-		am.breakdown= new Breakdown("TWD", priceSum);
-		u.amount= am;
-		purUnits.add(u);
-		dto.purchase_units=purUnits;
+		Amount am = new Amount();// pack paypal order dto
+		am.currency_code="TWD";// pack paypal order dto
+		am.value= String.valueOf(priceSum)+".00";// pack paypal order dto
+		am.breakdown= new Breakdown("TWD", priceSum);// pack paypal order dto
+		u.amount= am;// pack paypal order dto
+		purUnits.add(u);// pack paypal order dto
+		dto.purchase_units=purUnits;// pack paypal order dto
 		return paypalServ.createOrderUtil(dto);
 	}
 	
