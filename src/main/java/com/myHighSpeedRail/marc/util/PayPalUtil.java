@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 import com.myHighSpeedRail.marc.dto.paypalapi.CreatePayPalOrderDto;
+import com.myHighSpeedRail.marc.service.TicketOrderService;
 
 @Service
 public class PayPalUtil {
@@ -38,6 +40,8 @@ public class PayPalUtil {
 	private String basicToken;// ="QWFGOUFodi1XNWJ5eDlPeVJJMXBTWWNxTEE3aURqSXRtUlVPTFlvdG5wam1YQ1Q3S2RmRVBRLXNVOWViTUIzSU5hN1NQMG1ITjlwSVdQMnU6RUFBRGEtMExKaV9mU1FPbVdGU25vRHdtRDAyNWtZdEpkUWVzWDdCc0FESUVVbWZMNjBhUTVHSlFKMm0tTDBIbzBnMnNqY0RVQ3QwZmU3elQ=";
 	private String bearerToken=null;
 	private Date latestTokenUpdate=null;
+	@Autowired
+	private TicketOrderService tckServ;
 	
 	public @ResponseBody ResponseEntity<String> getTokenUtil(){
 		// check if old token is expire? if less than 5 minute will not get now token
@@ -126,7 +130,7 @@ public class PayPalUtil {
 	    }
 	}
 	
-	public @ResponseBody ResponseEntity<String>createOrderUtil(@RequestBody CreatePayPalOrderDto dto){
+	public @ResponseBody ResponseEntity<String>createOrderUtil(@RequestBody CreatePayPalOrderDto dto, Integer tckodid){
 		getTokenUtil();// will refresh the bearer token and update Date;
 
 		try {
@@ -157,7 +161,25 @@ public class PayPalUtil {
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
+			System.out.println( response);
 			in.close();
+//			JsonNode root = mapper.readTree(response.toString());
+//			Map<String, String> map = new HashMap<>();
+//			addKeys("", root, map, new ArrayList<>());
+			String[] tmp = response.toString().split("id\":\"");
+			if(tmp.length >=2) {
+				tmp = tmp[1].split("\"");				
+				String paypalOrderid =tmp[0];
+				System.out.println("paypalOrderId is:"+ paypalOrderid);
+				if(paypalOrderid==null) {
+					System.out.println("can not found paypal order id while creating Order");
+				}else {
+					tckServ.registPaypalTicketOrder(tckodid, paypalOrderid);					
+				}
+			}else {
+				System.out.println("failed to split");
+				return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
+			}
 			return new ResponseEntity<String>(response.toString(),HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -165,7 +187,7 @@ public class PayPalUtil {
 		return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
 	}
 	
-	public Boolean captureOrderUtil(String orderid){
+	public Boolean captureOrderUtil(String orderid,Integer ticketOrderId){
 		getTokenUtil();
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -188,6 +210,7 @@ public class PayPalUtil {
 			addKeys("", root, map, new ArrayList<>());
 			String status = map.get("status");
 			in.close();
+			
 			if(status.equals("COMPLETED")) {
 				System.out.println("status is completed");
 				return true;

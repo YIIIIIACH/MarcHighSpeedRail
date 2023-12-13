@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -82,7 +83,8 @@ public class TicketOrderController {
 	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
 	private String FRONT_SERVER_URL;
-	
+	@Value("${remote.front.end.host}")
+	private String REMOTE_FRONT_SERVER_URL;
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
 		try {
@@ -179,7 +181,8 @@ public class TicketOrderController {
 		// add application context into dto
 		AppContext actx= new AppContext();// pack paypal order dto
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
-		actx.return_url=SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);// pack paypal order dto
+		// return to back end url : SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);
+		actx.return_url= REMOTE_FRONT_SERVER_URL+"/paypalCheckoutReturn/"+String.valueOf(ticketOrderId);// pack paypal order dto
 		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; // pack paypal order dto
 		dto.application_context= actx; // pack paypal order dto
 		// add purchase_units into dto
@@ -207,15 +210,17 @@ public class TicketOrderController {
 		u.amount= am;// pack paypal order dto
 		purUnits.add(u);// pack paypal order dto
 		dto.purchase_units=purUnits;// pack paypal order dto
-		return paypalServ.createOrderUtil(dto);
+		return paypalServ.createOrderUtil(dto, ticketOrderId);
 	}
 	
-	@GetMapping("registAllocateTicketOrderSeats")
-	public String allocateTicketOrdeSeat(Model model,HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
-		if(!paypalServ.captureOrderUtil(paypalOrderId)) {
-			return "checkOutFail";
+	@PostMapping("registAllocateTicketOrderSeats")
+	public @ResponseBody ResponseEntity<String> allocateTicketOrdeSeat(Model model,HttpServletRequest req, @RequestBody String ticketOrderId){
+		// use ticketOrderId to get paypal order id
+		String paypalOrderId = tkoServ.getPaypalOrderIdByTicketOrderId(Integer.valueOf(ticketOrderId));
+		if(!paypalServ.captureOrderUtil( String.valueOf(paypalOrderId),Integer.valueOf(ticketOrderId))) {
+			return new ResponseEntity<String> ("failed",HttpStatus.BAD_REQUEST);
 		}
-		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
+		List<Booking> bList = bServ.findByTicketOrderId(Integer.valueOf(ticketOrderId));
 		//List<RailRouteStopStation> findByRouteIdStationId(Integer rid, Integer sid){
 		RailRouteStopStation stopst1 = schrrssServ.findByRouteIdStationId(
 				bList.get(0).getRailRouteSegment().getRailRoute().getRailRouteId()
@@ -245,7 +250,7 @@ public class TicketOrderController {
 		tkoServ.save(tmp );
 		//go capture the paypal token
 		model.addAttribute("msg","恭喜付款成功");
-		return "checkOutTicketReturn";
+		return new ResponseEntity<String> ("success",HttpStatus.OK);
 	}
 	
 	@PostMapping("/createBuinessTicketOrder/{ststid}/{edstid}/{amount}/{schid}")
@@ -354,21 +359,23 @@ public class TicketOrderController {
 		}	
 		//
 		AppContext actx= new AppContext();
-		actx.return_url=SERVER_BASE_URL+"/newBookBuinessSeat?ticketOrderId="+String.valueOf(tcko.getTicketOrderId());
+		actx.return_url=REMOTE_FRONT_SERVER_URL+"/paypalBuinessCheckoutReturn/"+String.valueOf(tcko.getTicketOrderId());
 		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+tcko.getTicketOrderId(); 
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
 		dto.application_context= actx;
-		return paypalServ.createOrderUtil(dto);
+		return paypalServ.createOrderUtil(dto,tcko.getTicketOrderId());
 	}
-	@GetMapping(value="/newBookBuinessSeat")
-	public String newBookBuinessSeat(Model model,HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
+	@PostMapping(value="/newBookBuinessSeat")
+	public @ResponseBody ResponseEntity<String> newBookBuinessSeat(HttpServletRequest req,@RequestBody String ticketOrderId){
+		// use ticketOrderId to get paypal order id
+		String paypalOrderId = tkoServ.getPaypalOrderIdByTicketOrderId(Integer.valueOf(ticketOrderId));
 		// 可能需要先檢查是否 paypal ticket order is approve
-		if( !paypalServ.captureOrderUtil( String.valueOf(paypalOrderId))) {
-			return "checkOutFail";
+		if( !paypalServ.captureOrderUtil( String.valueOf(paypalOrderId),Integer.valueOf(ticketOrderId))) {
+			return new ResponseEntity<String> ("failed",HttpStatus.BAD_REQUEST);
 		}
 		// use ticket order id to get BookList
-		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
-		TicketOrder tOrder = tkoServ.findById(ticketOrderId);
+		List<Booking> bList = bServ.findByTicketOrderId(Integer.valueOf(ticketOrderId));
+		TicketOrder tOrder = tkoServ.findById(Integer.valueOf(ticketOrderId));
 		Station stst = bList.get(0).getRailRouteSegment().getStartStation();
 		Station edst = bList.get(0).getRailRouteSegment().getEndStation();
 		// get ticketDisc id
@@ -394,7 +401,6 @@ public class TicketOrderController {
 		// update scheduleRestSeat [Ignore now ]
 		//策略改動在會員付款前要先分配好座位
 		//schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
-		
 		// create order
 		Integer paymentEarlyDay = tkdServ.findById(tkdid).getPurchaseEarlyLimitDay();
 		Date deadline = schArrServ.findByScheduleIdStationId(sch.getScheduleId(),stst.getStationId()).getArriveTime();
@@ -415,10 +421,7 @@ public class TicketOrderController {
 			b.setStatus("已分配座位");
 		}
 		bServ.saveAll(bList);
-		model.addAttribute("msg","座位分配成功");
-
-		return "checkOutTicketReturn";
-		
+		return new ResponseEntity<String> ("success",HttpStatus.OK);
 	}
 	@GetMapping("/getAllMemberTicketOrder")
 	public @ResponseBody DisplayMemberTicketOrderDto getAllMemberTicketOrder(HttpServletRequest req) {
