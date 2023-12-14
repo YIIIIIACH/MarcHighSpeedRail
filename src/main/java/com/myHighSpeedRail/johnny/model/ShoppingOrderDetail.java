@@ -12,8 +12,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "order_detail")
-public class OrderDetail {
+@Table(name = "shopping_order_detail")
+public class ShoppingOrderDetail {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,22 +28,22 @@ public class OrderDetail {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id_fk", nullable = false)
-	private Order order;
+	private ShoppingOrder shoppingOrder;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id_fk", nullable = false)
 	private Product product;
 
-	public OrderDetail() {
+	public ShoppingOrderDetail() {
 		super();
 	}
 
-	public OrderDetail(Integer orderDetailId, Integer quantity, Integer checkoutPrice, Order order, Product product) {
+	public ShoppingOrderDetail(Integer orderDetailId, Integer quantity, Integer checkoutPrice, ShoppingOrder shoppingOrder, Product product) {
 		super();
 		this.orderDetailId = orderDetailId;
 		this.quantity = quantity;
 		this.checkoutPrice = checkoutPrice;
-		this.order = order;
+		this.shoppingOrder = shoppingOrder;
 		this.product = product;
 	}
 
@@ -71,12 +71,12 @@ public class OrderDetail {
 		this.checkoutPrice = checkoutPrice;
 	}
 
-	public Order getOrder() {
-		return order;
+	public ShoppingOrder getShoppingOrder() {
+		return shoppingOrder;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setShoppingOrder(ShoppingOrder shoppingOrder) {
+		this.shoppingOrder = shoppingOrder;
 	}
 
 	public Product getProduct() {
@@ -86,5 +86,7 @@ public class OrderDetail {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
+
+
 	
 }

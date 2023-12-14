@@ -21,8 +21,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "shopping_order")
+public class ShoppingOrder {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +49,7 @@ public class Order {
 	private String member;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "station_id_fk", nullable = false)
+	@JoinColumn(name = "station_id_fk")
 	private	Station station;
 	
 	@PrePersist // 物件轉到 persist 狀態之前要做的事
@@ -60,11 +60,11 @@ public class Order {
 		}
 	}
 
-	public Order() {
+	public ShoppingOrder() {
 		super();
 	}
 
-	public Order(Integer orderId, Date orderCreationDate, Date orderCompletionDate, String orderStatus,
+	public ShoppingOrder(Integer orderId, Date orderCreationDate, Date orderCompletionDate, String orderStatus,
 			Integer totalPrice, String member, Station station) {
 		super();
 		this.orderId = orderId;
