@@ -7,14 +7,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.johnny.dto.CreateShoppingOrderRequestDto;
+import com.myHighSpeedRail.johnny.dto.ShoppingOrderWithDetailResponseDto;
 import com.myHighSpeedRail.johnny.model.ShoppingOrder;
 import com.myHighSpeedRail.johnny.model.ShoppingOrderDetail;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
-import com.myHighSpeedRail.johnny.service.OrderService;
+import com.myHighSpeedRail.johnny.service.ShoppingOrderService;
 import com.myHighSpeedRail.johnny.service.ShoppingCartItemService;
 import com.myHighSpeedRail.marc.util.PayPalUtil;
 
@@ -24,10 +28,11 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ShoppingOrderController {
 	
 	@Autowired
-	private OrderService oService;
+	private ShoppingOrderService oService;
 	
 	@Autowired
 	private ShoppingCartItemService cartService;
+	
 	
 	@Autowired
 	private PayPalUtil payPalService;
@@ -40,9 +45,8 @@ public class ShoppingOrderController {
 		ShoppingOrder shoppingOrder = new ShoppingOrder();
 		shoppingOrder.setMember(orderRequest.memberId);
 		shoppingOrder.setOrderStatus("待付款");
-		shoppingOrder.setOrderCreationDate(new Date());
+//		shoppingOrder.setOrderCreationDate(new Date());
 		shoppingOrder.setTotalPrice(orderRequest.totalPrice);
-		shoppingOrder.setMember(orderRequest.memberId);
 		
 		List<ShoppingOrderDetail> orderDetails = new ArrayList<>();
 		
@@ -58,10 +62,23 @@ public class ShoppingOrderController {
 			
 		}
 		oService.createOrder(shoppingOrder, orderDetails);
-		
+			
 		return ResponseEntity.ok("訂單已建立");
 	}
 	
+	
+//	@GetMapping("/OrderHistory")
+//	@ResponseBody
+//	public List<ShoppingOrder> findOrderByMemberId(HttpServletRequest req, @RequestParam("memberId") String memberId){
+//		return oService.findOrderByMemberId(memberId);
+//	}
+	
+	@GetMapping("/OrderHistory")
+	@ResponseBody
+	public List<ShoppingOrderWithDetailResponseDto> findOrderByMemberId(HttpServletRequest req, @RequestParam("memberId") String memberId){
+		return oService.findOrderAndDetailByMemberId(memberId);
+		
+	}
 	
 }
 	

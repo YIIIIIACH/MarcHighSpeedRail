@@ -249,4 +249,10 @@ public class ProductController {
 		return "addProduct";
 	}
 	
+	@GetMapping("/product/findByProductIds")
+	@ResponseBody
+	public List<ProductAndPhotoSegmentDto> findProductByIds(@RequestParam("productIds") List<Integer> productIds){
+		return pService.findProductByIds(productIds);
+	}
+	
 }
