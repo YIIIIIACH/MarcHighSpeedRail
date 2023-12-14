@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.johnny.dto.CreateShoppingOrderRequestDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartQuantityUpdateDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartResponseDto;
@@ -118,7 +119,7 @@ public class ShoppinCartItemController {
 		//要回應的內容
 		List<ShoppingCartResponseDto> res = new ArrayList<>();
 		
-		// cartItemList 會員的所有購物車品項
+		// cartItems 會員的所有購物車品項
 		List<ShoppingCartItem> cartItems = cartService.showAllCartItems(memberId);
 		
 			for(ShoppingCartItem item : cartItems) {
@@ -155,7 +156,7 @@ public class ShoppinCartItemController {
 		
 		if("刪除成功".equals(result))
 		{
-			return ResponseEntity.ok("商品刪除成功");// 狀態碼需不需要改成noContent
+			return ResponseEntity.ok("商品刪除成功");
 			
 		}else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("商品已不存在");
@@ -167,6 +168,15 @@ public class ShoppinCartItemController {
 	public ResponseEntity<String> removeAllCartItem(@RequestParam("memberId") String memberId){
 		String result = cartService.deleteAllItems(memberId);	
 		return ResponseEntity.ok(result);		
+	}
+	
+	//清除會員指定的購物車品項
+	@DeleteMapping("/ShoppingCart/deleteByItemIds")
+	public ResponseEntity<String> removeCartItemsByItemsId(@RequestParam String memberId, @RequestParam List<Integer> itemIds){
+		String result = cartService.deleteByMemberIdAndItemsId(memberId, itemIds);
+		
+		return ResponseEntity.ok(result);
+		
 	}
 	
 	//更新品項數量

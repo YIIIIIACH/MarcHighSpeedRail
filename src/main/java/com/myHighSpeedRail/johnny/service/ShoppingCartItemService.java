@@ -111,4 +111,9 @@ public class ShoppingCartItemService {
 		return cartDao.findByMemberIdAndItemIds(memberId, itemsId);
 	}
 	
+	public String deleteByMemberIdAndItemsId(String memberId, List<Integer> itemsId) {
+		cartDao.deleteByMemberIdAndItemIds(memberId, itemsId);
+		return "已清除指定品項, 訂單成立";
+	}
+	
 }

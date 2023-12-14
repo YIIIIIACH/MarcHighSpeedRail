@@ -187,4 +187,26 @@ public class ProductService {
 
 		return temp;
 	}
+	
+	public List<ProductAndPhotoSegmentDto> findProductByIds(List<Integer> productIds){
+		List<Product> products = pDao.findByProductIds(productIds);
+		
+		List<ProductAndPhotoSegmentDto> res = new ArrayList<>();
+		for(Product p : products) {
+			ProductAndPhotoSegmentDto temp = new ProductAndPhotoSegmentDto();
+			temp.productName = p.getProductName();
+			temp.productPrice = p.getProductPrice();
+			
+			p.getPhotoSegment().sort((a,b)-> a.getSequence()-b.getSequence());
+			StringBuilder sb = new StringBuilder();
+			for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+				sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
+			}
+			
+			temp.photoData= sb.toString();
+			res.add(temp);
+		}
+		return res;
+		
+	}
 }

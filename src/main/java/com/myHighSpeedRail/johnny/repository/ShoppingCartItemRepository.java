@@ -20,17 +20,17 @@ public interface ShoppingCartItemRepository extends JpaRepository<ShoppingCartIt
 	public List<ShoppingCartItem> findAllShoppingCartItemByMemberId(String memberId);
 	
 	@Modifying
-	@Query(value="DELETE FROM shopping_cart_item WHERE member_uuid = :memberId AND shopping_cart_item_id = :itemId", nativeQuery = true)
+	@Query(value = "DELETE FROM shopping_cart_item WHERE member_uuid = :memberId AND shopping_cart_item_id = :itemId", nativeQuery = true)
 	@Transactional
 	public void deleteShoppingCartItem(@Param("memberId") String memberId, @Param("itemId") Integer itemId);
 	
 	@Modifying
-	@Query(value="DELETE FROM shopping_cart_item WHERE member_uuid = :memberId", nativeQuery = true)
+	@Query(value = "DELETE FROM shopping_cart_item WHERE member_uuid = :memberId", nativeQuery = true)
 	@Transactional
 	public void deleteAllShoppingCartItemByMemberId(String memberId);
 	
 	@Modifying
-	@Query(value="UPDATE shopping_cart_item SET quantity = :quantity WHERE member_uuid = :memberId AND shopping_cart_item_id = :itemId", nativeQuery = true)
+	@Query(value = "UPDATE shopping_cart_item SET quantity = :quantity WHERE member_uuid = :memberId AND shopping_cart_item_id = :itemId", nativeQuery = true)
 	@Transactional
 	public void updateCartItemQuantity(String memberId, Integer itemId, Integer quantity);
 	
@@ -44,5 +44,10 @@ public interface ShoppingCartItemRepository extends JpaRepository<ShoppingCartIt
 	
 	@Query("from ShoppingCartItem where memberId = :memberId and shoppingCartItemId IN :itemIds")
 	public List<ShoppingCartItem> findByMemberIdAndItemIds(String memberId, List<Integer> itemIds);
+	
+	@Modifying
+	@Query(value = "DELETE FROM shopping_cart_item WHERE member_uuid = :memberId AND shopping_cart_item_id IN :itemIds", nativeQuery = true)
+	@Transactional
+	public void deleteByMemberIdAndItemIds(String memberId, List<Integer> itemIds);
 	
 }
