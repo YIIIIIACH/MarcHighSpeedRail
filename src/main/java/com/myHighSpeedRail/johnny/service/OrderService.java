@@ -6,29 +6,27 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.myHighSpeedRail.johnny.model.Order;
+import com.myHighSpeedRail.johnny.model.ShoppingOrder;
+import com.myHighSpeedRail.johnny.model.ShoppingOrderDetail;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
-import com.myHighSpeedRail.johnny.repository.OrderRepository;
+import com.myHighSpeedRail.johnny.repository.ShoppingOrderDetailRepository;
+import com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository;
 
 @Service
 public class OrderService {
 	
 	@Autowired
-	private OrderRepository orderDao;
+	private ShoppingOrderRepository orderDao;
+	
+	@Autowired
+    private ShoppingOrderDetailRepository orderDetailDao;
 	
 	
-//	public Order createOrder(ShoppingCartItem cartItem) {
-//		
-//		Order newOrder = new Order();
-//		newOrder.setMember(null);
-//
-//		o.setMember(cartItem.getmemberId());
-//			o.setOrderCreationDate(new Date());
-//		o.setOrderStatus("Pending");
-//			o.setStation(cartItem.getProduct());
-//
-//		o.setTotalPrice(cartItem.getProduct().getProductPrice() * cartItem.getQuantity();
-//		
-//		return o;
-//	}
+	public void createOrder(ShoppingOrder order, List<ShoppingOrderDetail> orderDetails) {
+		
+		orderDao.save(order);
+		
+		orderDetailDao.saveAll(orderDetails);
+		
+	}
 }
