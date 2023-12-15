@@ -79,8 +79,6 @@ public class TicketOrderController {
 	private PayPalUtil paypalServ;
 	@Autowired
 	private UserService uServ;
-	@Value("${server.baseurl}")
-	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
 	private String FRONT_SERVER_URL;
 	@Value("${remote.front.end.host}")
@@ -181,7 +179,6 @@ public class TicketOrderController {
 		// add application context into dto
 		AppContext actx= new AppContext();// pack paypal order dto
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
-		// return to back end url : SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);
 		actx.return_url= REMOTE_FRONT_SERVER_URL+"/paypalCheckoutReturn/"+String.valueOf(ticketOrderId);// pack paypal order dto
 		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; // pack paypal order dto
 		dto.application_context= actx; // pack paypal order dto
