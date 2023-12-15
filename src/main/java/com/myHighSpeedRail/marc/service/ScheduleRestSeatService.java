@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
 import com.myHighSpeedRail.marc.model.ScheduleDetail;
@@ -14,6 +15,7 @@ import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.repository.ScheduleRestSeatRepository;
 
+@Transactional(isolation = Isolation.SERIALIZABLE)
 @Service
 public class ScheduleRestSeatService {
 	@Autowired

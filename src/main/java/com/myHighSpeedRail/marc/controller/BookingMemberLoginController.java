@@ -22,8 +22,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class BookingMemberLoginController {
-	@Value("${server.baseurl}")
-	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
 	private String FRONT_SERVER_URL;
 	@Autowired

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
@@ -14,6 +16,7 @@ import com.myHighSpeedRail.marc.repository.ScheduleRepository;
 import com.myHighSpeedRail.marc.repository.ScheduleSeatStatusRepository;
 import com.myHighSpeedRail.marc.repository.SeatRepository;
 
+@Transactional(isolation = Isolation.SERIALIZABLE)
 @Service
 public class ScheduleSeatStatusService {
 	@Autowired
