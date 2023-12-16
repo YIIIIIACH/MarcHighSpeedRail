@@ -14,4 +14,7 @@ public interface SeatRepository extends JpaRepository<Seat, Integer>{
 	
 	@Query("from Seat where seatId in (:seatIdList)")
 	public List<Seat> findByIdInList(List<Integer> seatIdList);
+	
+	@Query("select max(s.trainSeatSequenece) from Seat as s where s.train.trainId=:tid")
+	public Integer getTrainSeatMaxRange( Integer tid);
 }

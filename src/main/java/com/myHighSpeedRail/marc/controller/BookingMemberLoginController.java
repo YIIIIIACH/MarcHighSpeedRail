@@ -22,8 +22,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class BookingMemberLoginController {
-	@Value("${server.baseurl}")
-	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
 	private String FRONT_SERVER_URL;
 	@Autowired
@@ -40,7 +38,7 @@ public class BookingMemberLoginController {
 //				}
 //			}
 //		}
-
+		
 		String currOrigin = ((HttpServletRequest)req).getHeader("Origin");
 		LoginResponseModel loginRes = uServ.login(ep.email,ep.password);
 		if(loginRes==null) {
@@ -91,7 +89,7 @@ public class BookingMemberLoginController {
 		if(token !=null) {	
 			LoginResponseModel userDetail = uServ.tokenlogin(UUID.fromString(token));
 			if( userDetail != null) {
-				return new ResponseEntity<String> (userDetail.getMember_name(),HttpStatus.OK);						
+				return new ResponseEntity<String> (userDetail.getMember_id().toString(),HttpStatus.OK);						
 			}else {
 				return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);				
 			}

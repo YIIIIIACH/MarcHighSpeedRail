@@ -79,8 +79,6 @@ public class TicketOrderController {
 	private PayPalUtil paypalServ;
 	@Autowired
 	private UserService uServ;
-	@Value("${server.baseurl}")
-	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
 	private String FRONT_SERVER_URL;
 	@Value("${remote.front.end.host}")
@@ -181,7 +179,6 @@ public class TicketOrderController {
 		// add application context into dto
 		AppContext actx= new AppContext();// pack paypal order dto
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
-		// return to back end url : SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);
 		actx.return_url= REMOTE_FRONT_SERVER_URL+"/paypalCheckoutReturn/"+String.valueOf(ticketOrderId);// pack paypal order dto
 		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; // pack paypal order dto
 		dto.application_context= actx; // pack paypal order dto
@@ -427,7 +424,7 @@ public class TicketOrderController {
 	public @ResponseBody DisplayMemberTicketOrderDto getAllMemberTicketOrder(HttpServletRequest req) {
 		Cookie []cookies = req.getCookies();
 		String token=null;
-		LoginResponseModel userDetail = null;
+		LoginResponseModel userDetail = new LoginResponseModel();
 		for( Cookie ck: cookies) {
 			if( ck.getName().equals("login-token")) {
 				token = ck.getValue();
@@ -454,8 +451,20 @@ public class TicketOrderController {
 		res.paymentDeadlines= new ArrayList<Date>();
 		res.ticketOrderIds = new ArrayList<Integer>();
 		res.totalPrices= new ArrayList<Integer>();
+		res.stArr = new ArrayList<>();
+		res.edArr = new ArrayList<>();
 		res.memberToken= userDetail.getMember_id().toString();
 		for( TicketOrder tckod : tckorList) {
+			List<Booking> bList = bServ.findByTicketOrderId(tckod.getTicketOrderId());
+			if(bList!=null &&  bList.size()>0) {
+				List<ScheduleArrive>  tmp = schArrServ.getStEdArriveBySchidRailRouteSegment(bList.get(0).getSchedule().getScheduleId(), bList.get(0).getRailRouteSegment().getRailRouteSegmentId());
+//				System.out.println(tmp.size());
+				res.stArr.add(tmp.get(0));
+				res.edArr.add(tmp.get(1));				
+			}else {
+				res.stArr.add(new ScheduleArrive());
+				res.edArr.add(new ScheduleArrive());
+			}
 			res.orderCreateTimes.add(tckod.getTicketOrderCreateTime());
 			res.orderStatuses.add(tckod.getStatus());
 			res.paymentDeadlines.add( tckod.getPaymentDeadline());

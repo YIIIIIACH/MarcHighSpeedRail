@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,5 +34,17 @@ public class SeatController {
 			return new ResponseEntity<String>("update failed",HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("update success",HttpStatus.OK);
+	}
+	
+	@GetMapping("/getTrainSeatMaxRange/{trainId}")
+	public ResponseEntity<Integer> getTrainSeatMaxRange(@PathVariable Integer trainId){
+		Integer maxSeatSeq=null;
+		try {
+			 maxSeatSeq = seatServ.getTrainSeatMaxRange(trainId);			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Integer> ( -1,HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Integer> ( maxSeatSeq,HttpStatus.OK);
 	}
 }
