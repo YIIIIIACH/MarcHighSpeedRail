@@ -82,11 +82,4 @@ public class EmployeeHistoricalDepartment {
 		this.department = department;
 	}
 
-	@Override
-	public String toString() {
-		return "EmployeeHistoricalDepartment [employeeHistoricalDepartmentId=" + employeeHistoricalDepartmentId
-				+ ", departmentEffectiveDate=" + departmentEffectiveDate + ", employee=" + employee + ", department="
-				+ department + "]";
-	}
-
 }

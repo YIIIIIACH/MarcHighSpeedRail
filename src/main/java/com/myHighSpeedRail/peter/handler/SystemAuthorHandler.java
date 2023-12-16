@@ -234,9 +234,6 @@ public class SystemAuthorHandler {
 
 	public void updateSystemAccessByDepartmentId(Integer id, EmployeeSystemAuthor esa) {
 
-		System.out.println("id: " + id);
-		System.out.println("esa: " + esa);
-
 		HashMap<Integer, ArrayList<Integer>> authorJson = esa.getAuthorJson();
 
 		Department d = new Department();
@@ -255,6 +252,18 @@ public class SystemAuthorHandler {
 
 	public void addEmployeeSystemAuthor(Integer id, EmployeeSystemAuthor esa) {
 
+		SystemAuthor exist = sService.findSystemAuthorByEmployeeId(id);
+		if (exist != null) {
+			System.out.println("已有此人系統權限");
+			return;
+		}
+
+		// 找到現有系統個數
+		SystemNumber = sService.findSystemCount();
+
+		// 把所有系統放進List存起來
+		systemList = sService.findAllSystems();
+
 		HashMap<Integer, ArrayList<Integer>> authorJson = esa.getAuthorJson();
 
 		String authorString = encapsulateMapToJson(authorJson);
@@ -265,11 +274,23 @@ public class SystemAuthorHandler {
 
 		sa.setAuthorJson(authorString);
 		sa.setEmployee(e);
-		
+
 		sService.addSystemAuthor(sa);
 	}
 
 	public void addDepartmentSystemAuthor(Integer id, EmployeeSystemAuthor esa) {
+
+		SystemAuthor exist = sService.findSystemAuthorByDepartmentId(id);
+		if (exist != null) {
+			System.out.println("已有此部門系統權限");
+			return;
+		}
+
+		// 找到現有系統個數
+		SystemNumber = sService.findSystemCount();
+
+		// 把所有系統放進List存起來
+		systemList = sService.findAllSystems();
 
 		HashMap<Integer, ArrayList<Integer>> authorJson = esa.getAuthorJson();
 
@@ -281,7 +302,7 @@ public class SystemAuthorHandler {
 
 		sa.setAuthorJson(authorString);
 		sa.setDepartment(d);
-		
+
 		sService.addSystemAuthor(sa);
 	}
 

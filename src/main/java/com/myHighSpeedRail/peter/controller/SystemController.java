@@ -57,7 +57,7 @@ public class SystemController {
 	
 	@ResponseBody
 	@GetMapping("/system/all")
-	public List<Systems> testfindAllSystems() {
+	public List<Systems> findAllSystems() {
 
 		return sService.findAllSystems();
 	}

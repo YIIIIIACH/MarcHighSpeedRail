@@ -30,6 +30,4 @@ public class SessionLoginEmployeeDTO {
 		this.empName = empName;
 	}
 
-	
-
 }

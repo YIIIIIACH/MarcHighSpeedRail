@@ -39,4 +39,36 @@ public class Leave {
 	public Leave() {
 	}
 
+	public Integer getLeaveId() {
+		return leaveId;
+	}
+
+	public void setLeaveId(Integer leaveId) {
+		this.leaveId = leaveId;
+	}
+
+	public String getLeaveName() {
+		return leaveName;
+	}
+
+	public void setLeaveName(String leaveName) {
+		this.leaveName = leaveName;
+	}
+
+	public String getAvailableLeaveDaysDescription() {
+		return availableLeaveDaysDescription;
+	}
+
+	public void setAvailableLeaveDaysDescription(String availableLeaveDaysDescription) {
+		this.availableLeaveDaysDescription = availableLeaveDaysDescription;
+	}
+
+	public List<EmployeeLeave> getEmployeeLeave() {
+		return employeeLeave;
+	}
+
+	public void setEmployeeLeave(List<EmployeeLeave> employeeLeave) {
+		this.employeeLeave = employeeLeave;
+	}
+
 }

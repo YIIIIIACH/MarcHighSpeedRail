@@ -7,14 +7,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class EmployeeLeaveApplyDTO {
+public class LeaveAuditDTO {
 
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "GMT+8")
+	@JsonProperty("elId")
+	private Integer employeeLeaveId;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@JsonProperty("startTime")
 	private Date employeeLeaveStartTime;
 
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@JsonProperty("endTime")
 	private Date employeeLeaveEndTime;
@@ -22,14 +25,30 @@ public class EmployeeLeaveApplyDTO {
 	@JsonProperty("reason")
 	private String employeeLeaveReason;
 
+	@JsonProperty("audit")
+	private String managerLeaveAudit;
+
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
+	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@JsonProperty("resultSnadDate")
+	private Date leaveAuditResultsSandingDate;
+	
+	@JsonProperty("leaveKind")
+	private String employeeLeaveKind;
+
 	@JsonProperty("managerId")
 	private Integer managerId;
 
 	@JsonProperty("employeeId")
 	private Integer employeeId;
 
-	@JsonProperty("leaveKind")
-	private String employeeLeaveKind;
+	public Integer getEmployeeLeaveId() {
+		return employeeLeaveId;
+	}
+
+	public void setEmployeeLeaveId(Integer employeeLeaveId) {
+		this.employeeLeaveId = employeeLeaveId;
+	}
 
 	public Date getEmployeeLeaveStartTime() {
 		return employeeLeaveStartTime;
@@ -53,6 +72,22 @@ public class EmployeeLeaveApplyDTO {
 
 	public void setEmployeeLeaveReason(String employeeLeaveReason) {
 		this.employeeLeaveReason = employeeLeaveReason;
+	}
+
+	public String getManagerLeaveAudit() {
+		return managerLeaveAudit;
+	}
+
+	public void setManagerLeaveAudit(String managerLeaveAudit) {
+		this.managerLeaveAudit = managerLeaveAudit;
+	}
+
+	public Date getLeaveAuditResultsSandingDate() {
+		return leaveAuditResultsSandingDate;
+	}
+
+	public void setLeaveAuditResultsSandingDate(Date leaveAuditResultsSandingDate) {
+		this.leaveAuditResultsSandingDate = leaveAuditResultsSandingDate;
 	}
 
 	public Integer getManagerId() {
@@ -79,5 +114,13 @@ public class EmployeeLeaveApplyDTO {
 		this.employeeLeaveKind = employeeLeaveKind;
 	}
 
+	@Override
+	public String toString() {
+		return "LeaveAuditDTO [employeeLeaveId=" + employeeLeaveId + ", employeeLeaveStartTime="
+				+ employeeLeaveStartTime + ", employeeLeaveEndTime=" + employeeLeaveEndTime + ", employeeLeaveReason="
+				+ employeeLeaveReason + ", managerLeaveAudit=" + managerLeaveAudit + ", leaveAuditResultsSandingDate="
+				+ leaveAuditResultsSandingDate + ", employeeLeaveKind=" + employeeLeaveKind + ", managerId=" + managerId
+				+ ", employeeId=" + employeeId + "]";
+	}
 	
 }

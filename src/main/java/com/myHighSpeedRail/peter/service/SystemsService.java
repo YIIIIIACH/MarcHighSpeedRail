@@ -83,5 +83,13 @@ public class SystemsService {
 		Integer id = sa.getDepartment().getDepartmentId();
 		saDao.updateByDepartmentId(id, authorJson);;
 	}
+	
+	public void deleteDepartmentSystemAuthor(Integer id) {
+		saDao.deleteByDepartmentId(id);
+	}
+	
+	public void deleteEmployeeSystemAuthor(Integer id) {
+		saDao.deleteByEmployeeId(id);
+	}
 
 }

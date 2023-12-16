@@ -31,4 +31,13 @@ public interface SystemAuthorRepository extends JpaRepository<SystemAuthor, Inte
 	@Query("update SystemAuthor as sa set sa.authorJson = :json where sa.department.departmentId = :id")
 	void updateByDepartmentId(@Param("id")Integer id,@Param("json") String json);
 	
+	@Modifying
+	@Transactional
+	@Query("delete from SystemAuthor as sa where sa.department.departmentId = :id")
+	void deleteByDepartmentId(@Param("id")Integer id);
+	
+	@Modifying
+	@Transactional
+	@Query("delete SystemAuthor as sa where sa.employee.employeeId = :id")
+	void deleteByEmployeeId(@Param("id")Integer id);
 }

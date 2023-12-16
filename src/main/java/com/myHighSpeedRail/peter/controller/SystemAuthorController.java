@@ -9,14 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.peter.dto.AddAuthorDTO;
+import com.myHighSpeedRail.peter.dto.AddSystemAuthorDTO;
 import com.myHighSpeedRail.peter.dto.EmployeeSystemAuthorDTO;
+import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
 import com.myHighSpeedRail.peter.dto.SystemAuthorMemberDTO;
 import com.myHighSpeedRail.peter.handler.EmployeeSystemAuthor;
 import com.myHighSpeedRail.peter.handler.SystemAuthorHandler;
@@ -26,6 +31,9 @@ import com.myHighSpeedRail.peter.model.SystemAuthor;
 import com.myHighSpeedRail.peter.service.DepartmentService;
 import com.myHighSpeedRail.peter.service.EmployeeService;
 import com.myHighSpeedRail.peter.service.SystemsService;
+import com.myHighSpeedRail.peter.vo.SessionLoginEmployee;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class SystemAuthorController {
@@ -46,10 +54,6 @@ public class SystemAuthorController {
 
 	@GetMapping("/system-author/add")
 	public ResponseEntity<String> addSystemAuthor(@RequestBody SystemAuthor sa) {
-
-		System.out.println(sa.getAuthorJson());
-		System.out.println("employee: " + sa.getEmployee());
-		System.out.println("dapartment: " + sa.getDepartment());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body("測試成功");
 	}
@@ -163,27 +167,89 @@ public class SystemAuthorController {
 		saHandler.updateSystemAccessByDepartmentId(id, esaDTO.getSystemAuthor());
 	}
 
-	
 	@ResponseBody
-	@PostMapping("/system-author/emp/add/{id}")
-	public void addEmployeeSystemAuthor(@PathVariable("id") Integer id, @RequestBody EmployeeSystemAuthorDTO esaDTO) {
-		SystemAuthor sa = sService.findSystemAuthorByEmployeeId(id);
-		if (sa != null) {
-			return;
-		}
-		EmployeeSystemAuthor systemAuthor = esaDTO.getSystemAuthor();
-		saHandler.addEmployeeSystemAuthor(id, systemAuthor);
+	@PostMapping("/system-author/emp/add")
+	public void addEmployeeSystemAuthor(@RequestBody AddAuthorDTO aaDTO) {
+
+		String info = aaDTO.getInfo();
+		String[] parts = info.split(":");
+
+		Integer empId = Integer.valueOf(parts[0]);
+
+		List<AddSystemAuthorDTO> asaLisst = aaDTO.getAsaLisst();
+
+		EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+
+		HashMap<Integer, ArrayList<Integer>> authorJson = new HashMap<Integer, ArrayList<Integer>>();
+
+		asaLisst.forEach(asa -> {
+			asa.getPermissions();
+			asa.getSystemId();
+			authorJson.put(asa.getSystemId(), asa.getPermissions());
+		});
+		esa.setAuthorJson(authorJson);
+
+		saHandler.addEmployeeSystemAuthor(empId, esa);
+
 	}
-	
+
 	@ResponseBody
-	@PostMapping("/system-author/dept/add/{id}")
-	public void addDepartmentSystemAuthor(@PathVariable("id") Integer id, @RequestBody EmployeeSystemAuthorDTO esaDTO) {
-		SystemAuthor sa = sService.findSystemAuthorByDepartmentId(id);
-		if (sa != null) {
-			return;
+	@PostMapping("/system-author/dept/add")
+	public void addDepartmentSystemAuthor(@RequestBody AddAuthorDTO aaDTO) {
+
+		String info = aaDTO.getInfo();
+		String[] parts = info.split(":");
+
+		Integer deptId = Integer.valueOf(parts[0]);
+
+		List<AddSystemAuthorDTO> asaLisst = aaDTO.getAsaLisst();
+
+		EmployeeSystemAuthor esa = new EmployeeSystemAuthor();
+
+		HashMap<Integer, ArrayList<Integer>> authorJson = new HashMap<Integer, ArrayList<Integer>>();
+
+		asaLisst.forEach(asa -> {
+			asa.getPermissions();
+			asa.getSystemId();
+			authorJson.put(asa.getSystemId(), asa.getPermissions());
+		});
+		esa.setAuthorJson(authorJson);
+
+		saHandler.addDepartmentSystemAuthor(deptId, esa);
+	}
+
+	@ResponseBody
+	@DeleteMapping("/system-author/delete/emp/{id}")
+	public void deleteByEmployeeId(@PathVariable("id") Integer id) {
+		sService.deleteEmployeeSystemAuthor(id);
+	}
+
+	@ResponseBody
+	@DeleteMapping("/system-author/delete/dept/{id}")
+	public void deleteByDepartmentId(@PathVariable("id") Integer id) {
+		sService.deleteDepartmentSystemAuthor(id);
+	}
+
+	@ResponseBody
+	@GetMapping("/view")
+	public ResponseEntity<?> auditViewAuthor(@RequestParam("name") String name, HttpSession httpSession) {
+
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
 		}
-		EmployeeSystemAuthor systemAuthor = esaDTO.getSystemAuthor();
-		saHandler.addDepartmentSystemAuthor(id, systemAuthor);
+
+		Boolean rightsOfView = emp.getEsa().rightsOfView(emp.getEmpId(), name);
+
+		if (rightsOfView == false) {
+			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+		} else if (rightsOfView == true) {
+			return ResponseEntity.status(HttpStatus.OK).body("OK");
+		}
+
+		return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
 	}
 
 }

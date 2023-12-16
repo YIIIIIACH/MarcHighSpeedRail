@@ -32,7 +32,7 @@ public class EmployeeSystemAuthor {
 
 	// 藉由systemName找systemId
 	private void getSytemId(String systemName, List<Systems> functionList) {
-
+		
 		// 使用Java 8的Stream API尋找符合條件的物件
 		Optional<Systems> foundObject = systemList.stream().filter(obj -> obj.getSystemName().equals(systemName))
 				.findFirst();

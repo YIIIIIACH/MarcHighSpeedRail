@@ -63,7 +63,6 @@ public class EmployeeController {
 			@RequestParam("psw") String loginPwd, HttpSession httpSession) {
 
 		Employee result = eService.checklogin(loginAccount, loginPwd);
-//		System.out.println("result: " + result);
 
 		if (result != null) {
 			EmployeeSystemAuthor esa = sahService.getEmpSystemAuthor(result);
@@ -71,8 +70,11 @@ public class EmployeeController {
 			SessionLoginEmployee sessionEmp = new SessionLoginEmployee();
 			sessionEmp.setEmpId(result.getEmployeeId());
 			sessionEmp.setEmpName(result.getEmployeeName());
+			sessionEmp.setDaptId(result.getEmployeeHistoricalDepartment().get(0).getDepartment().getDepartmentId());
+			sessionEmp.setDeptName(result.getEmployeeHistoricalDepartment().get(0).getDepartment().getDepartmentName());
 			sessionEmp.setEsa(esa);
 			httpSession.setAttribute("loginEmployee", sessionEmp);
+			System.out.println(sessionEmp);
 			return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 		}
 
@@ -202,17 +204,11 @@ public class EmployeeController {
 			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
 		}
 
-//		Map<String, String> responseMap = new HashMap<>();
-
-//		responseMap.put("userId", emp.getEmpName().toString());
-//		responseMap.put("userName", emp.getEmpId().toString());
-
 		SessionLoginEmployeeDTO empDTO = new SessionLoginEmployeeDTO();
 		empDTO.setEmpId(emp.getEmpId());
 		empDTO.setEmpName(emp.getEmpName());
 
 		return ResponseEntity.status(HttpStatus.OK).body(empDTO);
-//		return new ResponseEntity<Map<String, String>>(responseMap, HttpStatus.OK);
 	}
 
 	@ResponseBody
@@ -295,7 +291,7 @@ public class EmployeeController {
 			employeeEducationalQualifications.setEmployee(e);
 		});
 		e.setEmployeeEducationalQualifications(eqList);
-		
+
 		List<EmployeeTitle> tList = edDTO.getEmployeeTitle();
 		tList.forEach(employeeTitle -> {
 			employeeTitle.setEmployee(e);

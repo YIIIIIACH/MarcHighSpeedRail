@@ -1,13 +1,23 @@
 package com.myHighSpeedRail.peter.controller;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myHighSpeedRail.peter.dto.EmployeeLeaveApplyDTO;
+import com.myHighSpeedRail.peter.dto.LeaveAuditDTO;
+import com.myHighSpeedRail.peter.dto.LeaveCarryForwardDTO;
 import com.myHighSpeedRail.peter.model.Employee;
-import com.myHighSpeedRail.peter.model.EmployeeWorkOvertime;
+import com.myHighSpeedRail.peter.model.EmployeeLeave;
+import com.myHighSpeedRail.peter.model.Leave;
 import com.myHighSpeedRail.peter.service.EmployeeLeaveService;
 
 @RestController
@@ -15,9 +25,9 @@ public class LeaveController {
 
 	@Autowired
 	private EmployeeLeaveService elService;
-	
+
 	@PostMapping("/employee/leave")
-	public void employeeLeaveApply(@RequestBody EmployeeLeaveApplyDTO ewoa) {
+	public void employeeLeaveApply(@RequestBody EmployeeLeaveApplyDTO ela) {
 
 //		EmployeeWorkOvertime ewo = new EmployeeWorkOvertime();
 //		Employee emp = new Employee();
@@ -33,12 +43,31 @@ public class LeaveController {
 
 //		ewoService.employeeWorkOvertimeApplication(ewo);
 //		System.out.println("ewo: " + ewo);
+
+		EmployeeLeave el = new EmployeeLeave();
+		Employee emp = new Employee();
+		emp.setEmployeeId(ela.getEmployeeId());
+		Employee man = new Employee();
+		man.setEmployeeId(ela.getManagerId());
+		Leave leave = elService.findByLeaveName(ela.getEmployeeLeaveKind());
+		System.out.println("leave: " + leave.getLeaveId());
+
+		el.setEmployee(emp);
+		el.setManager(man);
+		el.setEmployeeLeaveEndTime(ela.getEmployeeLeaveEndTime());
+		el.setEmployeeLeaveReason(ela.getEmployeeLeaveReason());
+		el.setEmployeeLeaveStartTime(ela.getEmployeeLeaveStartTime());
+		el.setLeave(leave);
+
+		elService.employeeLeaveApplication(el);
+//		System.out.println("ela: " + ela);
+
 	}
 
-//	@ResponseBody
-//	@GetMapping("/employee/workovertime/audit")
-//	public List<WorkOvertimeAuditDTO> managerGetWorkOvertime(@RequestParam("id") Integer managerId) {
-//
+	@ResponseBody
+	@GetMapping("/employee/leave/audit")
+	public List<LeaveAuditDTO> managerGetLeave(@RequestParam("id") Integer managerId) {
+
 //		List<WorkOvertimeAuditDTO> woaList = new LinkedList<WorkOvertimeAuditDTO>();
 //
 //		List<EmployeeWorkOvertime> ewoList = ewoService.findNoAuditWithManagerId(managerId);
@@ -55,10 +84,29 @@ public class LeaveController {
 //			woaList.add(woa);
 //		}
 //		return woaList;
-//	}
-//
+		LinkedList<LeaveAuditDTO> laList = new LinkedList<LeaveAuditDTO>();
+
+		List<EmployeeLeave> elList = elService.findNoAuditWithManagerId(managerId);
+
+		for (EmployeeLeave el : elList) {
+			LeaveAuditDTO la = new LeaveAuditDTO();
+			la.setEmployeeId(el.getEmployee().getEmployeeId());
+			la.setEmployeeLeaveEndTime(el.getEmployeeLeaveEndTime());
+			la.setEmployeeLeaveId(el.getEmployeeLeaveId());
+			la.setEmployeeLeaveReason(el.getEmployeeLeaveReason());
+			la.setEmployeeLeaveStartTime(el.getEmployeeLeaveStartTime());
+			la.setLeaveAuditResultsSandingDate(el.getLeaveAuditResultsSandingDate());
+			la.setManagerId(el.getManager().getEmployeeId());
+			la.setManagerLeaveAudit(el.getManagerLeaveAudit());
+			la.setEmployeeLeaveKind(el.getLeave().getLeaveName());
+			laList.add(la);
+		}
+
+		return laList;
+	}
+
 //	@ResponseBody
-//	@GetMapping("/employee/workovertime/all")
+//	@GetMapping("/employee/leave/all")
 //	public List<WorkOvertimeGetDTO> testfindAll() {
 //
 //		List<WorkOvertimeGetDTO> woList = new LinkedList<WorkOvertimeGetDTO>();
@@ -79,34 +127,36 @@ public class LeaveController {
 //		}
 //		return woList;
 //	}
-//
-//	@ResponseBody
-//	@PutMapping("/employee/workovertime/audit")
-//	public void managerAuditWorkOvertime(@RequestBody WorkOvertimeAuditDTO woaDTO) {
-//
-//		EmployeeWorkOvertime ewo = new EmployeeWorkOvertime();
-//
-//		Employee emp = new Employee();
-//		emp.setEmployeeId(woaDTO.getEmployeeId());
-//		Employee man = new Employee();
-//		man.setEmployeeId(woaDTO.getManagerId());
-//
-//		ewo.setEmployee(emp);
-//		ewo.setEmployeeWorkOvertimeEndTime(woaDTO.getEmployeeWorkOvertimeEndTime());
-//		ewo.setEmployeeWorkOvertimeReason(woaDTO.getEmployeeWorkOvertimeReason());
-//		ewo.setEmployeeWorkOvertimeStartTime(woaDTO.getEmployeeWorkOvertimeStartTime());
-//		ewo.setManager(man);
-//		ewo.setManagerWorkOvertimeAudit(woaDTO.getManagerWorkOvertimeAudit());
-//		ewo.setWorkOvertimeAuditResultsSandingDate(woaDTO.getWorkOvertimeAuditResultsSandingDate());
-//		ewo.setEmployeeWorkOvertimeId(woaDTO.getEmployeeWorkOvertimeId());
-//
-//		ewoService.setAudit(ewo);
-//	}
-//
-//	@ResponseBody
-//	@GetMapping("/employee/workovertime/carry-forward")
-//	public List<WorkOvertimeCarryForwardDTO> getWorkOvertimeCarryForward() {
-//
+
+	@ResponseBody
+	@PutMapping("/employee/leave/audit")
+	public void managerAuditLeave(@RequestBody LeaveAuditDTO laDTO) {
+
+		EmployeeLeave el = new EmployeeLeave();
+
+		Employee emp = new Employee();
+		emp.setEmployeeId(laDTO.getEmployeeId());
+		Employee man = new Employee();
+		man.setEmployeeId(laDTO.getManagerId());
+		Leave leave = elService.findByLeaveName(laDTO.getEmployeeLeaveKind());
+
+		el.setEmployee(emp);
+		el.setEmployeeLeaveEndTime(laDTO.getEmployeeLeaveEndTime());
+		el.setEmployeeLeaveId(laDTO.getEmployeeLeaveId());
+		el.setEmployeeLeaveReason(laDTO.getEmployeeLeaveReason());
+		el.setEmployeeLeaveStartTime(laDTO.getEmployeeLeaveStartTime());
+		el.setLeave(leave);
+		el.setLeaveAuditResultsSandingDate(laDTO.getLeaveAuditResultsSandingDate());
+		el.setManager(man);
+		el.setManagerLeaveAudit(laDTO.getManagerLeaveAudit());
+
+		elService.setAudit(el);
+	}
+
+	@ResponseBody
+	@GetMapping("/employee/leave/carry-forward")
+	public List<LeaveCarryForwardDTO> getLeaveCarryForward() {
+
 //		List<WorkOvertimeCarryForwardDTO> wocfList = new LinkedList<WorkOvertimeCarryForwardDTO>();
 //
 //		List<EmployeeWorkOvertime> findSuccessAudit = ewoService.findSuccessAudit();
@@ -124,12 +174,32 @@ public class LeaveController {
 //			wocfList.add(wo);
 //		}
 //		return wocfList;
-//	}
-//
-//	@ResponseBody
-//	@PutMapping("/employee/workovertime/carry-forward")
-//	public void workOvertimeCarryForward(@RequestBody WorkOvertimeCarryForwardDTO wocfDTO) {
-//
+
+		List<LeaveCarryForwardDTO> lcfList = new LinkedList<LeaveCarryForwardDTO>();
+
+		List<EmployeeLeave> findSuccessAudit = elService.findSuccessAudit();
+		for (EmployeeLeave el : findSuccessAudit) {
+			LeaveCarryForwardDTO l = new LeaveCarryForwardDTO();
+			l.setEmployeeLeaveId(el.getEmployeeLeaveId());
+			l.setEmployeeId(el.getEmployee().getEmployeeId());
+			l.setEmployeeLeaveEndTime(el.getEmployeeLeaveEndTime());
+			l.setEmployeeLeaveReason(el.getEmployeeLeaveReason());
+			l.setEmployeeLeaveStartTime(el.getEmployeeLeaveStartTime());
+			l.setLeaveAuditResultsSandingDate(el.getLeaveAuditResultsSandingDate());
+			l.setLeaveCarryForwardDate(el.getLeaveCarryForwardDate());
+			l.setManagerId(el.getManager().getEmployeeId());
+			l.setManagerLeaveAudit(el.getManagerLeaveAudit());
+			l.setEmployeeLeaveKind(el.getLeave().getLeaveName());
+			lcfList.add(l);
+		}
+
+		return lcfList;
+	}
+
+	@ResponseBody
+	@PutMapping("/employee/leave/carry-forward")
+	public void leaveCarryForward(@RequestBody LeaveCarryForwardDTO lcfDTO) {
+
 //		EmployeeWorkOvertime ewo = new EmployeeWorkOvertime();
 //
 //		Employee emp = new Employee();
@@ -148,5 +218,33 @@ public class LeaveController {
 //		ewo.setWorkOvertimeCarryForwardDate(wocfDTO.getWorkOvertimeCarryForwardDate());
 //
 //		ewoService.setAudit(ewo);
-//	}
+
+		EmployeeLeave el = new EmployeeLeave();
+
+		Employee emp = new Employee();
+		emp.setEmployeeId(lcfDTO.getEmployeeId());
+		Employee man = new Employee();
+		man.setEmployeeId(lcfDTO.getManagerId());
+		Leave leave = elService.findByLeaveName(lcfDTO.getEmployeeLeaveKind());
+
+		el.setEmployee(emp);
+		el.setEmployeeLeaveEndTime(lcfDTO.getEmployeeLeaveEndTime());
+		el.setEmployeeLeaveId(lcfDTO.getEmployeeLeaveId());
+		el.setEmployeeLeaveReason(lcfDTO.getEmployeeLeaveReason());
+		el.setEmployeeLeaveStartTime(lcfDTO.getEmployeeLeaveStartTime());
+		el.setLeave(leave);
+		el.setLeaveAuditResultsSandingDate(lcfDTO.getLeaveAuditResultsSandingDate());
+		el.setLeaveCarryForwardDate(lcfDTO.getLeaveCarryForwardDate());
+		el.setManager(man);
+		el.setManagerLeaveAudit(lcfDTO.getManagerLeaveAudit());
+
+		elService.setAudit(el);
+	}
+
+	@ResponseBody
+	@GetMapping("/leave/all")
+	public List<Leave> getAllLeaveLeaves() {
+		return elService.findAllLeaves();
+	}
+	
 }
