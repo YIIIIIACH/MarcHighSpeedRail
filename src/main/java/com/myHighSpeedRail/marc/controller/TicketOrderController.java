@@ -424,7 +424,7 @@ public class TicketOrderController {
 	public @ResponseBody DisplayMemberTicketOrderDto getAllMemberTicketOrder(HttpServletRequest req) {
 		Cookie []cookies = req.getCookies();
 		String token=null;
-		LoginResponseModel userDetail = null;
+		LoginResponseModel userDetail = new LoginResponseModel();
 		for( Cookie ck: cookies) {
 			if( ck.getName().equals("login-token")) {
 				token = ck.getValue();
@@ -451,8 +451,20 @@ public class TicketOrderController {
 		res.paymentDeadlines= new ArrayList<Date>();
 		res.ticketOrderIds = new ArrayList<Integer>();
 		res.totalPrices= new ArrayList<Integer>();
+		res.stArr = new ArrayList<>();
+		res.edArr = new ArrayList<>();
 		res.memberToken= userDetail.getMember_id().toString();
 		for( TicketOrder tckod : tckorList) {
+			List<Booking> bList = bServ.findByTicketOrderId(tckod.getTicketOrderId());
+			if(bList!=null &&  bList.size()>0) {
+				List<ScheduleArrive>  tmp = schArrServ.getStEdArriveBySchidRailRouteSegment(bList.get(0).getSchedule().getScheduleId(), bList.get(0).getRailRouteSegment().getRailRouteSegmentId());
+//				System.out.println(tmp.size());
+				res.stArr.add(tmp.get(0));
+				res.edArr.add(tmp.get(1));				
+			}else {
+				res.stArr.add(new ScheduleArrive());
+				res.edArr.add(new ScheduleArrive());
+			}
 			res.orderCreateTimes.add(tckod.getTicketOrderCreateTime());
 			res.orderStatuses.add(tckod.getStatus());
 			res.paymentDeadlines.add( tckod.getPaymentDeadline());

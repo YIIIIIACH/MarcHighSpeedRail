@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.myHighSpeedRail.marc.model.ScheduleArrive;
 
 public class DisplayMemberTicketOrderDto {
 	public List<Integer> ticketOrderIds;
@@ -15,4 +16,6 @@ public class DisplayMemberTicketOrderDto {
 	public List<String> orderStatuses;
 	public List<Integer> totalPrices;
 	public String displayStatus;
+	public List<ScheduleArrive> stArr;
+	public List<ScheduleArrive> edArr;
 }

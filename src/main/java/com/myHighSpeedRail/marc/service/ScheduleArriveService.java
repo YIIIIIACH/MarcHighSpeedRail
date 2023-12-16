@@ -3,10 +3,12 @@ package com.myHighSpeedRail.marc.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
 import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.ScheduleArrive;
@@ -23,6 +25,8 @@ public class ScheduleArriveService {
 	private RailRouteStopStationService  rrssServ;
 	@Autowired
 	private TicketDiscountService tdServ;
+	@Autowired 
+	private RailRouteSegmentService rrsServ;
 	
 	public void setupScheduleArriveBySchedule(Integer scheduleId)throws Exception{
 		List<ScheduleArrive> sl =saDao.findByScheduleId(scheduleId); 
@@ -76,6 +80,34 @@ public class ScheduleArriveService {
 		if( res==null || res.size()==0 ) return null;
 		return res.get(0);
 		
-		
+	}
+	
+	public List<ScheduleArrive> getStEdArriveBySchidRailRouteSegment( Integer schid, Integer rrsId){
+		List<ScheduleArrive> res = new ArrayList<ScheduleArrive>();
+		// use rrsid to get st ed st Id
+		try {
+			Optional<RailRouteSegment> rrsOpt = rrsServ.findById(rrsId);
+			if( rrsOpt.isEmpty()) {
+				throw new Exception("railRoute sesgment not found");
+			}
+			// search from scharr in schid and stid
+			List<ScheduleArrive> stArrList = saDao.findByScheduleIdStationid(schid, rrsOpt.get().getStartStation().getStationId());
+			if(stArrList.size()==1) {
+				res.add( stArrList.get(0));
+			}else {
+				res.add( new ScheduleArrive());
+			}
+			// search for scharr in schid and edid
+			List<ScheduleArrive> edArrList = saDao.findByScheduleIdStationid(schid, rrsOpt.get().getEndStation().getStationId());
+			if(edArrList.size()==1) {
+				res.add(edArrList.get(0));
+			}else {
+				res.add( new ScheduleArrive());
+			}
+			
+		}catch( Exception e) {
+			e.printStackTrace();
+		}
+		return res;
 	}
 }

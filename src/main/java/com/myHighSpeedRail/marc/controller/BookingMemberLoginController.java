@@ -38,7 +38,7 @@ public class BookingMemberLoginController {
 //				}
 //			}
 //		}
-
+		
 		String currOrigin = ((HttpServletRequest)req).getHeader("Origin");
 		LoginResponseModel loginRes = uServ.login(ep.email,ep.password);
 		if(loginRes==null) {
@@ -89,7 +89,7 @@ public class BookingMemberLoginController {
 		if(token !=null) {	
 			LoginResponseModel userDetail = uServ.tokenlogin(UUID.fromString(token));
 			if( userDetail != null) {
-				return new ResponseEntity<String> (userDetail.getMember_name(),HttpStatus.OK);						
+				return new ResponseEntity<String> (userDetail.getMember_id().toString(),HttpStatus.OK);						
 			}else {
 				return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);				
 			}

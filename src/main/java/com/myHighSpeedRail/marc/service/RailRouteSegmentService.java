@@ -76,4 +76,7 @@ public class RailRouteSegmentService {
 		}
 		return rrsDao.findByStartEndStationExcludeRange(rrid, frontStIdList, backStIdList);
 	}
+	public Optional<RailRouteSegment> findById( Integer rrsId){
+		return rrsDao.findById(rrsId);
+	}
 }
