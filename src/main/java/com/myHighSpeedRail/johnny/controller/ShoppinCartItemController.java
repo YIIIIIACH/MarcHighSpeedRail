@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 import com.myHighSpeedRail.johnny.service.ProductService;
 import com.myHighSpeedRail.johnny.service.ShoppingCartItemService;
+import com.myHighSpeedRail.yuhsin.Models.LoginResponseModel;
 import com.myHighSpeedRail.yuhsin.Services.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -49,28 +51,32 @@ public class ShoppinCartItemController {
 			@RequestParam(value = "memberId") String memberId, 
 			@RequestParam(value = "quantity") Integer quantity
 			,HttpServletRequest req){	
-//		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
-//        Cookie []cookies = req.getCookies();
-//        String token = null;
-//        String uuid = null;
-////        token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-//        for( Cookie ck: cookies) {
-//            if( ck.getName().equals("login-token")) {
-//                token = ck.getValue();
-//            }
-//        }
-//        if(token == null) {
-//            // redirect to MemberSystem
-//            return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-//        }
-//        else{
-//            //validate the current login token 
-//            uuid = uService.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-//        }
-//        if(uuid == null) {
-//            return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-//        }
 		
+		String loginToken = null;
+		String uuid = null;
+		Cookie[] cookies = req.getCookies();
+		
+		if(cookies == null) {
+			//如找不到 cookie 則 print 找不到
+			System.out.println("not cookie found");
+		}else {		
+			//如找到 cookies 則遍歷, 並判斷cookie 的 key 是否等於字串 login-token
+			// 如 判斷為 true, 則取 value
+			for( Cookie cookie: cookies) {
+				if( cookie.getName().equals("login-token")) {
+					loginToken = cookie.getValue();
+				}
+			}
+		} 
+        String token = loginToken;
+        System.out.println(token);
+        
+        LoginResponseModel userDetail = null;
+        userDetail = uService.tokenlogin(UUID.fromString(token));
+        
+        if(userDetail == null) {
+			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+		}	
 		//判斷商品是否已存在購物車
 		boolean isProductInCart = cartService.isProductInCart(memberId, productId);
 		

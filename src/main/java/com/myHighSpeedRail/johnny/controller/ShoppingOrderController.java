@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myHighSpeedRail.johnny.dto.CreatePaidShoppingOrderDto;
 import com.myHighSpeedRail.johnny.dto.CreateUnpaidShoppingOrderRequestDto;
+import com.myHighSpeedRail.johnny.dto.ForCreatePaypalResDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingOrderWithDetailResponseDto;
 import com.myHighSpeedRail.johnny.model.ShoppingOrder;
 import com.myHighSpeedRail.johnny.model.ShoppingOrderDetail;
@@ -79,15 +80,20 @@ public class ShoppingOrderController {
 			orderDetails.add(orderDetail);
 			
 		}
-		oService.createOrder(shoppingOrder, orderDetails);
-			
-		return ResponseEntity.ok("訂單已建立訂");
+		ShoppingOrder createdOrder = oService.createOrder(shoppingOrder, orderDetails);
+		Integer orderId = createdOrder.getOrderId();
+		CreatePaidShoppingOrderDto temp = new CreatePaidShoppingOrderDto();
+		temp.memberId = orderRequest.memberId;
+		temp.orderId = orderId;
+		temp.totalPrice = orderRequest.totalPrice;
+		return createPaypalOrder(temp);
+//		return ResponseEntity.ok("訂單已建立");
 	}
 	
 	
 
 @PostMapping("/createPaypalOrder")
-public ResponseEntity<String> createPaypalOrder(HttpServletRequest req, @RequestBody CreatePaidShoppingOrderDto orderRequest){
+public ResponseEntity<String> createPaypalOrder( @RequestBody CreatePaidShoppingOrderDto orderRequest){
 	CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
 	// put info into dto
 	dto.intent="CAPTURE";

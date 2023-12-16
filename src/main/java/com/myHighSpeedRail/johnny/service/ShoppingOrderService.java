@@ -31,12 +31,11 @@ public class ShoppingOrderService {
 	@Autowired
 	private ProductRepository productDao;
 	
-	public void createOrder(ShoppingOrder order, List<ShoppingOrderDetail> orderDetails) {
-
-		orderDao.save(order);
-
+	public ShoppingOrder createOrder(ShoppingOrder order, List<ShoppingOrderDetail> orderDetails) {
+		ShoppingOrder so = orderDao.save(order);
 		orderDetailDao.saveAll(orderDetails);
-
+		return so;
+		
 	};
 
 	public List<ShoppingOrder> findOrderByMemberId(String memberId) {
