@@ -187,6 +187,63 @@ public class PayPalUtil {
 		return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
 	}
 	
+	public ResponseEntity<String>createProductOrderUtil( CreatePayPalOrderDto dto){
+		getTokenUtil();// will refresh the bearer token and update Date;
+
+		try {
+			String url = "https://api.sandbox.paypal.com/v2/checkout/orders";
+			URL obj = new URL(url);
+			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("accept", "application/json");
+			con.setRequestProperty("content-type", "application/json");
+			con.setRequestProperty("accept-language", "en_US");
+			con.setRequestProperty("authorization", "Bearer "+bearerToken);
+//			System.out.println(token);
+			ObjectMapper mapper = new ObjectMapper();
+			
+			String body= mapper.writeValueAsString(dto);
+//			System.out.println(body);
+			// Send request
+			con.setDoOutput(true);
+			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+			wr.write(body);
+			wr.flush();
+			wr.close();
+
+			BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			System.out.println( response);
+			in.close();
+//			JsonNode root = mapper.readTree(response.toString());
+//			Map<String, String> map = new HashMap<>();
+//			addKeys("", root, map, new ArrayList<>());
+//			String[] tmp = response.toString().split("id\":\"");
+//			if(tmp.length >=2) {
+//				tmp = tmp[1].split("\"");				
+//				String paypalOrderid =tmp[0];
+//				System.out.println("paypalOrderId is:"+ paypalOrderid);
+//				if(paypalOrderid==null) {
+//					System.out.println("can not found paypal order id while creating Order");
+//				}else {
+//					tckServ.registPaypalTicketOrder(tckodid, paypalOrderid);					
+//				}
+//			}else {
+//				System.out.println("failed to split");
+//				return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
+//			}
+			return new ResponseEntity<String>(response.toString(),HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("no work",HttpStatus.BAD_REQUEST);
+	}
+	
 	public Boolean captureOrderUtil(String orderid,Integer ticketOrderId){
 		getTokenUtil();
 		try {
