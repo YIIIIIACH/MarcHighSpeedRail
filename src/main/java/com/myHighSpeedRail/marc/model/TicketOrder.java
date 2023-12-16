@@ -42,8 +42,10 @@ public class TicketOrder {
 	
 	@Column(name="total_price",nullable=false)
 	private Integer totalPrice;
+
+	@Column(name="paypal_order_id")
+	private String paypalOrderId;
 	public TicketOrder() {;}
-	
 
 	public TicketOrder(String  memberToken, Date ticketOrderCreateTime, String status,
 			Date paymentDeadline, Integer totalPrice) {
@@ -54,9 +56,18 @@ public class TicketOrder {
 		this.status = status;
 		this.paymentDeadline = paymentDeadline;
 		this.totalPrice = totalPrice;
+		this.paypalOrderId=null;
 	}
 
 	
+	public String getPaypalOrderId() {
+		return paypalOrderId;
+	}
+	
+	
+	public void setPaypalOrderId(String paypalOrderId) {
+		this.paypalOrderId = paypalOrderId;
+	}
 	public String getMemberToken() {
 		return memberToken;
 	}

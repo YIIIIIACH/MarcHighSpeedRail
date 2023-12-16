@@ -37,7 +37,7 @@ public class ShoppingOrder {
 	@Column(name = "order_number", nullable = false, unique = true)
 	private String orderNumber;
 	
-	@JsonFormat(pattern = "yyyy/MM/dd") // 輸出的時候 轉出去以前, 先做轉換 
+	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone="GMT+8") // 輸出的時候 轉出去以前, 先做轉換 
 	@DateTimeFormat(pattern = "yyyy/MM/dd") // 轉換前端 String 日期到 Java 端日期格式
 	@Temporal(TemporalType.DATE) 
 	// TemporalType.DATE: 只保留日期部分。 TemporalType.TIME: 只保留時間部分。 TemporalType.TIMESTAMP: 保留日期和時間部分。

@@ -1,8 +1,11 @@
 package com.myHighSpeedRail.johnny.service;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +44,7 @@ public class ShoppingOrderService {
 	};
 
 	public List<ShoppingOrderWithDetailResponseDto> findOrderAndDetailByMemberId(String memberId) {
-		// 會員訂單基本資訊清單
+		// 會員訂單資訊清單
 		List<ShoppingOrder> orders = orderDao.findByMemberId(memberId);
 		// 要回應的Dto
 		List<ShoppingOrderWithDetailResponseDto> resList = new ArrayList<>();
@@ -54,14 +57,17 @@ public class ShoppingOrderService {
 			temp.orderCompletionDate = order.getOrderCompletionDate();
 			temp.member = order.getMember();
 			temp.orderNumber = order.getOrderNumber();
+			temp.orderId = order.getOrderId();
 
 			// 透過訂單找到訂單細項清單
 			List<ShoppingOrderDetail> orderDetails = order.getOrderDetails();
 
 			if (orderDetails != null && !orderDetails.isEmpty()) {
 				List<Product> products = new ArrayList<>();
-
+				List<String> photoData = new ArrayList<>();
+				temp.quantity = new ArrayList<Integer>();
 				for (int i = 0 ; i < orderDetails.size() ; i++) {
+					String pd = new String();
 					ShoppingOrderDetail detail = orderDetails.get(i);
 					
 					Product p = productDao.findById(detail.getProduct().getProductId()).orElse(null);
@@ -71,9 +77,12 @@ public class ShoppingOrderService {
 					for(ProductPhotoSegment pps: p.getPhotoSegment()) {
 						sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
 					}
+					pd = sb.toString();
+					photoData.add(pd);
 					products.add(p);
-					temp.quantity = detail.getQuantity();
+					temp.quantity.add(detail.getQuantity());
 				}
+				temp.photoData = photoData;
 				temp.products = products;
 			}
 			resList.add(temp);
@@ -81,4 +90,19 @@ public class ShoppingOrderService {
 		return resList;
 	};
 
+	public Boolean registPayedOrder(Integer orderId) {
+		Optional<ShoppingOrder> sOrder = orderDao.findById(orderId);
+		if( sOrder.isEmpty()) {
+			return false;
+		}
+		
+		ShoppingOrder sod = sOrder.get();
+		sod.setOrderStatus("已付款");
+		sod.setOrderCompletionDate(new Date());
+		orderDao.save(sod);
+		return true;
+		
+	}
+
+	
 }

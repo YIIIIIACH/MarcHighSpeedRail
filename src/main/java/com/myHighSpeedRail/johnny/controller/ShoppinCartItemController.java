@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.myHighSpeedRail.johnny.dto.CreateShoppingOrderRequestDto;
+import com.myHighSpeedRail.johnny.dto.CreateUnpaidShoppingOrderRequestDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartQuantityUpdateDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartResponseDto;
