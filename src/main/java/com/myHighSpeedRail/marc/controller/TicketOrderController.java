@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,11 +79,10 @@ public class TicketOrderController {
 	private PayPalUtil paypalServ;
 	@Autowired
 	private UserService uServ;
-	@Value("${server.baseurl}")
-	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
 	private String FRONT_SERVER_URL;
-	
+	@Value("${remote.front.end.host}")
+	private String REMOTE_FRONT_SERVER_URL;
 	@PostMapping("/booking")
 	public @ResponseBody ResponseEntity<String> doBookingAndMakeEmptyTicket(HttpServletRequest req,@RequestBody BookingDto bookingDto){
 		try {
@@ -171,51 +171,53 @@ public class TicketOrderController {
 			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
 		}
 		// get info of ticket order
-		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
+		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();// pack paypal order dto
 		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
 //		bList.get(0).getTicketOrder();
 		// put info into dto
-		dto.intent="CAPTURE";
+		dto.intent="CAPTURE"; // pack paypal order dto
 		// add application context into dto
-		AppContext actx= new AppContext();
+		AppContext actx= new AppContext();// pack paypal order dto
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
-		actx.return_url=SERVER_BASE_URL+"/registAllocateTicketOrderSeats?ticketOrderId="+String.valueOf(ticketOrderId);
-		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; 
-		dto.application_context= actx;
+		actx.return_url= REMOTE_FRONT_SERVER_URL+"/paypalCheckoutReturn/"+String.valueOf(ticketOrderId);// pack paypal order dto
+		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+ticketOrderId; // pack paypal order dto
+		dto.application_context= actx; // pack paypal order dto
 		// add purchase_units into dto
-		List<Unit> purUnits= new ArrayList<Unit>();
-		Unit u = new Unit();
-		u.items= new ArrayList<Item>();
+		List<Unit> purUnits= new ArrayList<Unit>();// pack paypal order dto
+		Unit u = new Unit();// pack paypal order dto
+		u.items= new ArrayList<Item>();// pack paypal order dto
 		// add item 
-		Integer priceSum=0;
+		Integer priceSum=0;// pack paypal order dto
 		for(int i=0; i<bList.size(); i++) {
 			Booking b= bList.get(i);
-			Item tmp = new Item();
-			tmp.name= "MarcHSR_Ticket";
-			tmp.description=  b.getRailRouteSegment().getStartStation().getStationName()+"-"+b.getRailRouteSegment().getEndStation().getStationName()+b.getTicketDiscount().getTicketDiscountName();
-			tmp.quantity="1";
-			priceSum+= b.getTicketPrice();
-			UnitAmount ua= new UnitAmount("TWD", String.valueOf(b.getTicketPrice())+".00");
-			tmp.unit_amount=ua;
-			u.items.add(tmp);
+			Item tmp = new Item();// pack paypal order dto
+			tmp.name= "MarcHSR_Ticket";// pack paypal order dto
+			tmp.description=  b.getRailRouteSegment().getStartStation().getStationName()+"-"+b.getRailRouteSegment().getEndStation().getStationName()+b.getTicketDiscount().getTicketDiscountName();// pack paypal order dto
+			tmp.quantity="1";// pack paypal order dto
+			priceSum+= b.getTicketPrice();// pack paypal order dto
+			UnitAmount ua= new UnitAmount("TWD", String.valueOf(b.getTicketPrice())+".00");// pack paypal order dto
+			tmp.unit_amount=ua;// pack paypal order dto
+			u.items.add(tmp);// pack paypal order dto
 		}
 		//create Amount
-		Amount am = new Amount();
-		am.currency_code="TWD";
-		am.value= String.valueOf(priceSum)+".00";
-		am.breakdown= new Breakdown("TWD", priceSum);
-		u.amount= am;
-		purUnits.add(u);
-		dto.purchase_units=purUnits;
-		return paypalServ.createOrderUtil(dto);
+		Amount am = new Amount();// pack paypal order dto
+		am.currency_code="TWD";// pack paypal order dto
+		am.value= String.valueOf(priceSum)+".00";// pack paypal order dto
+		am.breakdown= new Breakdown("TWD", priceSum);// pack paypal order dto
+		u.amount= am;// pack paypal order dto
+		purUnits.add(u);// pack paypal order dto
+		dto.purchase_units=purUnits;// pack paypal order dto
+		return paypalServ.createOrderUtil(dto, ticketOrderId);
 	}
 	
-	@GetMapping("registAllocateTicketOrderSeats")
-	public String allocateTicketOrdeSeat(Model model,HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
-		if(!paypalServ.captureOrderUtil(paypalOrderId)) {
-			return "checkOutFail";
+	@PostMapping("registAllocateTicketOrderSeats")
+	public @ResponseBody ResponseEntity<String> allocateTicketOrdeSeat(Model model,HttpServletRequest req, @RequestBody String ticketOrderId){
+		// use ticketOrderId to get paypal order id
+		String paypalOrderId = tkoServ.getPaypalOrderIdByTicketOrderId(Integer.valueOf(ticketOrderId));
+		if(!paypalServ.captureOrderUtil( String.valueOf(paypalOrderId),Integer.valueOf(ticketOrderId))) {
+			return new ResponseEntity<String> ("failed",HttpStatus.BAD_REQUEST);
 		}
-		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
+		List<Booking> bList = bServ.findByTicketOrderId(Integer.valueOf(ticketOrderId));
 		//List<RailRouteStopStation> findByRouteIdStationId(Integer rid, Integer sid){
 		RailRouteStopStation stopst1 = schrrssServ.findByRouteIdStationId(
 				bList.get(0).getRailRouteSegment().getRailRoute().getRailRouteId()
@@ -245,7 +247,7 @@ public class TicketOrderController {
 		tkoServ.save(tmp );
 		//go capture the paypal token
 		model.addAttribute("msg","恭喜付款成功");
-		return "checkOutTicketReturn";
+		return new ResponseEntity<String> ("success",HttpStatus.OK);
 	}
 	
 	@PostMapping("/createBuinessTicketOrder/{ststid}/{edstid}/{amount}/{schid}")
@@ -354,21 +356,23 @@ public class TicketOrderController {
 		}	
 		//
 		AppContext actx= new AppContext();
-		actx.return_url=SERVER_BASE_URL+"/newBookBuinessSeat?ticketOrderId="+String.valueOf(tcko.getTicketOrderId());
+		actx.return_url=REMOTE_FRONT_SERVER_URL+"/paypalBuinessCheckoutReturn/"+String.valueOf(tcko.getTicketOrderId());
 		actx.cancel_url= FRONT_SERVER_URL+"/bookSuccess/"+tcko.getTicketOrderId(); 
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
 		dto.application_context= actx;
-		return paypalServ.createOrderUtil(dto);
+		return paypalServ.createOrderUtil(dto,tcko.getTicketOrderId());
 	}
-	@GetMapping(value="/newBookBuinessSeat")
-	public String newBookBuinessSeat(Model model,HttpServletRequest req,@RequestParam Integer ticketOrderId,@RequestParam(value="token") String paypalOrderId){
+	@PostMapping(value="/newBookBuinessSeat")
+	public @ResponseBody ResponseEntity<String> newBookBuinessSeat(HttpServletRequest req,@RequestBody String ticketOrderId){
+		// use ticketOrderId to get paypal order id
+		String paypalOrderId = tkoServ.getPaypalOrderIdByTicketOrderId(Integer.valueOf(ticketOrderId));
 		// 可能需要先檢查是否 paypal ticket order is approve
-		if( !paypalServ.captureOrderUtil( String.valueOf(paypalOrderId))) {
-			return "checkOutFail";
+		if( !paypalServ.captureOrderUtil( String.valueOf(paypalOrderId),Integer.valueOf(ticketOrderId))) {
+			return new ResponseEntity<String> ("failed",HttpStatus.BAD_REQUEST);
 		}
 		// use ticket order id to get BookList
-		List<Booking> bList = bServ.findByTicketOrderId(ticketOrderId);
-		TicketOrder tOrder = tkoServ.findById(ticketOrderId);
+		List<Booking> bList = bServ.findByTicketOrderId(Integer.valueOf(ticketOrderId));
+		TicketOrder tOrder = tkoServ.findById(Integer.valueOf(ticketOrderId));
 		Station stst = bList.get(0).getRailRouteSegment().getStartStation();
 		Station edst = bList.get(0).getRailRouteSegment().getEndStation();
 		// get ticketDisc id
@@ -387,15 +391,6 @@ public class TicketOrderController {
 		for( ScheduleSeatStatus schss: schssList ) {
 			tmp.add(schss.getSeat());
 		}
-//		List<ScheduleSeatStatus> selectSchSeatList = schssServ.findBySeatSchedule(sch, tmp);
-		// check seat Available
-		for( ScheduleSeatStatus schss: schssList ) { // 原本是 ：selectSchSeatList
-			if( (schss.getScheduleStatus() & mask) > 0) {
-				model.addAttribute("msg","座位分配失敗請重新嘗試");
-				return "checkOutFail";
-			}
-		}
-		
 		// update scheduleSeatStatus
 		//策略改動在會員付款前要先分配好座位
 //		registBookedSeat( Integer schid , Long mask , Integer amt) {registBookedSeat( Integer schid , Long mask , Integer amt) {
@@ -403,7 +398,6 @@ public class TicketOrderController {
 		// update scheduleRestSeat [Ignore now ]
 		//策略改動在會員付款前要先分配好座位
 		//schrsServ.updateScheduleRestSeat( sch.getScheduleId(), tkdid , sch.getRailRoute().getRailRouteId() ,stst.getStationId() ,edst.getStationId(), schssList.size() );
-		
 		// create order
 		Integer paymentEarlyDay = tkdServ.findById(tkdid).getPurchaseEarlyLimitDay();
 		Date deadline = schArrServ.findByScheduleIdStationId(sch.getScheduleId(),stst.getStationId()).getArriveTime();
@@ -424,16 +418,13 @@ public class TicketOrderController {
 			b.setStatus("已分配座位");
 		}
 		bServ.saveAll(bList);
-		model.addAttribute("msg","座位分配成功");
-
-		return "checkOutTicketReturn";
-		
+		return new ResponseEntity<String> ("success",HttpStatus.OK);
 	}
 	@GetMapping("/getAllMemberTicketOrder")
 	public @ResponseBody DisplayMemberTicketOrderDto getAllMemberTicketOrder(HttpServletRequest req) {
 		Cookie []cookies = req.getCookies();
 		String token=null;
-		LoginResponseModel userDetail = null;
+		LoginResponseModel userDetail = new LoginResponseModel();
 		for( Cookie ck: cookies) {
 			if( ck.getName().equals("login-token")) {
 				token = ck.getValue();
@@ -460,8 +451,20 @@ public class TicketOrderController {
 		res.paymentDeadlines= new ArrayList<Date>();
 		res.ticketOrderIds = new ArrayList<Integer>();
 		res.totalPrices= new ArrayList<Integer>();
+		res.stArr = new ArrayList<>();
+		res.edArr = new ArrayList<>();
 		res.memberToken= userDetail.getMember_id().toString();
 		for( TicketOrder tckod : tckorList) {
+			List<Booking> bList = bServ.findByTicketOrderId(tckod.getTicketOrderId());
+			if(bList!=null &&  bList.size()>0) {
+				List<ScheduleArrive>  tmp = schArrServ.getStEdArriveBySchidRailRouteSegment(bList.get(0).getSchedule().getScheduleId(), bList.get(0).getRailRouteSegment().getRailRouteSegmentId());
+//				System.out.println(tmp.size());
+				res.stArr.add(tmp.get(0));
+				res.edArr.add(tmp.get(1));				
+			}else {
+				res.stArr.add(new ScheduleArrive());
+				res.edArr.add(new ScheduleArrive());
+			}
 			res.orderCreateTimes.add(tckod.getTicketOrderCreateTime());
 			res.orderStatuses.add(tckod.getStatus());
 			res.paymentDeadlines.add( tckod.getPaymentDeadline());

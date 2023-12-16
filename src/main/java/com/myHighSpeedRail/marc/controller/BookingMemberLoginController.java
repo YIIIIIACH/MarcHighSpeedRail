@@ -22,8 +22,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class BookingMemberLoginController {
-	@Value("${server.baseurl}")
-	private String SERVER_BASE_URL;
 	@Value("${front.end.host}")
 	private String FRONT_SERVER_URL;
 	@Autowired
@@ -40,7 +38,7 @@ public class BookingMemberLoginController {
 //				}
 //			}
 //		}
-
+		
 		String currOrigin = ((HttpServletRequest)req).getHeader("Origin");
 		LoginResponseModel loginRes = uServ.login(ep.email,ep.password);
 		if(loginRes==null) {
@@ -48,27 +46,27 @@ public class BookingMemberLoginController {
 			return new ResponseEntity<LoginResponseModel> (new LoginResponseModel(),HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println( loginRes.getMember_id().toString());
-//		Cookie c = new Cookie("login-token",loginRes.getLogin_token().toString());
-//		c.setMaxAge(3600);
+		Cookie c = new Cookie("login-token",loginRes.getLogin_token().toString());
+		c.setMaxAge(3600);
 //		c.setPath("/;");
-//		c.setSecure(false);
-//		c.setHttpOnly(false);
+		c.setSecure(false);
+		c.setHttpOnly(false);
 //		c.setPath(c.getPath().concat("SameSite=None;"));
-//		res.addCookie(c);
-//		Cookie c2 = new Cookie("member-name",loginRes.getMember_name());
-//		c2.setMaxAge(3600);
+		res.addCookie(c);
+		Cookie c2 = new Cookie("member-name",loginRes.getMember_name());
+		c2.setMaxAge(3600);
 //		c2.setPath("/;");
-//		c2.setSecure(false);
-//		c2.setHttpOnly(false);
+		c2.setSecure(false);
+		c2.setHttpOnly(false);
 //		c2.setPath(c2.getPath().concat("SameSite=None;"));
-//		res.addCookie(c2);
+		res.addCookie(c2);
 		res.setHeader("Access-Control-Allow-Credentials", "true");
 		res.setHeader("Access-Control-Allow-Origin", currOrigin==null? "true":currOrigin);
 		res.setHeader("Access-Control-Allow-Headers", "access-control-allow-origin, authority, content-type,version-info, X-Request-With");
 		res.setContentType("application/json;charset=UTF-8");
-		res.addHeader("Set-Cookie","login-token="+loginRes.getLogin_token().toString()+";Path=/;HttpOnly;Secure;SameSite=None");
+//		res.addHeader("Set-Cookie","login-token="+loginRes.getLogin_token().toString()+";HttpOnly=false");
 //		res.addHeader("Set-Cookie","login-token="+loginRes.getLogin_token().toString()+";Path=/;SameSite=None;Secure");
-		res.addHeader("Set-Cookie","member-name=test_member_name;Path=/;HttpOnly;Secure;SameSite=None");
+//		res.addHeader("Set-Cookie","member-name=test_member_name;HttpOnly=false");
 //		res.addHeader("Set-Cookie","member-name=test_member_name;Path=/;SameSite=None;Secure");
 
 		return new ResponseEntity<LoginResponseModel> (loginRes,HttpStatus.OK);
@@ -91,7 +89,7 @@ public class BookingMemberLoginController {
 		if(token !=null) {	
 			LoginResponseModel userDetail = uServ.tokenlogin(UUID.fromString(token));
 			if( userDetail != null) {
-				return new ResponseEntity<String> (userDetail.getMember_name(),HttpStatus.OK);						
+				return new ResponseEntity<String> (userDetail.getMember_id().toString(),HttpStatus.OK);						
 			}else {
 				return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);				
 			}

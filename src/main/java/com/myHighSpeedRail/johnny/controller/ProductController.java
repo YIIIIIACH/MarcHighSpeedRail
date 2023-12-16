@@ -38,6 +38,7 @@ public class ProductController {
 	
 	@Autowired
 	private ProductPhotoSegmentService ppsServ;
+	
 	@PostMapping("/product/add")
 	public ResponseEntity<String> addProduct(@RequestBody PostProductDto postDto) {	
 		try{
@@ -246,6 +247,12 @@ public class ProductController {
 	@GetMapping("/product/add1")
 	public String toAddProduct() {
 		return "addProduct";
+	}
+	
+	@GetMapping("/product/findByProductIds")
+	@ResponseBody
+	public List<ProductAndPhotoSegmentDto> findProductByIds(@RequestParam("productIds") List<Integer> productIds){
+		return pService.findProductByIds(productIds);
 	}
 	
 }

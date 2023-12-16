@@ -30,8 +30,12 @@ public class TicketDiscountService {
 		return tdDao.getAllDiscountType();
 	}
 	
-	public void save(TicketDiscount td) {
-		tdDao.save(td);
+	public void save(TicketDiscount td)throws Exception {
+		try {
+			tdDao.save(td);			
+		}catch(Exception e) {
+			throw new Exception("fail to crete new ticket discount");
+		}
 	}
 	
 	public TicketDiscount findById( Integer tid) {

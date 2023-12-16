@@ -1,12 +1,16 @@
 package com.myHighSpeedRail.johnny.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myHighSpeedRail.marc.model.Station;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,21 +19,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "shopping_order")
+public class ShoppingOrder {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id", nullable = false)
 	private Integer orderId;
 	
-	@JsonFormat(pattern = "yyyy/MM/dd") // 輸出的時候 轉出去以前, 先做轉換 
+	@Column(name = "order_number", nullable = false, unique = true)
+	private String orderNumber;
+	
+	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone="GMT+8") // 輸出的時候 轉出去以前, 先做轉換 
 	@DateTimeFormat(pattern = "yyyy/MM/dd") // 轉換前端 String 日期到 Java 端日期格式
 	@Temporal(TemporalType.DATE) 
 	// TemporalType.DATE: 只保留日期部分。 TemporalType.TIME: 只保留時間部分。 TemporalType.TIMESTAMP: 保留日期和時間部分。
@@ -49,8 +57,11 @@ public class Order {
 	private String member;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "station_id_fk", nullable = false)
+	@JoinColumn(name = "station_id_fk")
 	private	Station station;
+	
+	@OneToMany(mappedBy = "shoppingOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ShoppingOrderDetail> orderDetails;
 	
 	@PrePersist // 物件轉到 persist 狀態之前要做的事
 	// 在 save 以前, 先 new Date()
@@ -58,14 +69,19 @@ public class Order {
 		if(orderCreationDate == null) {
 			orderCreationDate = new Date();
 		}
+		
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+	     String dateString = dateFormat.format(orderCreationDate);
+	     String randomDigits = String.format("%06d", new Random().nextInt(1000000));
+	     orderNumber = dateString + randomDigits;
 	}
 
-	public Order() {
+	public ShoppingOrder() {
 		super();
 	}
 
-	public Order(Integer orderId, Date orderCreationDate, Date orderCompletionDate, String orderStatus,
-			Integer totalPrice, String member, Station station) {
+	public ShoppingOrder(Integer orderId, Date orderCreationDate, Date orderCompletionDate, String orderStatus,
+			Integer totalPrice, String member, Station station, String orderNumber) {
 		super();
 		this.orderId = orderId;
 		this.orderCreationDate = orderCreationDate;
@@ -74,6 +90,7 @@ public class Order {
 		this.totalPrice = totalPrice;
 		this.member = member;
 		this.station = station;
+		this.orderNumber = orderNumber;
 	}
 
 	public Integer getOrderId() {
@@ -130,6 +147,22 @@ public class Order {
 
 	public void setStation(Station station) {
 		this.station = station;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public List<ShoppingOrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<ShoppingOrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
 	}
 	
 	

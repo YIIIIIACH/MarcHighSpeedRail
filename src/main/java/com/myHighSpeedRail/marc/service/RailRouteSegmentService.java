@@ -46,6 +46,32 @@ public class RailRouteSegmentService {
 		}
 	}
 	
+	public Boolean createAllSegment( List<Integer> priceList ,List<RailRouteStopStation> rrssList) {
+		// check slist len == priceList len
+		RailRoute rr = rrssList.get(0).getRailRoute();
+		List<Station> sList = rrssList.stream().map((spst)->spst.getStopStation()).toList();
+		List<RailRouteSegment> rrsList = new ArrayList<>();
+		for( int i=0; i< sList.size()-1; i++) {
+			for(int j=i+1; j < sList.size(); j++) {
+				rrsList.add(new RailRouteSegment(
+						rr,
+						sList.get(i),
+						sList.get(j),
+						segmengPriceCal(i,j, priceList),
+						 rrssList.get(j).getCostTimeMinute()- rrssList.get(i).getCostTimeMinute()));
+				System.out.println(i+" "+j + " "+ segmengPriceCal(i,j,priceList) +" "+ (rrssList.get(j).getCostTimeMinute()- rrssList.get(i).getCostTimeMinute()) );
+			}
+		}
+		return true;
+	}
+	private int segmengPriceCal(Integer i, Integer j, List<Integer>priceList) {
+		int acc=0; 
+		for( ; i<j ;i++) {
+			acc+= priceList.get(i);
+		}
+		return acc;
+	}
+	
 	public List<RailRouteSegment> findAll(){
 		return rrsDao.findAll();
 	}
@@ -75,5 +101,8 @@ public class RailRouteSegmentService {
 			frontStIdList.add(rrss.getStopStation().getStationId());
 		}
 		return rrsDao.findByStartEndStationExcludeRange(rrid, frontStIdList, backStIdList);
+	}
+	public Optional<RailRouteSegment> findById( Integer rrsId){
+		return rrsDao.findById(rrsId);
 	}
 }

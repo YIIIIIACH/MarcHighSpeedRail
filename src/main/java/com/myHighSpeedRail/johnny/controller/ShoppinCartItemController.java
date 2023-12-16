@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.johnny.dto.CreateUnpaidShoppingOrderRequestDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartQuantityUpdateDto;
 import com.myHighSpeedRail.johnny.dto.ShoppingCartResponseDto;
@@ -25,6 +27,7 @@ import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
 import com.myHighSpeedRail.johnny.model.ShoppingCartItem;
 import com.myHighSpeedRail.johnny.service.ProductService;
 import com.myHighSpeedRail.johnny.service.ShoppingCartItemService;
+import com.myHighSpeedRail.yuhsin.Models.LoginResponseModel;
 import com.myHighSpeedRail.yuhsin.Services.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -48,28 +51,32 @@ public class ShoppinCartItemController {
 			@RequestParam(value = "memberId") String memberId, 
 			@RequestParam(value = "quantity") Integer quantity
 			,HttpServletRequest req){	
-//		//Cookie cookie = new Cookie("login-token", "e7039cb4-ee63-47fa-8f79-3585bd4c73a2");
-//        Cookie []cookies = req.getCookies();
-//        String token = null;
-//        String uuid = null;
-////        token = "e7039cb4-ee63-47fa-8f79-3585bd4c73a2";
-//        for( Cookie ck: cookies) {
-//            if( ck.getName().equals("login-token")) {
-//                token = ck.getValue();
-//            }
-//        }
-//        if(token == null) {
-//            // redirect to MemberSystem
-//            return new ResponseEntity<String> ("failed",HttpStatus.UNAUTHORIZED);
-//        }
-//        else{
-//            //validate the current login token 
-//            uuid = uService.tokenlogin(UUID.fromString(token)).getLogin_token().toString();
-//        }
-//        if(uuid == null) {
-//            return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
-//        }
 		
+		String loginToken = null;
+		String uuid = null;
+		Cookie[] cookies = req.getCookies();
+		
+		if(cookies == null) {
+			//如找不到 cookie 則 print 找不到
+			System.out.println("not cookie found");
+		}else {		
+			//如找到 cookies 則遍歷, 並判斷cookie 的 key 是否等於字串 login-token
+			// 如 判斷為 true, 則取 value
+			for( Cookie cookie: cookies) {
+				if( cookie.getName().equals("login-token")) {
+					loginToken = cookie.getValue();
+				}
+			}
+		} 
+        String token = loginToken;
+        System.out.println(token);
+        
+        LoginResponseModel userDetail = null;
+        userDetail = uService.tokenlogin(UUID.fromString(token));
+        
+        if(userDetail == null) {
+			return new ResponseEntity<String> ("member token not valid or other error",HttpStatus.UNAUTHORIZED);
+		}	
 		//判斷商品是否已存在購物車
 		boolean isProductInCart = cartService.isProductInCart(memberId, productId);
 		
@@ -118,7 +125,7 @@ public class ShoppinCartItemController {
 		//要回應的內容
 		List<ShoppingCartResponseDto> res = new ArrayList<>();
 		
-		// cartItemList 會員的所有購物車品項
+		// cartItems 會員的所有購物車品項
 		List<ShoppingCartItem> cartItems = cartService.showAllCartItems(memberId);
 		
 			for(ShoppingCartItem item : cartItems) {
@@ -155,7 +162,7 @@ public class ShoppinCartItemController {
 		
 		if("刪除成功".equals(result))
 		{
-			return ResponseEntity.ok("商品刪除成功");// 狀態碼需不需要改成noContent
+			return ResponseEntity.ok("商品刪除成功");
 			
 		}else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("商品已不存在");
@@ -167,6 +174,15 @@ public class ShoppinCartItemController {
 	public ResponseEntity<String> removeAllCartItem(@RequestParam("memberId") String memberId){
 		String result = cartService.deleteAllItems(memberId);	
 		return ResponseEntity.ok(result);		
+	}
+	
+	//清除會員指定的購物車品項
+	@DeleteMapping("/ShoppingCart/deleteByItemIds")
+	public ResponseEntity<String> removeCartItemsByItemsId(@RequestParam String memberId, @RequestParam List<Integer> itemIds){
+		String result = cartService.deleteByMemberIdAndItemsId(memberId, itemIds);
+		
+		return ResponseEntity.ok(result);
+		
 	}
 	
 	//更新品項數量
@@ -185,4 +201,5 @@ public class ShoppinCartItemController {
 //	public String updateQuantity(@RequestBody ShoppingCartQuantityUpdateDto scquDto) {
 //		return cartService.updateQuantity(scquDto);
 //	}
+	
 }

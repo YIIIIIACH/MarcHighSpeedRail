@@ -5,11 +5,12 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.myHighSpeedRail.marc.model.RailRoute;
 import com.myHighSpeedRail.marc.model.RailRouteSegment;
 import com.myHighSpeedRail.marc.model.RailRouteStopStation;
-
+@Repository
 public interface RailRouteSegmentRepository extends JpaRepository<RailRouteSegment,Integer>{
 	@Query("from RailRouteSegment rrs where rrs.endStation.stationId=:eid and rrs.startStation.stationId=:sid and rrs.railRoute.railRouteId=:rid")
 	public Optional<RailRouteSegment> findByStopStationId(Integer rid, Integer sid, Integer eid);

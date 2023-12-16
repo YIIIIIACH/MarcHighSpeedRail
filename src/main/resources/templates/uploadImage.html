@@ -6,9 +6,9 @@
     <title>upload image</title>
 </head>
 <body>
-    <input type="file" id="input" multiple>
-    <button onclick="parseImage()">parse image</button>
-    <button onclick="postImage()">Post</button>
+    <input type="file" id="input" multiple><br><br>
+    <button onclick="parseImage()">parse image</button><br><br>
+    <button onclick="postImage()">Post</button><br><br>
     <button onclick="getImageAndAppend()">GETAppend</button>
     <img id="img" >
     <!-- <p><img id="tar" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt ="Red dot"><p> -->
@@ -28,11 +28,11 @@
 			if (photo != null) {
 				bodycontent = JSON.stringify({
 					//"productId":49,
-                    "productName":'特製抹茶餅乾',
-                    "productPrice":60,
-                    "productDescription": '使用頂級抹茶粉製成的餅乾，香濃的抹茶味搭配酥脆口感，令人陶醉。',
-                    "productType": '精選食品',
-                    "productInventory":180,
+                    "productName":"蜜汁果仁燕麥棒",
+                    "productPrice":45,
+                    "productDescription": "精選新鮮果仁，淋上香甜蜜汁，搭配燕麥製成的健康零嘴，美味又營養。",
+                    "productType": "精選食品",
+                    "productInventory":200,
 					"photoData": photo,
 					"buyingMethod": ["站點取貨","宅配到府"],
 				})

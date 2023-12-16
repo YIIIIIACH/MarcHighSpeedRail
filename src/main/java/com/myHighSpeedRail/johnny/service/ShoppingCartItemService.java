@@ -69,11 +69,6 @@ public class ShoppingCartItemService {
 	}
 	
 	
-	
-//	public ShoppingCartItem save( ShoppingCartItem shoppingCartItem) {
-//		return cartDao.save(shoppingCartItem);
-//	}
-	
 	//	展示會員所有購物車商品
 	public List<ShoppingCartItem> showAllCartItems(String memberId){
 		List<ShoppingCartItem> items = cartDao.findAllShoppingCartItemByMemberId(memberId);
@@ -110,4 +105,15 @@ public class ShoppingCartItemService {
 		
 		return shoppingCartItem.isPresent();
 	}
+	
+	// 透過會員 ID , 與多個 shoppingCartItemIds 找商品
+	public List<ShoppingCartItem> findByMemberIdAndItemsId(String memberId, List<Integer> itemsId){
+		return cartDao.findByMemberIdAndItemIds(memberId, itemsId);
+	}
+	
+	public String deleteByMemberIdAndItemsId(String memberId, List<Integer> itemsId) {
+		cartDao.deleteByMemberIdAndItemIds(memberId, itemsId);
+		return "已清除指定品項, 訂單成立";
+	}
+	
 }

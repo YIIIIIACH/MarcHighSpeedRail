@@ -5,11 +5,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.ScheduleArrive;
 import com.myHighSpeedRail.marc.model.StationScheduleCmpsPK;
-
+@Repository
 public interface ScheduleArriveRepository extends JpaRepository<ScheduleArrive,StationScheduleCmpsPK>{
 	@Query("from ScheduleArrive where schedule.scheduleId=:schId")
 	public List<ScheduleArrive> findByScheduleId(Integer schId);

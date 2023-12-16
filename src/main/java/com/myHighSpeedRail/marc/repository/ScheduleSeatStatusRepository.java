@@ -6,13 +6,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.myHighSpeedRail.marc.model.Schedule;
 import com.myHighSpeedRail.marc.model.ScheduleSeatStatus;
 import com.myHighSpeedRail.marc.model.Seat;
 
 import jakarta.transaction.Transactional;
-
+@Repository
 public interface ScheduleSeatStatusRepository extends JpaRepository<ScheduleSeatStatus, Integer>{
 	//(scheduleStatus & :mask)<0 and , Long mask
 	@Query(value="select * from schedule_seat_status  where schedule_id_fk =:sid and schedule_status & :mask =0 ",nativeQuery = true)

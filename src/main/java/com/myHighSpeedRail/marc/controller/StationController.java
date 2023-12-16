@@ -16,7 +16,7 @@ import com.myHighSpeedRail.marc.ApiResponse.StationApiResponse;
 import com.myHighSpeedRail.marc.ApiResponse.StationListApiResponse;
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.service.StationService;
-
+@CrossOrigin
 @RestController
 public class StationController {
 	
