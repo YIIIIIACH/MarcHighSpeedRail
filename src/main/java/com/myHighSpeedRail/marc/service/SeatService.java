@@ -64,6 +64,10 @@ public class SeatService {
 	public List<Seat> findByIdInList(List<Integer>seatIdList){
 		return seatDao.findByIdInList(seatIdList);
 	}
+	
+	public Integer getTrainSeatMaxRange(Integer trainId) {
+		return seatDao.getTrainSeatMaxRange(trainId);
+	}
 }
 /*
 1 - 100 seats 1 to 20
