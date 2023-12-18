@@ -3,13 +3,18 @@ package com.myHighSpeedRail.derekwu.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.myHighSpeedRail.derekwu.dto.LostPropertyGuestDTO;
 import com.myHighSpeedRail.derekwu.model.LostProperty;
@@ -33,9 +38,22 @@ public class LostPropertyController {
 	
 	//新增登記遺失物
 	@PostMapping("/LostProperty/add")
-	public LostProperty postLostProperty(@RequestBody LostProperty lostProperty) {
-		LostProperty resLostProperty = lpRepo.save(lostProperty);
-		return resLostProperty;
+	public ResponseEntity<LostProperty> postLostProperty(
+			@RequestBody LostProperty lostProperty,
+			@RequestPart(name = "lostPhoto", required = false) MultipartFile lostPhotoFile) {
+		try{
+			// 將 MultipartFile 的檔案內容轉換為 byte[]
+            if (lostPhotoFile != null) {
+                byte[] lostPhotoBytes = lostPhotoFile.getBytes();
+                lostProperty.setLostPhoto(lostPhotoBytes);
+            }
+            LostProperty savedLostProperty = lpRepo.save(lostProperty);
+            return new ResponseEntity<>(savedLostProperty, HttpStatus.CREATED);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	//查詢遺失物(員工)
 	@GetMapping("/LostProperty/backend/search/detailOutward")
@@ -76,4 +94,12 @@ public class LostPropertyController {
 	public List<LostProperty> searchMoreDetailsOutward(@RequestParam("details") String details){
 		return lpServ.searchMoreDetails(details);
 	}
+	
+	//查詢所有遺失物(員工)
+	@GetMapping("/LostProperty/backend/findAll")
+	public Page<LostProperty> findAll(){
+		return lpServ.findByPage(1);
+	}
+	
+	
 }
