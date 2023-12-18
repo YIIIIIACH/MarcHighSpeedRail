@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myHighSpeedRail.marc.dto.ScheduleRestSeatBackStageDto;
 import com.myHighSpeedRail.marc.model.ScheduleRestSeat;
 import com.myHighSpeedRail.marc.service.ScheduleRestSeatService;
 
@@ -36,6 +37,17 @@ public class ScheduleRestSeatController {
 		List<Integer> slist = new ArrayList<Integer>();
 		slist.add(schid);
 		return schRestSeatServ.segmentDiscountRestSeatInSchedule( slist, ststId, edstId, tdType);
+	}
+	
+	@GetMapping("/getScheduleRestSeat")
+	public @ResponseBody ResponseEntity<List<ScheduleRestSeatBackStageDto>> getScheduleRestSeat(@RequestParam(value="schid")Integer schid){
+		try {
+			return new ResponseEntity< List<ScheduleRestSeatBackStageDto>>( schRestSeatServ.getScheduleRestSeat(schid),HttpStatus.OK);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity< List<ScheduleRestSeatBackStageDto>>(new ArrayList<ScheduleRestSeatBackStageDto>(),HttpStatus.BAD_REQUEST);
 	}
 	
 }

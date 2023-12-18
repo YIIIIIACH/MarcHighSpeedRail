@@ -14,7 +14,7 @@ import com.myHighSpeedRail.marc.model.ScheduleRestSeat;
 import com.myHighSpeedRail.marc.model.Station;
 import com.myHighSpeedRail.marc.model.TicketDiscount;
 import com.myHighSpeedRail.marc.repository.ScheduleRestSeatRepository;
-
+import com.myHighSpeedRail.marc.dto.ScheduleRestSeatBackStageDto;
 @Transactional(isolation = Isolation.SERIALIZABLE)
 @Service
 public class ScheduleRestSeatService {
@@ -56,7 +56,19 @@ public class ScheduleRestSeatService {
 	public List<ScheduleRestSeat> segmentDiscountRestSeatInSchedule(List<Integer> schidList, Integer ststid, Integer edstid, String tickedDiscountType) {
 		return schRestSeatDao.getRestSeatByStEdStationTicketDiscount(schidList,ststid, edstid, tickedDiscountType);
 	}
-	
+	public List<ScheduleRestSeatBackStageDto> getScheduleRestSeat(Integer schid){
+		List<ScheduleRestSeat> restSeats = schRestSeatDao.getScheduleRestSeat(schid);
+		List<ScheduleRestSeatBackStageDto> resList =   new ArrayList<ScheduleRestSeatBackStageDto>();
+		for( ScheduleRestSeat srs : restSeats) {
+			ScheduleRestSeatBackStageDto tmp =  new ScheduleRestSeatBackStageDto();
+			tmp.startStationId= srs.getRailRouteSegment().getStartStation().getStationId();
+			tmp.endStationId = srs.getRailRouteSegment().getEndStation().getStationId();
+			tmp.ticketDiscountId = srs.getTicketDiscount().getTicketDiscountId();
+			tmp.restSeatAmount = srs.getRestSeatAmount();
+			resList.add(tmp);
+		}
+		return resList;
+	}
 	/*
 	 * update schedule_rest_seat set rest_seat_amount =rest_seat_amount  where schedule_id_fk=<SCHID> and discount_id_fk=<DISCOUNTID> and rail_route_segment_id_fk in (
 			findByRouteIdStartStEndStRange( rrid, findByRouteIdStationSeqMinRange(rrid, rrs1.getxxSeq()) , findByRouteIdStationSeqMinRange(rrid, rrs1.getxxSeq()))
