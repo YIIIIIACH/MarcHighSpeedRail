@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.myHighSpeedRail.derekwu.dto.LostPropertyGuestDTO;
@@ -12,7 +15,6 @@ import com.myHighSpeedRail.derekwu.model.LostProperty;
 import com.myHighSpeedRail.derekwu.repository.LostPropertyRepository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceContext;
 
 @Service
@@ -62,10 +64,21 @@ public class LostPropertyService {
 	//設定多重like的搜尋Query
 	public List<LostProperty> searchMoreDetails(String details){
 		List<LostProperty> resultList = new ArrayList<>();
-		try {
 			resultList = em.createNativeQuery(empMorekeywordSearch(details),LostProperty.class).getResultList();
-		}catch(Exception e){
-		}
+			
 		return resultList;
 	}
+	
+	//找全部並且page化
+	public Page<LostProperty> findByPage(Integer pageNumber){
+		Pageable pgb = PageRequest.of(pageNumber-1, 8, Sort.Direction.DESC, "findDate");
+		
+		Page<LostProperty> page = LPrepo.findAll(pgb);
+		return page;
+	}
+	
+	
+	//設定以page呈現多重like的搜尋Query 冷靜，先想想
+
+	
 }
