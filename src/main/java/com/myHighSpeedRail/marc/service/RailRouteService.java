@@ -62,4 +62,19 @@ public class RailRouteService {
 	public List<RailRoute>getAllByHQL(){
 		return rrDao.getAllRailRouteByHQL();
 	}
+	
+	public RailRoute insertRouteBackStage(Integer depStationId,Integer desStationid,Integer stopStationCnt
+			){
+		try {
+			// check station exist
+			if( sDao.findById(desStationid).isEmpty() || sDao.findById(desStationid).isEmpty()) {
+				throw new Exception("station not found");
+			}
+			return rrDao.save(new RailRoute( sDao.findById(depStationId).get(), sDao.findById(desStationid).get(), stopStationCnt));
+			
+		}catch(Exception e){
+			System.err.println("[Error] occur in RailRouteController or Failed of Find Station by Id");
+		}
+		return null;
+	}
 }
