@@ -81,10 +81,13 @@ public class SystemAuthorHandler {
 
 		} else {
 			Department dept = eService.findLatestDepartment(e.getEmployeeId());
+
+//			SystemAuthor departmentSystemAuthor = dept.getSystemAuthor().get(0);
+
 			// 從部門Id尋找權限
 			SystemAuthor departmentSystemAuthor = dService.getDepartmentSystemAuthor(dept.getDepartmentId());
 
-			if (!(departmentSystemAuthor == null)) {
+			if (departmentSystemAuthor == null) {
 				System.out.println("沒有這個部門ID的權限");
 				return null;
 			}

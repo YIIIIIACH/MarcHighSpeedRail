@@ -62,6 +62,10 @@ public class RailRouteSegmentService {
 				System.out.println(i+" "+j + " "+ segmengPriceCal(i,j,priceList) +" "+ (rrssList.get(j).getCostTimeMinute()- rrssList.get(i).getCostTimeMinute()) );
 			}
 		}
+		List<RailRouteSegment> res =  rrsDao.saveAll(rrsList);
+		if( res==null || res.size()<=0) {
+			return false;
+		}
 		return true;
 	}
 	private int segmengPriceCal(Integer i, Integer j, List<Integer>priceList) {
