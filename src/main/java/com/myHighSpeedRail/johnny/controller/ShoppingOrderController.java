@@ -92,48 +92,48 @@ public class ShoppingOrderController {
 	
 	
 
-@PostMapping("/createPaypalOrder")
-public ResponseEntity<String> createPaypalOrder( @RequestBody CreatePaidShoppingOrderDto orderRequest){
-	CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
-	// put info into dto
-	dto.intent="CAPTURE";
-	// add purchase_units into dto
-	List<Unit> purUnits= new ArrayList<Unit>();
-	Unit u = new Unit();
-	u.items= new ArrayList<Item>();
-	// add item 
-//		Integer priceSum=0;
-//		Station stst = stServ.findById(ststid).get();
-//		Station edst = stServ.findById(edstid).get();
-	
-	Item item = new Item();
-	item.name= "MarcHSR_product_all";
-	item.description= "高鐵商品";
-	item.quantity="1";
-//			priceSum+= oneTicketPrice;
-	UnitAmount ua= new UnitAmount("TWD", String.valueOf(orderRequest.totalPrice)+".00");
-	item.unit_amount=ua;
-	u.items.add(item);
-	//create Amount
-	Amount am = new Amount();
-	am.currency_code="TWD";
-	am.value= String.valueOf(orderRequest.totalPrice)+".00";
-	am.breakdown= new Breakdown("TWD",orderRequest.totalPrice);
-	u.amount= am;
-	purUnits.add(u);
-	dto.purchase_units=purUnits;
-	AppContext actx = new AppContext();
-//	actx.return_url = SERVER_BASE_URL+"";// your vue return url
-	actx.return_url = REMOTE_FRONT_SERVER_URL+"/orderPaymentSuccess/"+orderRequest.orderId;
-	actx.cancel_url = FRONT_SERVER_URL;// your payout failed return url, 
-	//會redirect client 到一隻專門接收user approve 成功資訊的controller
-	dto.application_context= actx;
-	return paypalServ.createProductOrderUtil(dto);
-}
+	@PostMapping("/createPaypalOrder")
+	public ResponseEntity<String> createPaypalOrder( @RequestBody CreatePaidShoppingOrderDto orderRequest){
+		CreatePayPalOrderDto dto = new CreatePayPalOrderDto();
+		// put info into dto
+		dto.intent="CAPTURE";
+		// add purchase_units into dto
+		List<Unit> purUnits= new ArrayList<Unit>();
+		Unit u = new Unit();
+		u.items= new ArrayList<Item>();
+		// add item 
+	//		Integer priceSum=0;
+	//		Station stst = stServ.findById(ststid).get();
+	//		Station edst = stServ.findById(edstid).get();
+		
+		Item item = new Item();
+		item.name= "MarcHSR_product_all";
+		item.description= "高鐵商品";
+		item.quantity="1";
+	//			priceSum+= oneTicketPrice;
+		UnitAmount ua= new UnitAmount("TWD", String.valueOf(orderRequest.totalPrice)+".00");
+		item.unit_amount=ua;
+		u.items.add(item);
+		//create Amount
+		Amount am = new Amount();
+		am.currency_code="TWD";
+		am.value= String.valueOf(orderRequest.totalPrice)+".00";
+		am.breakdown= new Breakdown("TWD",orderRequest.totalPrice);
+		u.amount= am;
+		purUnits.add(u);
+		dto.purchase_units=purUnits;
+		AppContext actx = new AppContext();
+	//	actx.return_url = SERVER_BASE_URL+"";// your vue return url
+		actx.return_url = REMOTE_FRONT_SERVER_URL+"/orderPaymentSuccess/"+orderRequest.orderId;
+		actx.cancel_url = FRONT_SERVER_URL;// your payout failed return url, 
+		//會redirect client 到一隻專門接收user approve 成功資訊的controller
+		dto.application_context= actx;
+		return paypalServ.createProductOrderUtil(dto);
+	}
 
 
-@PostMapping("/changeOrderStatus")
-public @ResponseBody ResponseEntity<String> changeOrderStatus(@RequestBody Integer orderId, @RequestParam String paypalOrderId){
+	@PostMapping("/changeOrderStatus")
+	public @ResponseBody ResponseEntity<String> changeOrderStatus(@RequestBody Integer orderId, @RequestParam String paypalOrderId){
 	//
 	// use ticketOrderId to get paypal order id
 		// 可能需要先檢查是否 paypal ticket order is approve
@@ -153,13 +153,12 @@ public @ResponseBody ResponseEntity<String> changeOrderStatus(@RequestBody Integ
 //		return oService.findOrderByMemberId(memberId);
 //	}
 
-@GetMapping("/OrderHistory")
-@ResponseBody
-public List<ShoppingOrderWithDetailResponseDto> findOrderByMemberId(HttpServletRequest req, @RequestParam("memberId") String memberId){
-	return oService.findOrderAndDetailByMemberId(memberId);
-	
-}
-
+	@GetMapping("/OrderHistory")
+	@ResponseBody
+	public List<ShoppingOrderWithDetailResponseDto> findOrderByMemberId(HttpServletRequest req, @RequestParam("memberId") String memberId){
+		return oService.findOrderAndDetailByMemberId(memberId);
+		
+	}
 
 
 }

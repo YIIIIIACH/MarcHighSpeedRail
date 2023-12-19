@@ -9,7 +9,7 @@ import com.myHighSpeedRail.johnny.model.Product;
 public class ShoppingOrderWithDetailResponseDto {
 
 	public Date orderCreationDate;
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone="GMT+8")
 	public Date orderCompletionDate;
 	public String orderStatus;
 	public String orderNumber;

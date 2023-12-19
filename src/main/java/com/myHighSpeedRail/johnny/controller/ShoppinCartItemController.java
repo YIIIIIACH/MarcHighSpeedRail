@@ -186,7 +186,7 @@ public class ShoppinCartItemController {
 	}
 	
 	//更新品項數量
-	@PutMapping("/ShoppingCart/updata")
+	@PutMapping("/ShoppingCart/update")
 	@ResponseBody
 	public String updateQuantity(
 			@RequestParam("memberId") String memberId, 
