@@ -25,6 +25,9 @@ public interface ScheduleRestSeatRepository extends JpaRepository<ScheduleRestSe
 			+ " where rrs.startStation.stationId=:ststid and rrs.endStation.stationId=:edstid"
 			+ " and td.ticketDiscountType=:tdtype and schrs.schedule.scheduleId in :schidlist")
 	public List<ScheduleRestSeat> getRestSeatByStEdStationTicketDiscount(List<Integer>schidlist,Integer ststid,Integer edstid, String tdtype);
+	
+	@Query("from ScheduleRestSeat as schrs where schrs.schedule.scheduleId=:schid")
+	public List<ScheduleRestSeat> getScheduleRestSeat(Integer schid);
 	/*
 	 * update schedule_rest_seat set rest_seat_amount =rest_seat_amount  where schedule_id_fk=<SCHID> and discount_id_fk=<DISCOUNTID> and rail_route_segment_id_fk in (
 			select rail_route_segment_id from rail_route_segment where start_station_id_fk in (

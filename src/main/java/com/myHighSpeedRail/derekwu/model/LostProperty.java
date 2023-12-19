@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.derekwu.model;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,8 +45,8 @@ public class LostProperty {
 	@Column(name="detail_outward",nullable=false)
 	private String detailOutward;
 	
-	@Column(name="lost_photo",nullable=false)
-	private String lostPhoto;
+	@Column(name="lost_photo",nullable=true)
+	private byte[] lostPhoto;
 	
 	@Column(name="letter_check",nullable=false)
 	private Boolean letterCheck = false;
@@ -61,10 +62,11 @@ public class LostProperty {
 	public LostProperty() {
 		
 	}
-	
+
 	public LostProperty(Integer lostPropertyId, Integer tripId, String stationName, Date findDate, String stayStation,
-			String simpleOutward, String detailOutward, String lostPhoto, Boolean letterCheck, Boolean receiveCheck, FindLost findlost) {
-		
+			String simpleOutward, String detailOutward, byte[] lostPhoto, Boolean letterCheck, Boolean receiveCheck,
+			FindLost findlost) {
+		super();
 		this.lostPropertyId = lostPropertyId;
 		this.tripId = tripId;
 		this.stationName = stationName;
@@ -76,24 +78,6 @@ public class LostProperty {
 		this.letterCheck = letterCheck;
 		this.receiveCheck = receiveCheck;
 		this.findlost = findlost;
-	}
-	public LostProperty(Integer tripId, String stationName, Date findDate, String stayStation,
-			String simpleOutward, String detailOutward, String lostPhoto) {
-		
-		this.tripId = tripId;
-		this.stationName = stationName;
-		this.findDate = findDate;
-		this.stayStation = stayStation;
-		this.simpleOutward = simpleOutward;
-		this.detailOutward = detailOutward;
-		this.lostPhoto = lostPhoto;
-	}
-	public LostProperty(String stationName, Date findDate, String stayStation,
-			String simpleOutward) {				
-		this.stationName = stationName;
-		this.findDate = findDate;
-		this.stayStation = stayStation;
-		this.simpleOutward = simpleOutward;		
 	}
 
 	public Integer getLostPropertyId() {
@@ -152,11 +136,11 @@ public class LostProperty {
 		this.detailOutward = detailOutward;
 	}
 
-	public String getLostPhoto() {
+	public byte[] getLostPhoto() {
 		return lostPhoto;
 	}
 
-	public void setLostPhoto(String lostPhoto) {
+	public void setLostPhoto(byte[] lostPhoto) {
 		this.lostPhoto = lostPhoto;
 	}
 
@@ -188,9 +172,11 @@ public class LostProperty {
 	public String toString() {
 		return "LostProperty [lostPropertyId=" + lostPropertyId + ", tripId=" + tripId + ", stationName=" + stationName
 				+ ", findDate=" + findDate + ", stayStation=" + stayStation + ", simpleOutward=" + simpleOutward
-				+ ", detailOutward=" + detailOutward + ", lostPhoto=" + lostPhoto + ", letterCheck=" + letterCheck
-				+ ", receiveCheck=" + receiveCheck + ", findlost=" + findlost + "]";
+				+ ", detailOutward=" + detailOutward + ", lostPhoto=" + Arrays.toString(lostPhoto) + ", letterCheck="
+				+ letterCheck + ", receiveCheck=" + receiveCheck + ", findlost=" + findlost + "]";
 	}
+	
+	
 
 
 	

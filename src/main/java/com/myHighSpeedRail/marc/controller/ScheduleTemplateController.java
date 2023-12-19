@@ -45,5 +45,15 @@ public class ScheduleTemplateController {
 		}
 		return ResponseEntity.ok("insert was successful");
 	}
-	
+	@GetMapping("/getScheduleTemplateById")
+	public @ResponseBody ResponseEntity<ScheduleTemplate> getScheduleTemplateById(@RequestParam Integer schtid){
+		ScheduleTemplate scht = null;
+		try {
+			scht = stServ.findById(schtid);			
+		}catch( Exception e) {
+			e.printStackTrace();
+			new ResponseEntity<ScheduleTemplate> (scht, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<ScheduleTemplate> (scht, HttpStatus.OK);
+	}
 }

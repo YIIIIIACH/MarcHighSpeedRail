@@ -36,10 +36,12 @@ public class ScheduleTemplate {
 	private RailRoute railRoute;
 	
 	@Temporal(TemporalType.TIME)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Column(name="depart_time", nullable=false)
 	private Date departTime;
 	
 	@Temporal(TemporalType.TIME)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Column(name="destinate_time",nullable=false)
 	private Date destinateTime;
 	

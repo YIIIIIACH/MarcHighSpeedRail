@@ -56,7 +56,11 @@ public class RailRouteController {
 		// create one railRoute
 //		rrsss.insertRoute(dto.depStationId, dto.desStationId, dto.stationCnt);
 		// rail route id is temporary
-		List<RailRouteStopStation> rrssList = rrssServ.inserRailRouteStopStations( Integer.valueOf(1), dto.stIdList, dto.costTimeList);
+		RailRoute newRR = rrsss.insertRouteBackStage(dto.depStationId, dto.desStationId, dto.stIdList.size());
+		if( newRR ==null) {
+			return new ResponseEntity<String>("failed" , HttpStatus.BAD_REQUEST);
+		}
+		List<RailRouteStopStation> rrssList = rrssServ.inserRailRouteStopStations( newRR.getRailRouteId(), dto.stIdList, dto.costTimeList);
 		if(rrssList==null) {
 			return new ResponseEntity<String>("constructing , but failed" , HttpStatus.BAD_REQUEST);
 		}

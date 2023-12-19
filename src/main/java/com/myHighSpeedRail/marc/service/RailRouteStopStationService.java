@@ -55,6 +55,10 @@ public class RailRouteStopStationService {
 			schssList.add(new RailRouteStopStation(rr.get(), i, sList.get(i), costTimeList.get(i)));
 			System.out.println( rr.get().getRailRouteId()+" "+i + " " + sList.get(i).getStationName()+ " "+ costTimeList.get(i));
 		}
+		List<RailRouteStopStation> res = rrssDao.saveAll( schssList);
+		if( res == null || res.size()<=0) {
+			return null;
+		}
 		return schssList;
 	}
 	
