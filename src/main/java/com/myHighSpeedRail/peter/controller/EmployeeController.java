@@ -62,6 +62,12 @@ public class EmployeeController {
 	public ResponseEntity<?> employeeLogin(@RequestParam("empAccount") String loginAccount,
 			@RequestParam("psw") String loginPwd, HttpSession httpSession) {
 
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp != null) {
+			httpSession.removeAttribute("loginEmployee");
+		}
+
 		Employee result = eService.checklogin(loginAccount, loginPwd);
 
 		if (result != null) {
@@ -74,7 +80,6 @@ public class EmployeeController {
 			sessionEmp.setDeptName(result.getEmployeeHistoricalDepartment().get(0).getDepartment().getDepartmentName());
 			sessionEmp.setEsa(esa);
 			httpSession.setAttribute("loginEmployee", sessionEmp);
-			System.out.println(sessionEmp);
 			return ResponseEntity.status(HttpStatus.OK).body("登入成功");
 		}
 
@@ -96,6 +101,7 @@ public class EmployeeController {
 	@ResponseBody
 	@PostMapping("/employee/add")
 	public ResponseEntity<?> addEmpData(@RequestBody Employee emp) {
+//		System.out.println(emp);
 
 		if (eService.checkEmpAccountIfExist(emp.getEmployeeAccount())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("員工帳號已存在");
@@ -311,6 +317,14 @@ public class EmployeeController {
 		eService.employeeUpdateWithoutEncodePassword(e);
 
 		return ResponseEntity.status(HttpStatus.OK).body("更新資料成功");
+	}
+
+	@PutMapping("/employee/logout")
+	public ResponseEntity<?> employeeLogout(HttpSession httpSession) {
+
+		httpSession.removeAttribute("loginEmployee");
+
+		return ResponseEntity.status(HttpStatus.OK).body("已登出");
 	}
 
 }
