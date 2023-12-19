@@ -238,18 +238,82 @@ public class SystemAuthorController {
 
 		if (emp == null) {
 			System.out.println("session attribute 空的");
-			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
 		}
 
 		Boolean rightsOfView = emp.getEsa().rightsOfView(emp.getEmpId(), name);
 
 		if (rightsOfView == false) {
-			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
 		} else if (rightsOfView == true) {
-			return ResponseEntity.status(HttpStatus.OK).body("OK");
+			return ResponseEntity.status(HttpStatus.OK).body(true);
 		}
 
-		return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+		return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+	}
+	
+//	@ResponseBody
+	@GetMapping("/create")
+	public ResponseEntity<?> auditCreateAuthor(@RequestParam("name") String name, HttpSession httpSession) {
+
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+		}
+
+		Boolean rightsOfCreate = emp.getEsa().rightsOfCreate(emp.getEmpId(), name);
+
+		if (rightsOfCreate == false) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+		} else if (rightsOfCreate == true) {
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		}
+
+		return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+	}
+	
+	@GetMapping("/delete")
+	public ResponseEntity<?> auditDeleteAuthor(@RequestParam("name") String name, HttpSession httpSession) {
+
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+		}
+
+		Boolean rightsOfDelete = emp.getEsa().rightsOfDelete(emp.getEmpId(), name);
+
+		if (rightsOfDelete == false) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+		} else if (rightsOfDelete == true) {
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		}
+
+		return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+	}
+	
+	@GetMapping("/update")
+	public ResponseEntity<?> auditUpdateAuthor(@RequestParam("name") String name, HttpSession httpSession) {
+
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+		}
+
+		Boolean rightsOfUpdate = emp.getEsa().rightsOfUpdate(emp.getEmpId(), name);
+
+		if (rightsOfUpdate == false) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
+		} else if (rightsOfUpdate == true) {
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		}
+
+		return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED); // 401
 	}
 
 }
