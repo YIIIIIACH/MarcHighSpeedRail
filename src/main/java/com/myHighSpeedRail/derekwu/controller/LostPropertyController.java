@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myHighSpeedRail.derekwu.dto.LostPropertyGuestDTO;
 import com.myHighSpeedRail.derekwu.model.LostProperty;
 import com.myHighSpeedRail.derekwu.repository.LostPropertyRepository;
@@ -39,21 +40,25 @@ public class LostPropertyController {
 	//新增登記遺失物
 	@PostMapping("/LostProperty/add")
 	public ResponseEntity<LostProperty> postLostProperty(
-			@RequestBody LostProperty lostProperty,
-			@RequestPart(name = "lostPhoto", required = false) MultipartFile lostPhotoFile) {
-		try{
-			// 將 MultipartFile 的檔案內容轉換為 byte[]
-            if (lostPhotoFile != null) {
-                byte[] lostPhotoBytes = lostPhotoFile.getBytes();
-                lostProperty.setLostPhoto(lostPhotoBytes);
-            }
-            LostProperty savedLostProperty = lpRepo.save(lostProperty);
-            return new ResponseEntity<>(savedLostProperty, HttpStatus.CREATED);
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	    @RequestParam(name = "lostProperty") String lostPropertyJson,
+	    @RequestPart(name = "lostPhoto", required = false) MultipartFile lostPhoto) {
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        LostProperty lostProperty = objectMapper.readValue(lostPropertyJson, LostProperty.class);
+
+	        // 將 MultipartFile 的檔案內容轉換為 byte[]
+	        if (lostPhoto != null) {
+	            byte[] lostPhotoBytes = lostPhoto.getBytes();
+	            lostProperty.setLostPhoto(lostPhotoBytes);
+	        }
+
+	        LostProperty savedLostProperty = lpRepo.save(lostProperty);
+	        return new ResponseEntity<>(savedLostProperty, HttpStatus.CREATED);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	}
 	//查詢遺失物(員工)
 	@GetMapping("/LostProperty/backend/search/detailOutward")

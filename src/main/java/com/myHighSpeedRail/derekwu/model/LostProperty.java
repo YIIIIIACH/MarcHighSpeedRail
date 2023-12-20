@@ -45,6 +45,7 @@ public class LostProperty {
 	@Column(name="detail_outward",nullable=false)
 	private String detailOutward;
 	
+	@JsonIgnore
 	@Column(name="lost_photo",nullable=true)
 	private byte[] lostPhoto;
 	
