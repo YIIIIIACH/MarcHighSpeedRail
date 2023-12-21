@@ -35,7 +35,6 @@ public class SeatController {
 		}
 		return new ResponseEntity<String>("update success",HttpStatus.OK);
 	}
-	
 	@GetMapping("/getTrainSeatMaxRange/{trainId}")
 	public ResponseEntity<Integer> getTrainSeatMaxRange(@PathVariable Integer trainId){
 		Integer maxSeatSeq=null;
