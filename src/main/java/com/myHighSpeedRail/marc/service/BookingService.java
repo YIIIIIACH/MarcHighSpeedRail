@@ -41,4 +41,17 @@ public class BookingService {
 			return;
 		}
 	}
+	
+	public Boolean verifyBookingQRcode( Integer bookingid) {
+		Optional<Booking> bOpt = bDao.findById(bookingid);
+		if( bOpt.isEmpty()) {
+			return false;
+		}
+		if( "已分配座位".equals(bOpt.get().getStatus())) {
+			bOpt.get().setStatus("已使用");
+			bDao.save( bOpt.get());
+			return true;
+		}
+		return false;
+	}
 }
