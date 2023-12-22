@@ -47,7 +47,7 @@ public class BookingService {
 		if( bOpt.isEmpty()) {
 			return false;
 		}
-		if( "已分配座位".equals(bOpt.get().getStatus())) {
+		if( "已分配座位".equals(bOpt.get().getStatus()) && bOpt.get().getTicketQrcodeUrl()!= null) {
 			bOpt.get().setStatus("已使用");
 			bDao.save( bOpt.get());
 			return true;
