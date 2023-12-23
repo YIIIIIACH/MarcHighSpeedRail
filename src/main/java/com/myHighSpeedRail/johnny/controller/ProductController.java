@@ -26,8 +26,13 @@ import com.myHighSpeedRail.johnny.dto.PostProductDto;
 import com.myHighSpeedRail.johnny.dto.ProductAndPhotoSegmentDto;
 import com.myHighSpeedRail.johnny.model.Product;
 import com.myHighSpeedRail.johnny.model.ProductPhotoSegment;
+import com.myHighSpeedRail.johnny.model.ProductTrackingList;
 import com.myHighSpeedRail.johnny.service.ProductPhotoSegmentService;
 import com.myHighSpeedRail.johnny.service.ProductService;
+import com.myHighSpeedRail.johnny.service.ProductTrackingListService;
+import com.myHighSpeedRail.johnny.util.ConfirmIsTracking;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -38,6 +43,10 @@ public class ProductController {
 	
 	@Autowired
 	private ProductPhotoSegmentService ppsServ;
+	
+	@Autowired
+	private ProductTrackingListService ptlServ;
+	
 	
 	@PostMapping("/product/add")
 	public ResponseEntity<String> addProduct(@RequestBody PostProductDto postDto) {	
@@ -80,8 +89,28 @@ public class ProductController {
 	// 取得所有商品資訊
 	@GetMapping("/products")
 	@ResponseBody
-	public List<ProductAndPhotoSegmentDto> getAllproduct(){
-		return pService.findAllProduct();	
+	public List<ProductAndPhotoSegmentDto> getAllproduct(@RequestParam("mId") String mId){
+		return getTrackingProductID(mId);	
+	}
+	
+	//確認商品是否已追蹤
+	public List<ProductAndPhotoSegmentDto> getTrackingProductID(String mId){
+		List<ProductTrackingList> trackings = ptlServ.findByMemberId(mId);
+		List<ProductAndPhotoSegmentDto> products = pService.findAllProduct();
+		
+		for (ProductAndPhotoSegmentDto p : products) {
+	        p.isTracking = false;
+	    }
+		
+		for(ProductTrackingList t : trackings) {
+			for(ProductAndPhotoSegmentDto p : products) {
+				if(t.getProduct().getProductId() == p.productId) {
+					p.isTracking = true;
+				}
+			}
+		}
+		return products;
+		
 	}
 	
 	//取得product (分頁)

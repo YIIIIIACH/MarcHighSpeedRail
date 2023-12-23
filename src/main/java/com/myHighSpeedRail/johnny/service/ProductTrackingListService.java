@@ -37,13 +37,24 @@ public class ProductTrackingListService {
 	}
 	
 	public List<ProductTrackingList> findByMemberId(String mId){
-		
-		return ptlDao.findByMemberId(mId);
-		
+		return ptlDao.findByMemberId(mId);	
 	}
 	
 	public String deleteByMemberIdAndtrackingId(String mId, Integer tId) {
 		ptlDao.deleteByMemberIdAndTrackingId(mId, tId);
 		return "已刪除";
 	}
+	
+	public String deleteByMemberIdAndProductId(String mId, Integer pId) {
+		ptlDao.deleteByMemberIdAndproductId(mId, pId);
+		return "已刪除";
+	}
+	
+	public boolean isProductInTrackingList(String mId, Integer pId) {
+		
+		 Optional<ProductTrackingList> optional = ptlDao.findByMemberIdAndProductId(mId, pId);
+		 
+		 return optional.isPresent();
+	}
+	
 }

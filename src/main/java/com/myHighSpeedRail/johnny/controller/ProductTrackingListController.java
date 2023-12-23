@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,11 +31,19 @@ public class ProductTrackingListController {
 	
 	@PostMapping("/ProductTrackingList/add")
 	@ResponseBody
-	public String addProductToTrackingList(@RequestBody ProductTrackingRequestDto ptl) {
+	public ResponseEntity<String> addProductToTrackingList(@RequestBody ProductTrackingRequestDto ptl) {
 		
-		ptlServ.addProductToTrackingList(ptl.pId, ptl.mId);
+		boolean isProductInTrackingList = ptlServ.isProductInTrackingList(ptl.mId, ptl.pId);
 		
-		return "追蹤成功";
+		if(isProductInTrackingList) {
+			return new ResponseEntity<String> ("商品已在追蹤清單內",HttpStatus.OK);
+		}else {
+			ptlServ.addProductToTrackingList(ptl.pId, ptl.mId);
+			return new ResponseEntity<String> ("追蹤商品成功",HttpStatus.OK);
+		}
+		
+		
+		
 		
 	}
 	
@@ -67,6 +77,12 @@ public class ProductTrackingListController {
 	@ResponseBody
 	public String deleteByMemberIdAndTrackingId(@RequestParam("mId") String mId, @RequestParam("tId") Integer tId) {
 		return ptlServ.deleteByMemberIdAndtrackingId(mId, tId);
+	}
+	
+	@DeleteMapping("/ProductTrackingList/delete2")
+	@ResponseBody
+	public String deleteByMemberIdAndProductId(@RequestParam("mId") String mId, @RequestParam("pId") Integer pId) {
+		return ptlServ.deleteByMemberIdAndProductId(mId, pId);
 	}
 	
 	
