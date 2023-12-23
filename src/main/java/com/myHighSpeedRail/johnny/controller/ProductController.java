@@ -150,9 +150,21 @@ public class ProductController {
 	
 	@GetMapping("/api/product/{id}")
 	@ResponseBody
-	public ProductAndPhotoSegmentDto findProductById(@PathVariable("id") Integer id) {
+	public ProductAndPhotoSegmentDto findProductById(@PathVariable("id") Integer id, @RequestParam("mId") String mId) {
+		return isProductInTracking(id, mId);
+	}
+	
+	public ProductAndPhotoSegmentDto isProductInTracking(Integer pId, String mId) {
+		ProductAndPhotoSegmentDto product = pService.findProductById(pId);
+		List<ProductTrackingList> trackings = ptlServ.findByMemberId(mId);
 		
-		return pService.findProductById(id);
+		for(ProductTrackingList t : trackings) {
+			if(t.getProduct().getProductId() == pId) {
+				product.isTracking = true;
+			}
+		}
+		return product;
+		
 	}
 	
 	//透過id下架商品
