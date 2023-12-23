@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -45,6 +46,7 @@ public class LostProperty {
 	@Column(name="detail_outward",nullable=false)
 	private String detailOutward;
 	
+	@Lob
 	@JsonIgnore
 	@Column(name="lost_photo",nullable=true)
 	private byte[] lostPhoto;
