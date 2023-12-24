@@ -8,9 +8,5 @@ import java.util.UUID;
 @Getter
 public class TokenLoginRequestModel {
     private UUID login_token;
-    private UUID member_id;
-    private String device_name;
-    private String data;
-    private String created_at;
 
 }
