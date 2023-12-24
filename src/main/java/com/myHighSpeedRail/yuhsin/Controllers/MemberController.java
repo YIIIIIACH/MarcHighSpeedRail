@@ -158,7 +158,6 @@ public class MemberController {
             var get_data=_userService.edit(
                     request.getMember_id(),
                     request.getMember_name(),
-                    request.getMember_password(),
                     request.getMember_email(),
                     request.getMember_phone());
             return g1.toJson(get_data);
@@ -169,6 +168,33 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/member/editpwd")
+    public String editpwd(@RequestBody String body_input,
+                       HttpServletResponse httpServletResponse){
+        _logger.info("on editpwd");
+        PasswordRequestModel request;
+        PasswordResponseModel result;
+        try {
+            _logger.debug("editpwd," + body_input);
+            request = g1.fromJson(body_input, PasswordRequestModel.class);
+        } catch (Exception ex) {
+            _logger.warn(String.format("editpwd input fail,%s", ex.toString()));
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+        try {
+            var get_data=_userService.editpwd(
+                    request.getMember_id(),
+                    request.getMode(),
+                    request.getCurent_password(),
+                    request.getNew_password());
+            return g1.toJson(get_data);
+        } catch (Exception ex) {
+            _logger.warn(String.format("editpwd,output fail,%s", ex.toString()));
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+    }
 
     @PostMapping("/member/removeUser")
     public String delete(@RequestBody String body_input,

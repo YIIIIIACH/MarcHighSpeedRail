@@ -102,11 +102,31 @@ public class UserService {
         return null;
     }
 
-    public UpdateResponseModel edit(UUID id, String name, String password, String email, String phone) {
+    public PasswordResponseModel editpwd(UUID id, int mode, String password, String newpwd) {
+        PasswordRequestModel request = new PasswordRequestModel();
+        request.setMember_id(id);
+        request.setMode(mode);
+        request.setCurent_password(password);
+        request.setNew_password(newpwd);
+        Gson g1 = new Gson();
+        String requestJson = g1.toJson(request);
+        String callback = null;
+        try {
+            callback = post(account_url + "/editPwd", requestJson);
+            if (callback != null) {
+                var get = g1.fromJson(callback, PasswordResponseModel.class);
+                return get;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+        return null;
+    }
+
+    public UpdateResponseModel edit(UUID id, String name, String email, String phone) {
         UpdateRequestModel request = new UpdateRequestModel();
         request.setMember_id(id);
         request.setMember_name(name);
-        request.setMember_password(password);
         request.setMember_email(email);
         request.setMember_phone(phone);
         Gson g1 = new Gson();
