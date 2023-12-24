@@ -63,7 +63,7 @@ public class UserService {
         return null;
     }
 
-    public TokenLogoutRequestModel signout(UUID token) {
+    public TokenLoginRequestModel signout(UUID token) {
         TokenLoginRequestModel request = new TokenLoginRequestModel();
         request.setLogin_token(token);
         Gson g1 = new Gson();
@@ -72,7 +72,7 @@ public class UserService {
         try {
             callback = post(account_url + "/signout", requestJson);
             if (callback != null) {
-                var get = g1.fromJson(callback, TokenLogoutRequestModel.class);
+                var get = g1.fromJson(callback, TokenLoginRequestModel.class);
                 return get;
             }
         } catch (Exception ex) {
@@ -144,7 +144,7 @@ public class UserService {
         return null;
     }
 
-    public boolean removeInfo(UUID id) {
+    public ResultModel removeInfo(UUID id) {
         UpdateRequestModel request = new UpdateRequestModel();
         request.setMember_id(id);
 
@@ -153,13 +153,14 @@ public class UserService {
         String callback = null;
         try {
             callback = post(account_url + "/removeUser", requestJson);
-            if (callback.equals("200")) {
-                return true;
+            if (callback!=null) {
+                var get = g1.fromJson(callback, ResultModel.class);
+                return get;
             }
         } catch (Exception ex) {
-            return false;
+            return null;
         }
-        return false;
+        return null;
     }
 
     private String post(String url, String jsonBody) throws IOException {
