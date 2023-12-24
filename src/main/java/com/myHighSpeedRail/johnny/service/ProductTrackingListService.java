@@ -42,12 +42,12 @@ public class ProductTrackingListService {
 	
 	public String deleteByMemberIdAndtrackingId(String mId, Integer tId) {
 		ptlDao.deleteByMemberIdAndTrackingId(mId, tId);
-		return "已刪除";
+		return "已取消追蹤！";
 	}
 	
 	public String deleteByMemberIdAndProductId(String mId, Integer pId) {
 		ptlDao.deleteByMemberIdAndproductId(mId, pId);
-		return "已刪除";
+		return "已取消追蹤！";
 	}
 	
 	public boolean isProductInTrackingList(String mId, Integer pId) {

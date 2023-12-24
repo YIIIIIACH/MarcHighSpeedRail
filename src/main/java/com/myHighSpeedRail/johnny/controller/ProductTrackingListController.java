@@ -39,7 +39,7 @@ public class ProductTrackingListController {
 			return new ResponseEntity<String> ("商品已在追蹤清單內",HttpStatus.OK);
 		}else {
 			ptlServ.addProductToTrackingList(ptl.pId, ptl.mId);
-			return new ResponseEntity<String> ("追蹤商品成功",HttpStatus.OK);
+			return new ResponseEntity<String> ("加入追蹤成功！",HttpStatus.OK);
 		}
 		
 		

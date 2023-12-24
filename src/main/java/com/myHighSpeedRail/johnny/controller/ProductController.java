@@ -119,7 +119,7 @@ public class ProductController {
 	public Page<ProductAndPhotoSegmentDto> showProductByPage (@RequestParam(name = "p", defaultValue = "1") Integer pageNumber){
 			Page<Product> pList = pService.findbyPage(pageNumber);
 			List<ProductAndPhotoSegmentDto> res= new ArrayList<ProductAndPhotoSegmentDto>();
-			int flag =0;
+
 			for( Product p : pList) {
 				ProductAndPhotoSegmentDto tmp = new ProductAndPhotoSegmentDto();
 				tmp.productDescription= p.getProductDescription();
@@ -137,9 +137,7 @@ public class ProductController {
 				
 				tmp.photoData= sb.toString();
 				res.add(tmp);
-				if(flag==0) {
-					flag=1;
-				}
+				
 			}
 			Pageable pageable = PageRequest.of(pageNumber - 1, pList.getSize());
 			Page<ProductAndPhotoSegmentDto> pageResult = new PageImpl<>(res, pageable, pList.getTotalElements());
