@@ -39,6 +39,7 @@ public class LeaveController {
 
 		SessionLoginEmployee sessionEmp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
 
+
 		if (sessionEmp == null) {
 			System.out.println("session attribute 空的");
 			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
@@ -69,22 +70,6 @@ public class LeaveController {
 	@GetMapping("/employee/leave/audit")
 	public List<LeaveAuditDTO> managerGetLeave(@RequestParam("id") Integer managerId) {
 
-//		List<WorkOvertimeAuditDTO> woaList = new LinkedList<WorkOvertimeAuditDTO>();
-//
-//		List<EmployeeWorkOvertime> ewoList = ewoService.findNoAuditWithManagerId(managerId);
-//
-//		for (EmployeeWorkOvertime ewo : ewoList) {
-//			WorkOvertimeAuditDTO woa = new WorkOvertimeAuditDTO();
-//			woa.setEmployeeId(ewo.getEmployee().getEmployeeId());
-//			woa.setEmployeeWorkOvertimeEndTime(ewo.getEmployeeWorkOvertimeEndTime());
-//			woa.setEmployeeWorkOvertimeReason(ewo.getEmployeeWorkOvertimeReason());
-//			woa.setEmployeeWorkOvertimeStartTime(ewo.getEmployeeWorkOvertimeStartTime());
-//			woa.setManagerId(ewo.getManager().getEmployeeId());
-//			woa.setManagerWorkOvertimeAudit(ewo.getManagerWorkOvertimeAudit());
-//			woa.setEmployeeWorkOvertimeId(ewo.getEmployeeWorkOvertimeId());
-//			woaList.add(woa);
-//		}
-//		return woaList;
 		LinkedList<LeaveAuditDTO> laList = new LinkedList<LeaveAuditDTO>();
 
 		List<EmployeeLeave> elList = elService.findNoAuditWithManagerId(managerId);
