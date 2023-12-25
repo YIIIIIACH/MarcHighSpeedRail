@@ -2,6 +2,7 @@ package com.myHighSpeedRail.marc.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,14 @@ public class SchduleTemplateService {
 		}catch(Exception e){
 			throw e;
 		}
+	}
+	
+	public Boolean  removeScheduleTemplate( Integer schtid) {
+		Optional<ScheduleTemplate> schtOpt = stDao.findById(schtid);
+		if(schtOpt.isEmpty()) {
+			return false;
+		}
+		stDao.delete(schtOpt.get());
+		return true;
 	}
 }

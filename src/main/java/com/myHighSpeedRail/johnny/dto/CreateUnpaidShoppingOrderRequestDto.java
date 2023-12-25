@@ -8,5 +8,4 @@ public class CreateUnpaidShoppingOrderRequestDto {
 	public List<Integer> cartItemIds;
 	public Integer totalPrice;
 	
-	
 }

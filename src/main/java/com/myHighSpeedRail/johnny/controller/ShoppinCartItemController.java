@@ -85,7 +85,7 @@ public class ShoppinCartItemController {
 			return new ResponseEntity<String> ("商品已在購物車內",HttpStatus.OK);
 		}else {
 			cartService.addItemToCartWithQuantity(productId, memberId, quantity);
-			return ResponseEntity.ok("商品已成功加入購物車");
+			return ResponseEntity.ok("商品成功加入購物車！");
 		}
 			
 	}
@@ -123,8 +123,7 @@ public class ShoppinCartItemController {
 	public List<ShoppingCartResponseDto> showAllCartItems(@RequestParam("memberId") String memberId){
 		
 		//要回應的內容
-		List<ShoppingCartResponseDto> res = new ArrayList<>();
-		
+		List<ShoppingCartResponseDto> res = new ArrayList<>();	
 		// cartItems 會員的所有購物車品項
 		List<ShoppingCartItem> cartItems = cartService.showAllCartItems(memberId);
 		
@@ -186,7 +185,7 @@ public class ShoppinCartItemController {
 	}
 	
 	//更新品項數量
-	@PutMapping("/ShoppingCart/updata")
+	@PutMapping("/ShoppingCart/update")
 	@ResponseBody
 	public String updateQuantity(
 			@RequestParam("memberId") String memberId, 

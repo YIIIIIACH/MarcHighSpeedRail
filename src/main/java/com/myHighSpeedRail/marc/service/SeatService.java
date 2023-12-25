@@ -60,7 +60,39 @@ public class SeatService {
 			}
 		}
 	}
-
+	public Boolean setupOneTrainSeats( Train train) {
+		try {
+			if( seatDao.findByTrainId(train.getTrainId()).isEmpty()) {
+				List<Seat> allSeat = new ArrayList<Seat> ();
+				int seq=1;
+				for(int car=1; car<=5; car++) {
+					if(car!=3) {
+						for( int row=1; row<=20; row++) {
+//					/public Seat(Train train, Integer carriage, Integer trainSeatSequenece, String seatCode, String seatDescirption) {
+							allSeat.add( new Seat(train,car,seq++,String.valueOf(row)+"-A","靠窗"));
+							allSeat.add( new Seat(train,car,seq++,String.valueOf(row)+"-B","中座"));
+							allSeat.add( new Seat(train,car,seq++,String.valueOf(row)+"-C","靠走道"));
+							allSeat.add( new Seat(train,car,seq++,String.valueOf(row)+"-D","靠走道"));
+							allSeat.add(new Seat(train,car,seq++,String.valueOf(row)+"-E","靠窗"));
+						}
+					}
+				}
+				for( int row=1; row<=11; row++) {
+//				/public Seat(Train train, Integer carriage, Integer trainSeatSequenece, String seatCode, String seatDescirption) {
+					allSeat.add( new Seat(train,3,seq++,String.valueOf(row)+"-A","靠窗"));
+					allSeat.add( new Seat(train,3,seq++,String.valueOf(row)+"-B","中座"));
+					allSeat.add( new Seat(train,3,seq++,String.valueOf(row)+"-C","靠走道"));
+					allSeat.add( new Seat(train,3,seq++,String.valueOf(row)+"-D","靠走道"));
+					allSeat.add( new Seat(train,3,seq++,String.valueOf(row)+"-E","靠窗"));
+				}
+				seatDao.saveAll(allSeat);
+			}
+		}catch( Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 	public List<Seat> findByIdInList(List<Integer>seatIdList){
 		return seatDao.findByIdInList(seatIdList);
 	}
