@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
+
 @Setter
 @Getter
-public class TokenLoginRequestModel {
-    private UUID login_token;
-
+public class PasswordResponseModel {
+    private UUID member_id;
 }

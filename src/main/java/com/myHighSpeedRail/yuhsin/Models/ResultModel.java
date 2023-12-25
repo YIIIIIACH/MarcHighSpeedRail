@@ -1,13 +1,13 @@
 package com.myHighSpeedRail.yuhsin.Models;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class ResultModel {
-    private String info;
+    private boolean success;
 
-    public String getInfo() {
-        return info;
-    }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
 }
+

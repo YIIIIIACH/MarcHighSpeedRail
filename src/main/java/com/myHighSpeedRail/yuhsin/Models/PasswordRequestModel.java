@@ -5,20 +5,18 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Getter
 @Setter
-public class UpdateRequestModel {
+@Getter
+public class PasswordRequestModel {
     private UUID member_id;
-    private String member_name;
-    private String member_email;
-    private String member_phone;
+    private String curent_password;
+    private String new_password;
+    private int mode;
 
     public UserModel toUserModel() {
         UserModel userModel = new UserModel();
         userModel.setMember_id(member_id);
-        userModel.setMember_name(member_name);
-        userModel.setMember_email(member_email);
-        userModel.setMember_phone(member_phone);
+        userModel.setMember_password(new_password);
         return userModel;
     }
 }
