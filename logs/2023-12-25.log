@@ -57,3 +57,15 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2023-12-25T13:01:13.501+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
 2023-12-25T13:02:20.358+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown initiated...
 2023-12-25T13:02:20.362+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown completed.
+2023-12-25T20:40:17.013+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 19232 (C:\Users\Luster\OneDrive\workspace\資策會\final test\MarcHighSpeedRail\target\classes started by Luster in C:\Users\Luster\OneDrive\workspace\資策會\final test\MarcHighSpeedRail)
+2023-12-25T20:40:17.013+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T21:23:02.175+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 5156 (C:\Users\Luster\OneDrive\workspace\資策會\final test\MarcHighSpeedRail\target\classes started by Luster in C:\Users\Luster\OneDrive\workspace\資策會\final test\MarcHighSpeedRail)
+2023-12-25T21:23:02.177+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T21:23:04.226+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-25T21:23:04.699+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: c90aa3a4-484c-4a00-a28d-6ec6ee1f1b44
+2023-12-25T21:23:04.703+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-25T21:23:05.096+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T21:23:08.401+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T21:23:09.038+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 7.33 seconds (process running for 8.155)
+2023-12-25T21:23:52.263+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-25T21:23:52.269+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
