@@ -57,3 +57,42 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2023-12-25T13:01:13.501+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
 2023-12-25T13:02:20.358+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown initiated...
 2023-12-25T13:02:20.362+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown completed.
+2023-12-25T13:05:40.903+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 18359 (/home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail/target/classes started by yiiiiiach in /home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail)
+2023-12-25T13:05:40.905+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T13:05:42.454+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-25T13:05:42.777+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 387073fc-acc4-4b14-b9fa-c2262d53a06c
+2023-12-25T13:05:42.778+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-25T13:05:43.088+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T13:05:45.688+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T13:05:46.098+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 5.621 seconds (process running for 6.506)
+2023-12-25T13:05:48.803+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-25T13:05:48.810+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-25T20:08:33.186+08:00 WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/home/yiiiiiach/.m2/repository/org/json/json/20220924/json-20220924.jar!/org/json/JSONObject.class
+	jar:file:/home/yiiiiiach/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2023-12-25T20:08:33.202+08:00 INFO  c.m.MarcHighSpeedRailApplicationTests : Starting MarcHighSpeedRailApplicationTests using Java 17.0.8.1 with PID 9611 (started by yiiiiiach in /home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail)
+2023-12-25T20:08:33.203+08:00 INFO  c.m.MarcHighSpeedRailApplicationTests : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T20:08:34.210+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-25T20:08:34.716+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 9736a07a-af03-4c3b-96ee-a223d99ae227
+2023-12-25T20:08:34.718+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-25T20:08:35.066+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T20:08:37.657+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T20:08:38.049+08:00 INFO  c.m.MarcHighSpeedRailApplicationTests : Started MarcHighSpeedRailApplicationTests in 5.132 seconds (process running for 5.983)
+2023-12-25T20:08:38.540+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-25T20:08:38.544+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-25T20:42:03.825+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 14041 (/home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail/target/classes started by yiiiiiach in /home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail)
+2023-12-25T20:42:03.827+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T20:42:04.968+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-25T20:42:05.167+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: f3953340-aa18-4e31-a204-642a58708d0a
+2023-12-25T20:42:05.168+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-25T20:42:05.418+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T20:42:07.548+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T20:42:07.921+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 4.435 seconds (process running for 4.924)
+2023-12-25T20:42:13.111+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-25T20:42:13.114+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
