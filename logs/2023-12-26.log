@@ -1,0 +1,263 @@
+2023-12-26T00:00:14.912+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T00:00:14.912+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T00:00:15.213+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-11 - Starting...
+2023-12-26T00:00:15.550+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-11 - Added connection ConnectionID:124 ClientConnectionId: 0d034194-13e1-4356-a4b5-f1e40b626163
+2023-12-26T00:00:15.551+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-11 - Start completed.
+2023-12-26T00:00:15.559+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T00:00:16.048+08:00 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderController': Unsatisfied dependency expressed through field 'oService': Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+2023-12-26T00:00:16.049+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-11 - Shutdown initiated...
+2023-12-26T00:00:16.087+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-11 - Shutdown completed.
+2023-12-26T00:00:16.094+08:00 ERROR o.s.boot.SpringApplication : Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderController': Unsatisfied dependency expressed through field 'oService': Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:747)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1416)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:597)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:973)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:950)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:616)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:738)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:440)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
+	at com.myHighSpeedRail.MarcHighSpeedRailApplication.main(MarcHighSpeedRailApplication.java:10)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:747)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1416)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:597)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1417)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1337)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:764)
+	... 25 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1770)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1417)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1337)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:764)
+	... 39 common frames omitted
+Caused by: org.springframework.data.repository.query.QueryCreationException: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.data.repository.query.QueryCreationException.create(QueryCreationException.java:101)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:115)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.mapMethodsToQuery(QueryExecutorMethodInterceptor.java:99)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lambda$new$0(QueryExecutorMethodInterceptor.java:88)
+	at java.base/java.util.Optional.map(Optional.java:260)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.<init>(QueryExecutorMethodInterceptor.java:88)
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport.getRepository(RepositoryFactorySupport.java:357)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.lambda$afterPropertiesSet$5(RepositoryFactoryBeanSupport.java:279)
+	at org.springframework.data.util.Lazy.getNullable(Lazy.java:245)
+	at org.springframework.data.util.Lazy.get(Lazy.java:114)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.afterPropertiesSet(RepositoryFactoryBeanSupport.java:285)
+	at org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean.afterPropertiesSet(JpaRepositoryFactoryBean.java:132)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1817)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1766)
+	... 49 common frames omitted
+Caused by: java.lang.IllegalStateException: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.data.jpa.repository.query.JpaQueryMethod.assertParameterNamesInAnnotatedQuery(JpaQueryMethod.java:179)
+	at org.springframework.data.jpa.repository.query.JpaQueryMethod.<init>(JpaQueryMethod.java:146)
+	at org.springframework.data.jpa.repository.query.DefaultJpaQueryMethodFactory.build(DefaultJpaQueryMethodFactory.java:44)
+	at org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy$AbstractQueryLookupStrategy.resolveQuery(JpaQueryLookupStrategy.java:94)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:111)
+	... 61 common frames omitted
+2023-12-26T00:00:45.837+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T00:00:45.837+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T00:00:46.130+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-12 - Starting...
+2023-12-26T00:00:46.371+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-12 - Added connection ConnectionID:126 ClientConnectionId: 6dc3003f-ff0e-425a-b3f2-cfe5361b0545
+2023-12-26T00:00:46.371+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-12 - Start completed.
+2023-12-26T00:00:46.378+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T00:00:46.729+08:00 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderController': Unsatisfied dependency expressed through field 'oService': Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+2023-12-26T00:00:46.729+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-12 - Shutdown initiated...
+2023-12-26T00:00:46.779+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-12 - Shutdown completed.
+2023-12-26T00:00:46.786+08:00 ERROR o.s.boot.SpringApplication : Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderController': Unsatisfied dependency expressed through field 'oService': Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:747)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1416)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:597)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:973)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:950)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:616)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:738)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:440)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
+	at com.myHighSpeedRail.MarcHighSpeedRailApplication.main(MarcHighSpeedRailApplication.java:10)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:747)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1416)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:597)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1417)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1337)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:764)
+	... 25 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1770)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1417)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1337)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:764)
+	... 39 common frames omitted
+Caused by: org.springframework.data.repository.query.QueryCreationException: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.data.repository.query.QueryCreationException.create(QueryCreationException.java:101)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:115)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.mapMethodsToQuery(QueryExecutorMethodInterceptor.java:99)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lambda$new$0(QueryExecutorMethodInterceptor.java:88)
+	at java.base/java.util.Optional.map(Optional.java:260)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.<init>(QueryExecutorMethodInterceptor.java:88)
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport.getRepository(RepositoryFactorySupport.java:357)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.lambda$afterPropertiesSet$5(RepositoryFactoryBeanSupport.java:279)
+	at org.springframework.data.util.Lazy.getNullable(Lazy.java:245)
+	at org.springframework.data.util.Lazy.get(Lazy.java:114)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.afterPropertiesSet(RepositoryFactoryBeanSupport.java:285)
+	at org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean.afterPropertiesSet(JpaRepositoryFactoryBean.java:132)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1817)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1766)
+	... 49 common frames omitted
+Caused by: java.lang.IllegalStateException: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.data.jpa.repository.query.JpaQueryMethod.assertParameterNamesInAnnotatedQuery(JpaQueryMethod.java:179)
+	at org.springframework.data.jpa.repository.query.JpaQueryMethod.<init>(JpaQueryMethod.java:146)
+	at org.springframework.data.jpa.repository.query.DefaultJpaQueryMethodFactory.build(DefaultJpaQueryMethodFactory.java:44)
+	at org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy$AbstractQueryLookupStrategy.resolveQuery(JpaQueryLookupStrategy.java:94)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:111)
+	... 61 common frames omitted
+2023-12-26T00:00:50.387+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T00:00:50.387+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T00:00:50.683+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-13 - Starting...
+2023-12-26T00:00:50.884+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-13 - Added connection ConnectionID:128 ClientConnectionId: 7bb7cfa7-a592-47e5-81fa-c2f51a0acf08
+2023-12-26T00:00:50.884+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-13 - Start completed.
+2023-12-26T00:00:50.892+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T00:00:51.682+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T00:00:51.835+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.462 seconds (process running for 9315.802)
+2023-12-26T00:00:56.813+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-13 - Shutdown initiated...
+2023-12-26T00:00:56.814+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-13 - Shutdown completed.
+2023-12-26T00:00:59.395+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 17860 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T00:00:59.397+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T00:01:00.648+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-26T00:01:01.084+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 34db5a91-e296-492e-8fdf-2faeba61250d
+2023-12-26T00:01:01.085+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-26T00:01:01.384+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T00:01:03.480+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T00:01:03.836+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 4.752 seconds (process running for 5.301)
+2023-12-26T00:01:38.719+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-26T00:01:38.723+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-26T00:01:38.780+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 17860 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T00:01:38.781+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T00:01:39.114+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Starting...
+2023-12-26T00:01:39.557+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-2 - Added connection ConnectionID:11 ClientConnectionId: 5a7cc8b7-b941-4e0f-ac94-3ecc496eba58
+2023-12-26T00:01:39.558+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Start completed.
+2023-12-26T00:01:39.566+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T00:01:40.424+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T00:01:40.567+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.806 seconds (process running for 42.032)
+2023-12-26T00:01:57.768+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown initiated...
+2023-12-26T00:01:57.770+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown completed.
+2023-12-26T00:01:57.827+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 17860 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T00:01:57.827+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T00:01:58.139+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Starting...
+2023-12-26T00:01:58.388+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-3 - Added connection ConnectionID:21 ClientConnectionId: 8714ca70-2bf0-4725-8e3d-7114c38a750e
+2023-12-26T00:01:58.389+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Start completed.
+2023-12-26T00:01:58.397+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T00:01:59.160+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T00:01:59.294+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.485 seconds (process running for 60.76)
+2023-12-26T00:02:57.165+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Shutdown initiated...
+2023-12-26T00:02:57.167+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Shutdown completed.
+2023-12-26T00:02:57.255+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 17860 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T00:02:57.255+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T00:02:57.644+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Starting...
+2023-12-26T00:02:57.904+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-4 - Added connection ConnectionID:31 ClientConnectionId: 35e87ffc-63fd-443a-85fb-fdedd8547a5d
+2023-12-26T00:02:57.905+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Start completed.
+2023-12-26T00:02:57.913+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T00:02:58.708+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T00:02:58.847+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.62 seconds (process running for 120.312)
+2023-12-26T01:46:50.508+08:00 WARN  o.a.c.loader.WebappClassLoaderBase : The web application [MarcHighSpeedRail] appears to have started a thread named [mssql-jdbc-shared-timer-core-9] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2023-12-26T01:46:50.518+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Shutdown initiated...
+2023-12-26T01:46:50.520+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Shutdown completed.
+2023-12-26T01:46:53.324+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 17684 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T01:46:53.325+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T01:46:54.544+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-26T01:46:55.024+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 7b67a4c2-581a-4149-8853-8ab107e013f6
+2023-12-26T01:46:55.026+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-26T01:46:55.316+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T01:46:57.597+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T01:46:58.007+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 4.991 seconds (process running for 5.496)
+2023-12-26T01:47:07.848+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-26T01:47:07.852+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-26T01:47:07.910+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 17684 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-26T01:47:07.911+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T01:47:08.318+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Starting...
+2023-12-26T01:47:08.513+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-2 - Added connection ConnectionID:11 ClientConnectionId: 559997f7-1f20-4a68-ab22-f6dded9ac9a5
+2023-12-26T01:47:08.513+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Start completed.
+2023-12-26T01:47:08.522+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T01:47:09.334+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T01:47:09.477+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.587 seconds (process running for 16.966)
+2023-12-26T01:47:12.371+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown initiated...
+2023-12-26T01:47:12.373+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown completed.

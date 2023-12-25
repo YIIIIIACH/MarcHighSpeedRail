@@ -57,3 +57,550 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2023-12-25T13:01:13.501+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
 2023-12-25T13:02:20.358+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown initiated...
 2023-12-25T13:02:20.362+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown completed.
+2023-12-25T13:14:07.762+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 25968 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T13:14:07.765+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T13:14:09.901+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-25T13:14:10.153+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: dd3b7dc5-387d-4748-b483-55083a3ad47e
+2023-12-25T13:14:10.154+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-25T13:14:10.449+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T13:14:12.507+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T13:14:12.862+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 5.604 seconds (process running for 6.366)
+2023-12-25T13:15:26.531+08:00 WARN  c.zaxxer.hikari.pool.ProxyConnection : HikariPool-1 - Connection ConnectionID:1 ClientConnectionId: dd3b7dc5-387d-4748-b483-55083a3ad47e marked as broken because of SQLSTATE(08S01), ErrorCode(0)
+com.microsoft.sqlserver.jdbc.SQLServerException: Connection reset
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.terminate(SQLServerConnection.java:3806)
+	at com.microsoft.sqlserver.jdbc.TDSChannel.read(IOBuffer.java:2110)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readPacket(IOBuffer.java:6788)
+	at com.microsoft.sqlserver.jdbc.TDSReader.nextPacket(IOBuffer.java:6738)
+	at com.microsoft.sqlserver.jdbc.TDSReader.ensurePayload(IOBuffer.java:6711)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readBytes(IOBuffer.java:7022)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readWrappedBytes(IOBuffer.java:7067)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readInt(IOBuffer.java:6992)
+	at com.microsoft.sqlserver.jdbc.ServerDTVImpl.getValue(dtv.java:3798)
+	at com.microsoft.sqlserver.jdbc.DTV.getValue(dtv.java:247)
+	at com.microsoft.sqlserver.jdbc.Column.getValue(Column.java:190)
+	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getValue(SQLServerResultSet.java:2085)
+	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getValue(SQLServerResultSet.java:2071)
+	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getInt(SQLServerResultSet.java:2357)
+	at com.zaxxer.hikari.pool.HikariProxyResultSet.getInt(HikariProxyResultSet.java)
+	at org.hibernate.type.descriptor.jdbc.IntegerJdbcType$2.doExtract(IntegerJdbcType.java:88)
+	at org.hibernate.type.descriptor.jdbc.BasicExtractor.extract(BasicExtractor.java:44)
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.readCurrentRowValues(JdbcValuesResultSetImpl.java:314)
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.advance(JdbcValuesResultSetImpl.java:293)
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.processNext(JdbcValuesResultSetImpl.java:134)
+	at org.hibernate.sql.results.jdbc.internal.AbstractJdbcValues.next(AbstractJdbcValues.java:19)
+	at org.hibernate.sql.results.internal.RowProcessingStateStandardImpl.next(RowProcessingStateStandardImpl.java:66)
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:178)
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:33)
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.doExecuteQuery(JdbcSelectExecutorStandardImpl.java:361)
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.executeQuery(JdbcSelectExecutorStandardImpl.java:168)
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.list(JdbcSelectExecutorStandardImpl.java:93)
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:31)
+	at org.hibernate.loader.ast.internal.CollectionLoaderSingleKey.load(CollectionLoaderSingleKey.java:114)
+	at org.hibernate.persister.collection.AbstractCollectionPersister.initialize(AbstractCollectionPersister.java:680)
+	at org.hibernate.event.internal.DefaultInitializeCollectionEventListener.onInitializeCollection(DefaultInitializeCollectionEventListener.java:75)
+	at org.hibernate.event.service.internal.EventListenerGroupImpl.fireEventOnEachListener(EventListenerGroupImpl.java:127)
+	at org.hibernate.internal.SessionImpl.initializeCollection(SessionImpl.java:1702)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.lambda$initialize$3(AbstractPersistentCollection.java:617)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.withTemporarySessionIfNeeded(AbstractPersistentCollection.java:265)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.initialize(AbstractPersistentCollection.java:615)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.read(AbstractPersistentCollection.java:136)
+	at org.hibernate.collection.spi.PersistentBag.toArray(PersistentBag.java:377)
+	at java.base/java.util.List.sort(List.java:509)
+	at com.myHighSpeedRail.johnny.service.ProductService.findAllProduct(ProductService.java:88)
+	at com.myHighSpeedRail.johnny.controller.ProductController.getTrackingProductID(ProductController.java:99)
+	at com.myHighSpeedRail.johnny.controller.ProductController.getAllproduct(ProductController.java:93)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1081)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at com.myHighSpeedRail.config.CorsConfigFilter.doFilter(CorsConfigFilter.java:46)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:328)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:355)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:808)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:966)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.readInternal(IOBuffer.java:1208)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.read(IOBuffer.java:1195)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.readInternal(IOBuffer.java:1208)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.read(IOBuffer.java:1195)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:484)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.readFully(SSLSocketInputRecord.java:467)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.decodeInputRecord(SSLSocketInputRecord.java:243)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.decode(SSLSocketInputRecord.java:181)
+	at java.base/sun.security.ssl.SSLTransport.decode(SSLTransport.java:111)
+	at java.base/sun.security.ssl.SSLSocketImpl.decode(SSLSocketImpl.java:1513)
+	at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1484)
+	at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:1069)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.readInternal(IOBuffer.java:1208)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.read(IOBuffer.java:1195)
+	at com.microsoft.sqlserver.jdbc.TDSChannel.read(IOBuffer.java:2101)
+	... 97 common frames omitted
+2023-12-25T13:15:26.536+08:00 WARN  o.h.e.jdbc.spi.SqlExceptionHelper : SQL Error: 0, SQLState: 08S01
+2023-12-25T13:15:26.536+08:00 ERROR o.h.e.jdbc.spi.SqlExceptionHelper : Connection reset
+2023-12-25T13:15:26.545+08:00 ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] : Servlet.service() for servlet [dispatcherServlet] in context with path [/MarcHighSpeedRail] threw exception [Request processing failed: org.hibernate.exception.JDBCConnectionException: Could not extract column [4] from JDBC ResultSet [Connection reset] [n/a]] with root cause
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:328)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:355)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:808)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:966)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.readInternal(IOBuffer.java:1208)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.read(IOBuffer.java:1195)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.readInternal(IOBuffer.java:1208)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.read(IOBuffer.java:1195)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:484)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.readFully(SSLSocketInputRecord.java:467)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.decodeInputRecord(SSLSocketInputRecord.java:243)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.decode(SSLSocketInputRecord.java:181)
+	at java.base/sun.security.ssl.SSLTransport.decode(SSLTransport.java:111)
+	at java.base/sun.security.ssl.SSLSocketImpl.decode(SSLSocketImpl.java:1513)
+	at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1484)
+	at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:1069)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.readInternal(IOBuffer.java:1208)
+	at com.microsoft.sqlserver.jdbc.TDSChannel$ProxyInputStream.read(IOBuffer.java:1195)
+	at com.microsoft.sqlserver.jdbc.TDSChannel.read(IOBuffer.java:2101)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readPacket(IOBuffer.java:6788)
+	at com.microsoft.sqlserver.jdbc.TDSReader.nextPacket(IOBuffer.java:6738)
+	at com.microsoft.sqlserver.jdbc.TDSReader.ensurePayload(IOBuffer.java:6711)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readBytes(IOBuffer.java:7022)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readWrappedBytes(IOBuffer.java:7067)
+	at com.microsoft.sqlserver.jdbc.TDSReader.readInt(IOBuffer.java:6992)
+	at com.microsoft.sqlserver.jdbc.ServerDTVImpl.getValue(dtv.java:3798)
+	at com.microsoft.sqlserver.jdbc.DTV.getValue(dtv.java:247)
+	at com.microsoft.sqlserver.jdbc.Column.getValue(Column.java:190)
+	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getValue(SQLServerResultSet.java:2085)
+	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getValue(SQLServerResultSet.java:2071)
+	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getInt(SQLServerResultSet.java:2357)
+	at com.zaxxer.hikari.pool.HikariProxyResultSet.getInt(HikariProxyResultSet.java)
+	at org.hibernate.type.descriptor.jdbc.IntegerJdbcType$2.doExtract(IntegerJdbcType.java:88)
+	at org.hibernate.type.descriptor.jdbc.BasicExtractor.extract(BasicExtractor.java:44)
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.readCurrentRowValues(JdbcValuesResultSetImpl.java:314)
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.advance(JdbcValuesResultSetImpl.java:293)
+	at org.hibernate.sql.results.jdbc.internal.JdbcValuesResultSetImpl.processNext(JdbcValuesResultSetImpl.java:134)
+	at org.hibernate.sql.results.jdbc.internal.AbstractJdbcValues.next(AbstractJdbcValues.java:19)
+	at org.hibernate.sql.results.internal.RowProcessingStateStandardImpl.next(RowProcessingStateStandardImpl.java:66)
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:178)
+	at org.hibernate.sql.results.spi.ListResultsConsumer.consume(ListResultsConsumer.java:33)
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.doExecuteQuery(JdbcSelectExecutorStandardImpl.java:361)
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.executeQuery(JdbcSelectExecutorStandardImpl.java:168)
+	at org.hibernate.sql.exec.internal.JdbcSelectExecutorStandardImpl.list(JdbcSelectExecutorStandardImpl.java:93)
+	at org.hibernate.sql.exec.spi.JdbcSelectExecutor.list(JdbcSelectExecutor.java:31)
+	at org.hibernate.loader.ast.internal.CollectionLoaderSingleKey.load(CollectionLoaderSingleKey.java:114)
+	at org.hibernate.persister.collection.AbstractCollectionPersister.initialize(AbstractCollectionPersister.java:680)
+	at org.hibernate.event.internal.DefaultInitializeCollectionEventListener.onInitializeCollection(DefaultInitializeCollectionEventListener.java:75)
+	at org.hibernate.event.service.internal.EventListenerGroupImpl.fireEventOnEachListener(EventListenerGroupImpl.java:127)
+	at org.hibernate.internal.SessionImpl.initializeCollection(SessionImpl.java:1702)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.lambda$initialize$3(AbstractPersistentCollection.java:617)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.withTemporarySessionIfNeeded(AbstractPersistentCollection.java:265)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.initialize(AbstractPersistentCollection.java:615)
+	at org.hibernate.collection.spi.AbstractPersistentCollection.read(AbstractPersistentCollection.java:136)
+	at org.hibernate.collection.spi.PersistentBag.toArray(PersistentBag.java:377)
+	at java.base/java.util.List.sort(List.java:509)
+	at com.myHighSpeedRail.johnny.service.ProductService.findAllProduct(ProductService.java:88)
+	at com.myHighSpeedRail.johnny.controller.ProductController.getTrackingProductID(ProductController.java:99)
+	at com.myHighSpeedRail.johnny.controller.ProductController.getAllproduct(ProductController.java:93)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1081)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at com.myHighSpeedRail.config.CorsConfigFilter.doFilter(CorsConfigFilter.java:46)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2023-12-25T13:15:26.609+08:00 ERROR o.a.c.c.C.[Tomcat].[localhost] : Exception Processing ErrorPage[errorCode=0, location=/error]
+org.apache.catalina.connector.ClientAbortException: java.io.IOException: 連線已被您主機上的軟體中止。
+	at org.apache.catalina.connector.OutputBuffer.doFlush(OutputBuffer.java:305)
+	at org.apache.catalina.connector.OutputBuffer.flush(OutputBuffer.java:267)
+	at org.apache.catalina.connector.CoyoteOutputStream.flush(CoyoteOutputStream.java:120)
+	at java.base/java.io.FilterOutputStream.flush(FilterOutputStream.java:153)
+	at com.fasterxml.jackson.core.json.UTF8JsonGenerator.flush(UTF8JsonGenerator.java:1200)
+	at com.fasterxml.jackson.databind.ObjectWriter.writeValue(ObjectWriter.java:1063)
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.writeInternal(AbstractJackson2HttpMessageConverter.java:483)
+	at org.springframework.http.converter.AbstractGenericHttpMessageConverter.write(AbstractGenericHttpMessageConverter.java:103)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:297)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:245)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1081)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:642)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:410)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:340)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:277)
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:362)
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:222)
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:308)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:149)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.io.IOException: 連線已被您主機上的軟體中止。
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:54)
+	at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:132)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:97)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:53)
+	at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:532)
+	at org.apache.tomcat.util.net.NioChannel.write(NioChannel.java:118)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.doWrite(NioEndpoint.java:1381)
+	at org.apache.tomcat.util.net.SocketWrapperBase.doWrite(SocketWrapperBase.java:764)
+	at org.apache.tomcat.util.net.SocketWrapperBase.flushBlocking(SocketWrapperBase.java:728)
+	at org.apache.tomcat.util.net.SocketWrapperBase.flush(SocketWrapperBase.java:712)
+	at org.apache.coyote.http11.Http11OutputBuffer$SocketOutputBuffer.flush(Http11OutputBuffer.java:566)
+	at org.apache.coyote.http11.filters.ChunkedOutputFilter.flush(ChunkedOutputFilter.java:157)
+	at org.apache.coyote.http11.Http11OutputBuffer.flush(Http11OutputBuffer.java:220)
+	at org.apache.coyote.http11.Http11Processor.flush(Http11Processor.java:1246)
+	at org.apache.coyote.AbstractProcessor.action(AbstractProcessor.java:400)
+	at org.apache.coyote.Response.action(Response.java:208)
+	at org.apache.catalina.connector.OutputBuffer.doFlush(OutputBuffer.java:301)
+	... 56 common frames omitted
+2023-12-25T13:35:24.152+08:00 WARN  o.a.c.loader.WebappClassLoaderBase : The web application [MarcHighSpeedRail] appears to have started a thread named [mssql-jdbc-shared-timer-core-2] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2023-12-25T13:35:24.163+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-25T13:35:24.166+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-25T21:25:13.307+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 26412 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T21:25:13.309+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T21:25:14.882+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-25T21:25:15.465+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: cbdc9227-bfea-4310-b2af-b57c02edbc3c
+2023-12-25T21:25:15.467+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-25T21:25:15.862+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T21:25:18.216+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T21:25:18.667+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 5.702 seconds (process running for 6.433)
+2023-12-25T21:25:35.154+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-25T21:25:35.157+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-25T21:25:36.852+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T21:25:36.854+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T21:25:38.109+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-25T21:25:38.486+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: dee6788b-1054-4e45-93d5-1e8aa88806da
+2023-12-25T21:25:38.487+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-25T21:25:38.783+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T21:25:40.964+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T21:25:41.343+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 4.799 seconds (process running for 5.31)
+2023-12-25T21:28:53.959+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-25T21:28:53.963+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-25T21:28:54.082+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T21:28:54.083+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T21:28:54.479+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Starting...
+2023-12-25T21:28:54.758+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-2 - Added connection ConnectionID:11 ClientConnectionId: cc23346e-378e-4fbe-9eb7-9956be63d30e
+2023-12-25T21:28:54.759+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Start completed.
+2023-12-25T21:28:54.768+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T21:28:55.703+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T21:28:55.873+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.827 seconds (process running for 199.84)
+2023-12-25T22:13:12.689+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown initiated...
+2023-12-25T22:13:12.691+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown completed.
+2023-12-25T22:13:12.774+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T22:13:12.774+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T22:13:13.110+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Starting...
+2023-12-25T22:13:13.357+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-3 - Added connection ConnectionID:31 ClientConnectionId: 2a5765da-6b69-401a-bdd6-a195d7875fba
+2023-12-25T22:13:13.358+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Start completed.
+2023-12-25T22:13:13.367+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T22:13:14.175+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T22:13:14.329+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.577 seconds (process running for 2858.296)
+2023-12-25T22:18:06.429+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Shutdown initiated...
+2023-12-25T22:18:06.431+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-3 - Shutdown completed.
+2023-12-25T22:18:06.490+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T22:18:06.490+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T22:18:06.811+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Starting...
+2023-12-25T22:18:07.054+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-4 - Added connection ConnectionID:41 ClientConnectionId: 88d59158-d977-4247-8784-92c10b0d86da
+2023-12-25T22:18:07.054+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Start completed.
+2023-12-25T22:18:07.063+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T22:18:07.790+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T22:18:07.933+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.463 seconds (process running for 3151.9)
+2023-12-25T22:20:26.237+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Shutdown initiated...
+2023-12-25T22:20:26.238+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-4 - Shutdown completed.
+2023-12-25T22:20:26.295+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T22:20:26.295+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T22:20:26.594+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Starting...
+2023-12-25T22:20:26.797+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-5 - Added connection ConnectionID:51 ClientConnectionId: 65477057-78b5-443a-bdce-208671707107
+2023-12-25T22:20:26.797+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Start completed.
+2023-12-25T22:20:26.804+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T22:20:27.537+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T22:20:27.682+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.403 seconds (process running for 3291.648)
+2023-12-25T22:20:33.361+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Shutdown initiated...
+2023-12-25T22:20:33.363+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Shutdown completed.
+2023-12-25T22:20:33.420+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T22:20:33.421+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T22:20:33.719+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-6 - Starting...
+2023-12-25T22:20:34.149+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-6 - Added connection ConnectionID:61 ClientConnectionId: f1a739e2-9994-4b81-921c-28c45fd48932
+2023-12-25T22:20:34.150+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-6 - Start completed.
+2023-12-25T22:20:34.157+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T22:20:34.860+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T22:20:34.995+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.592 seconds (process running for 3298.963)
+2023-12-25T22:21:07.819+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-6 - Shutdown initiated...
+2023-12-25T22:21:07.822+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-6 - Shutdown completed.
+2023-12-25T22:21:07.880+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T22:21:07.880+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T22:21:08.181+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-7 - Starting...
+2023-12-25T22:21:08.408+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-7 - Added connection ConnectionID:71 ClientConnectionId: a7a4a4fa-6bd7-48ec-b60d-aee9df001308
+2023-12-25T22:21:08.408+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-7 - Start completed.
+2023-12-25T22:21:08.414+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T22:21:09.098+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T22:21:09.230+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.368 seconds (process running for 3333.198)
+2023-12-25T22:22:09.417+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-7 - Shutdown initiated...
+2023-12-25T22:22:09.418+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-7 - Shutdown completed.
+2023-12-25T22:22:09.480+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T22:22:09.480+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T22:22:09.787+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-8 - Starting...
+2023-12-25T22:22:10.004+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-8 - Added connection ConnectionID:81 ClientConnectionId: ccf55e9d-42ab-4117-af8c-56f81c1aff10
+2023-12-25T22:22:10.004+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-8 - Start completed.
+2023-12-25T22:22:10.012+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T22:22:10.901+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T22:22:11.120+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.655 seconds (process running for 3395.087)
+2023-12-25T22:32:51.949+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-8 - Shutdown initiated...
+2023-12-25T22:32:51.951+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-8 - Shutdown completed.
+2023-12-25T22:32:52.024+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T22:32:52.024+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T22:32:52.349+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-9 - Starting...
+2023-12-25T22:32:52.595+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-9 - Added connection ConnectionID:91 ClientConnectionId: 101b4ef7-e64c-402b-bd3e-046227692329
+2023-12-25T22:32:52.595+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-9 - Start completed.
+2023-12-25T22:32:52.604+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T22:32:53.369+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-25T22:32:53.526+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.519 seconds (process running for 4037.493)
+2023-12-25T23:59:14.585+08:00 WARN  o.a.c.loader.WebappClassLoaderBase : The web application [MarcHighSpeedRail] appears to have started a thread named [mssql-jdbc-shared-timer-core-10] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2023-12-25T23:59:14.590+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-9 - Shutdown initiated...
+2023-12-25T23:59:14.592+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-9 - Shutdown completed.
+2023-12-25T23:59:14.673+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8248 (C:\FinalProjectWorkSpace\marcHighSpeed\target\classes started by User in C:\FinalProjectWorkSpace\marcHighSpeed)
+2023-12-25T23:59:14.673+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-25T23:59:15.005+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-10 - Starting...
+2023-12-25T23:59:15.267+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-10 - Added connection ConnectionID:121 ClientConnectionId: 707147fe-d6af-4c22-ac14-70068bbea7c4
+2023-12-25T23:59:15.268+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-10 - Start completed.
+2023-12-25T23:59:15.276+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-25T23:59:15.683+08:00 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderController': Unsatisfied dependency expressed through field 'oService': Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+2023-12-25T23:59:15.684+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-10 - Shutdown initiated...
+2023-12-25T23:59:15.912+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-10 - Shutdown completed.
+2023-12-25T23:59:15.935+08:00 ERROR o.s.boot.SpringApplication : Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderController': Unsatisfied dependency expressed through field 'oService': Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:747)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1416)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:597)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:973)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:950)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:616)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:738)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:440)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
+	at com.myHighSpeedRail.MarcHighSpeedRailApplication.main(MarcHighSpeedRailApplication.java:10)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'shoppingOrderService': Unsatisfied dependency expressed through field 'orderDao': Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:747)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1416)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:597)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1417)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1337)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:764)
+	... 25 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'shoppingOrderRepository' defined in com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1770)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:520)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1417)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1337)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:764)
+	... 39 common frames omitted
+Caused by: org.springframework.data.repository.query.QueryCreationException: Could not create query for public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String); Reason: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.data.repository.query.QueryCreationException.create(QueryCreationException.java:101)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:115)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.mapMethodsToQuery(QueryExecutorMethodInterceptor.java:99)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lambda$new$0(QueryExecutorMethodInterceptor.java:88)
+	at java.base/java.util.Optional.map(Optional.java:260)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.<init>(QueryExecutorMethodInterceptor.java:88)
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport.getRepository(RepositoryFactorySupport.java:357)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.lambda$afterPropertiesSet$5(RepositoryFactoryBeanSupport.java:279)
+	at org.springframework.data.util.Lazy.getNullable(Lazy.java:245)
+	at org.springframework.data.util.Lazy.get(Lazy.java:114)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.afterPropertiesSet(RepositoryFactoryBeanSupport.java:285)
+	at org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean.afterPropertiesSet(JpaRepositoryFactoryBean.java:132)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1817)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1766)
+	... 49 common frames omitted
+Caused by: java.lang.IllegalStateException: Using named parameters for method public abstract com.myHighSpeedRail.johnny.model.ShoppingOrder com.myHighSpeedRail.johnny.repository.ShoppingOrderRepository.findByMemberIdAndOrderNumber(java.lang.String,java.lang.String) but parameter 'Optional[orderNumber]' not found in annotated query 'from ShoppingOrder where member = :memberId and orderNumber = :oNum'
+	at org.springframework.data.jpa.repository.query.JpaQueryMethod.assertParameterNamesInAnnotatedQuery(JpaQueryMethod.java:179)
+	at org.springframework.data.jpa.repository.query.JpaQueryMethod.<init>(JpaQueryMethod.java:146)
+	at org.springframework.data.jpa.repository.query.DefaultJpaQueryMethodFactory.build(DefaultJpaQueryMethodFactory.java:44)
+	at org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy$AbstractQueryLookupStrategy.resolveQuery(JpaQueryLookupStrategy.java:94)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:111)
+	... 61 common frames omitted

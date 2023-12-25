@@ -13,4 +13,6 @@ public interface ShoppingOrderRepository extends JpaRepository<ShoppingOrder, In
 	@Query("from ShoppingOrder where member = :memberId")
 	public List<ShoppingOrder> findByMemberId(@Param("memberId") String memberId);
 	
+	@Query("from ShoppingOrder where member = :mId and orderNumber = :oNum")
+	public ShoppingOrder findByMemberIdAndOrderNumber(@Param("mId") String memberId, @Param("oNum") String orderNumber);
 }
