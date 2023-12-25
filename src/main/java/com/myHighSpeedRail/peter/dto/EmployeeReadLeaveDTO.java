@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class LeaveCarryForwardDTO {
+public class EmployeeReadLeaveDTO {
 
 	@JsonProperty("leaveId")
 	private Integer employeeLeaveId;
@@ -28,24 +28,13 @@ public class LeaveCarryForwardDTO {
 	@JsonProperty("audit")
 	private String managerLeaveAudit;
 
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
-	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	@JsonProperty("resultSnadDate")
-	private Date leaveAuditResultsSandingDate;
-
-	@JsonProperty("managerId")
-	private Integer managerId;
-
 	@JsonProperty("employeeId")
 	private Integer employeeId;
 
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	@JsonProperty("CarryForwardDate")
-	private Date leaveCarryForwardDate;
-	
-	@JsonProperty("leaveKind")
-	private String employeeLeaveKind;
+	@JsonProperty("readTime")
+	private Date employeeReadTime;
 
 	public Integer getEmployeeLeaveId() {
 		return employeeLeaveId;
@@ -87,22 +76,6 @@ public class LeaveCarryForwardDTO {
 		this.managerLeaveAudit = managerLeaveAudit;
 	}
 
-	public Date getLeaveAuditResultsSandingDate() {
-		return leaveAuditResultsSandingDate;
-	}
-
-	public void setLeaveAuditResultsSandingDate(Date leaveAuditResultsSandingDate) {
-		this.leaveAuditResultsSandingDate = leaveAuditResultsSandingDate;
-	}
-
-	public Integer getManagerId() {
-		return managerId;
-	}
-
-	public void setManagerId(Integer managerId) {
-		this.managerId = managerId;
-	}
-
 	public Integer getEmployeeId() {
 		return employeeId;
 	}
@@ -111,21 +84,12 @@ public class LeaveCarryForwardDTO {
 		this.employeeId = employeeId;
 	}
 
-	public Date getLeaveCarryForwardDate() {
-		return leaveCarryForwardDate;
+	public Date getEmployeeReadTime() {
+		return employeeReadTime;
 	}
 
-	public void setLeaveCarryForwardDate(Date leaveCarryForwardDate) {
-		this.leaveCarryForwardDate = leaveCarryForwardDate;
+	public void setEmployeeReadTime(Date employeeReadTime) {
+		this.employeeReadTime = employeeReadTime;
 	}
 
-	public String getEmployeeLeaveKind() {
-		return employeeLeaveKind;
-	}
-
-	public void setEmployeeLeaveKind(String employeeLeaveKind) {
-		this.employeeLeaveKind = employeeLeaveKind;
-	}
-	
-	
 }

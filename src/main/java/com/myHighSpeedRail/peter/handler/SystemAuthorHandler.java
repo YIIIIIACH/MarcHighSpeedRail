@@ -117,7 +117,7 @@ public class SystemAuthorHandler {
 		HashMap<Integer, EmployeeSystemAuthor> esaMap = new HashMap<Integer, EmployeeSystemAuthor>();
 
 		saList.forEach(sa -> {
-			System.out.println(sa.getEmployee());
+//			System.out.println(sa.getEmployee());
 			if (sa.getEmployee() != null) {
 				String authorJson = sa.getAuthorJson();
 
@@ -144,7 +144,7 @@ public class SystemAuthorHandler {
 		HashMap<Integer, EmployeeSystemAuthor> dsaMap = new HashMap<Integer, EmployeeSystemAuthor>();
 
 		saList.forEach(sa -> {
-			System.out.println(sa.getDepartment());
+//			System.out.println(sa.getDepartment());
 			if (sa.getDepartment() != null) {
 				String authorJson = sa.getAuthorJson();
 

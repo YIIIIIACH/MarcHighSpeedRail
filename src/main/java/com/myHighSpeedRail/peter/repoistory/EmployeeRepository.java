@@ -2,13 +2,13 @@ package com.myHighSpeedRail.peter.repoistory;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import com.myHighSpeedRail.peter.model.Employee;
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
@@ -36,5 +36,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 //            @Param("employeeBasicSalary") BigDecimal employeeBasicSalary,
 //            @Param("employeeId") Integer employeeId
 //			);
+	
+	@Modifying
+	@Transactional
+	@Query("update Employee e set e.employeePassword = :psw where e.employeeId = :id")
+	void updatePassword(@Param("psw") String pwd, @Param("id") Integer id);
 }
  

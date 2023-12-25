@@ -1,9 +1,13 @@
 package com.myHighSpeedRail.peter.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,12 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myHighSpeedRail.peter.dto.EmployeeLeaveApplyDTO;
+import com.myHighSpeedRail.peter.dto.EmployeeReadLeaveDTO;
 import com.myHighSpeedRail.peter.dto.LeaveAuditDTO;
 import com.myHighSpeedRail.peter.dto.LeaveCarryForwardDTO;
 import com.myHighSpeedRail.peter.model.Employee;
 import com.myHighSpeedRail.peter.model.EmployeeLeave;
 import com.myHighSpeedRail.peter.model.Leave;
 import com.myHighSpeedRail.peter.service.EmployeeLeaveService;
+import com.myHighSpeedRail.peter.vo.SessionLoginEmployee;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class LeaveController {
@@ -27,26 +35,18 @@ public class LeaveController {
 	private EmployeeLeaveService elService;
 
 	@PostMapping("/employee/leave")
-	public void employeeLeaveApply(@RequestBody EmployeeLeaveApplyDTO ela) {
+	public ResponseEntity<?> employeeLeaveApply(@RequestBody EmployeeLeaveApplyDTO ela, HttpSession httpSession) {
 
-//		EmployeeWorkOvertime ewo = new EmployeeWorkOvertime();
-//		Employee emp = new Employee();
-//		emp.setEmployeeId(ewoa.getEmployeeId());
-//		Employee man = new Employee();
-//		man.setEmployeeId(ewoa.getManagerId());
-//
-//		ewo.setEmployee(emp);
-//		ewo.setManager(man);
-//		ewo.setEmployeeWorkOvertimeEndTime(ewoa.getEmployeeWorkOvertimeEndTime());
-//		ewo.setEmployeeWorkOvertimeReason(ewoa.getEmployeeWorkOvertimeReason());
-//		ewo.setEmployeeWorkOvertimeStartTime(ewoa.getEmployeeWorkOvertimeStartTime());
+		SessionLoginEmployee sessionEmp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
 
-//		ewoService.employeeWorkOvertimeApplication(ewo);
-//		System.out.println("ewo: " + ewo);
+		if (sessionEmp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+		}
 
 		EmployeeLeave el = new EmployeeLeave();
 		Employee emp = new Employee();
-		emp.setEmployeeId(ela.getEmployeeId());
+		emp.setEmployeeId(sessionEmp.getEmpId());
 		Employee man = new Employee();
 		man.setEmployeeId(ela.getManagerId());
 		Leave leave = elService.findByLeaveName(ela.getEmployeeLeaveKind());
@@ -60,7 +60,8 @@ public class LeaveController {
 		el.setLeave(leave);
 
 		elService.employeeLeaveApplication(el);
-//		System.out.println("ela: " + ela);
+
+		return ResponseEntity.status(HttpStatus.OK).body("申請成功");
 
 	}
 
@@ -200,25 +201,6 @@ public class LeaveController {
 	@PutMapping("/employee/leave/carry-forward")
 	public void leaveCarryForward(@RequestBody LeaveCarryForwardDTO lcfDTO) {
 
-//		EmployeeWorkOvertime ewo = new EmployeeWorkOvertime();
-//
-//		Employee emp = new Employee();
-//		emp.setEmployeeId(wocfDTO.getEmployeeId());
-//		Employee man = new Employee();
-//		man.setEmployeeId(wocfDTO.getManagerId());
-//
-//		ewo.setEmployee(emp);
-//		ewo.setEmployeeWorkOvertimeEndTime(wocfDTO.getEmployeeWorkOvertimeEndTime());
-//		ewo.setEmployeeWorkOvertimeReason(wocfDTO.getEmployeeWorkOvertimeReason());
-//		ewo.setEmployeeWorkOvertimeStartTime(wocfDTO.getEmployeeWorkOvertimeStartTime());
-//		ewo.setManager(man);
-//		ewo.setManagerWorkOvertimeAudit(wocfDTO.getManagerWorkOvertimeAudit());
-//		ewo.setWorkOvertimeAuditResultsSandingDate(wocfDTO.getWorkOvertimeAuditResultsSandingDate());
-//		ewo.setEmployeeWorkOvertimeId(wocfDTO.getEmployeeWorkOvertimeId());
-//		ewo.setWorkOvertimeCarryForwardDate(wocfDTO.getWorkOvertimeCarryForwardDate());
-//
-//		ewoService.setAudit(ewo);
-
 		EmployeeLeave el = new EmployeeLeave();
 
 		Employee emp = new Employee();
@@ -246,5 +228,56 @@ public class LeaveController {
 	public List<Leave> getAllLeaveLeaves() {
 		return elService.findAllLeaves();
 	}
-	
+
+	@ResponseBody
+	@GetMapping("/employee/leave/unread")
+	public ResponseEntity<?> getUnReadAuditByEmployeeId(HttpSession httpSession) {
+
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+		}
+
+		List<EmployeeLeave> elList = elService.findUnReadAuditByEmployeeId(emp.getEmpId());
+
+		List<EmployeeReadLeaveDTO> erlList = new ArrayList<EmployeeReadLeaveDTO>();
+
+		for (EmployeeLeave el : elList) {
+			EmployeeReadLeaveDTO erlDTO = new EmployeeReadLeaveDTO();
+			erlDTO.setEmployeeId(emp.getEmpId());
+			erlDTO.setEmployeeLeaveEndTime(el.getEmployeeLeaveEndTime());
+			erlDTO.setEmployeeLeaveId(el.getEmployeeLeaveId());
+			erlDTO.setEmployeeLeaveReason(el.getEmployeeLeaveReason());
+			erlDTO.setEmployeeLeaveStartTime(el.getEmployeeLeaveStartTime());
+			erlDTO.setManagerLeaveAudit(el.getManagerLeaveAudit());
+			erlList.add(erlDTO);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(erlList);
+	}
+
+	@ResponseBody
+	@PutMapping("/employee/leave/read")
+	public ResponseEntity<?> employeeReadAudit(HttpSession httpSession) {
+
+		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
+
+		if (emp == null) {
+			System.out.println("session attribute 空的");
+			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
+		}
+
+		List<EmployeeLeave> elList = elService.findUnReadAuditByEmployeeId(emp.getEmpId());
+		for (EmployeeLeave el : elList) {
+
+			Date date = new Date();
+			elService.updateEmployeeReadAudit(date, el.getEmployeeLeaveId());
+
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body("狀態更新成功");
+	}
+
 }

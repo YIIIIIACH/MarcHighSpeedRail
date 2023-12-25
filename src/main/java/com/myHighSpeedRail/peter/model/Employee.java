@@ -351,43 +351,43 @@ public class Employee {
 		this.employeeTitle = employeeTitle;
 	}
 
-	@Override
-	public String toString() {
-		return "Employee [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeGender="
-				+ employeeGender + ", employeeBirth=" + employeeBirth + ", employeeIdNumber=" + employeeIdNumber
-				+ ", employeePhoneNumber=" + employeePhoneNumber + ", employeeContactNumber=" + employeeContactNumber
-				+ ", employeeEmail=" + employeeEmail + ", employeeResidenceAddress=" + employeeResidenceAddress
-				+ ", employeeContactAddress=" + employeeContactAddress + ", employeePhoto=" + employeePhoto
-				+ ", employeeArrivalDate=" + employeeArrivalDate + ", employeeSalaryKind=" + employeeSalaryKind
-				+ ", employeeBasicSalary=" + employeeBasicSalary + ", employeeAccount=" + employeeAccount
-				+ ", employeePassword=" + employeePassword + ", systemAuthor=" + systemAuthor
-				+ ", employeeHistoricalDepartment=" + employeeHistoricalDepartment + ", employeeWorkOvertimeByEmployee="
-				+ employeeWorkOvertimeByEmployee + ", employeeWorkOvertimeByManager=" + employeeWorkOvertimeByManager
-				+ ", employeeEducationalQualifications=" + employeeEducationalQualifications
-				+ ", emergencyContactPerson=" + emergencyContactPerson + ", employeeWorkExperience="
-				+ employeeWorkExperience + ", employeeHistoricalBaseSalary=" + employeeHistoricalBaseSalary
-				+ ", employeeLeaveByEmployee=" + employeeLeaveByEmployee + ", employeeLeaveByManager="
-				+ employeeLeaveByManager + ", employeeTitle=" + employeeTitle + ", getEmployeeId()=" + getEmployeeId()
-				+ ", getEmployeeName()=" + getEmployeeName() + ", getEmployeeGender()=" + getEmployeeGender()
-				+ ", getEmployeeBirth()=" + getEmployeeBirth() + ", getEmployeeIdNumber()=" + getEmployeeIdNumber()
-				+ ", getEmployeePhoneNumber()=" + getEmployeePhoneNumber() + ", getEmployeeContactNumber()="
-				+ getEmployeeContactNumber() + ", getEmployeeEmail()=" + getEmployeeEmail()
-				+ ", getEmployeeResidenceAddress()=" + getEmployeeResidenceAddress() + ", getEmployeeContactAddress()="
-				+ getEmployeeContactAddress() + ", getEmployeePhoto()=" + getEmployeePhoto()
-				+ ", getEmployeeArrivalDate()=" + getEmployeeArrivalDate() + ", getEmployeeSalaryKind()="
-				+ getEmployeeSalaryKind() + ", getEmployeeBasicSalary()=" + getEmployeeBasicSalary()
-				+ ", getEmployeeAccount()=" + getEmployeeAccount() + ", getEmployeePassword()=" + getEmployeePassword()
-				+ ", getSystemAuthor()=" + getSystemAuthor() + ", getEmployeeHistoricalDepartment()="
-				+ getEmployeeHistoricalDepartment() + ", getEmployeeWorkOvertimeByEmployee()="
-				+ getEmployeeWorkOvertimeByEmployee() + ", getEmployeeWorkOvertimeByManager()="
-				+ getEmployeeWorkOvertimeByManager() + ", getEmployeeEducationalQualifications()="
-				+ getEmployeeEducationalQualifications() + ", getEmergencyContactPerson()="
-				+ getEmergencyContactPerson() + ", getEmployeeWorkExperience()=" + getEmployeeWorkExperience()
-				+ ", getEmployeeHistoricalBaseSalary()=" + getEmployeeHistoricalBaseSalary()
-				+ ", getEmployeeLeaveByEmployee()=" + getEmployeeLeaveByEmployee() + ", getEmployeeLeaveByManager()="
-				+ getEmployeeLeaveByManager() + ", getEmployeeTitle()=" + getEmployeeTitle() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Employee [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeGender="
+//				+ employeeGender + ", employeeBirth=" + employeeBirth + ", employeeIdNumber=" + employeeIdNumber
+//				+ ", employeePhoneNumber=" + employeePhoneNumber + ", employeeContactNumber=" + employeeContactNumber
+//				+ ", employeeEmail=" + employeeEmail + ", employeeResidenceAddress=" + employeeResidenceAddress
+//				+ ", employeeContactAddress=" + employeeContactAddress + ", employeePhoto=" + employeePhoto
+//				+ ", employeeArrivalDate=" + employeeArrivalDate + ", employeeSalaryKind=" + employeeSalaryKind
+//				+ ", employeeBasicSalary=" + employeeBasicSalary + ", employeeAccount=" + employeeAccount
+//				+ ", employeePassword=" + employeePassword + ", systemAuthor=" + systemAuthor
+//				+ ", employeeHistoricalDepartment=" + employeeHistoricalDepartment + ", employeeWorkOvertimeByEmployee="
+//				+ employeeWorkOvertimeByEmployee + ", employeeWorkOvertimeByManager=" + employeeWorkOvertimeByManager
+//				+ ", employeeEducationalQualifications=" + employeeEducationalQualifications
+//				+ ", emergencyContactPerson=" + emergencyContactPerson + ", employeeWorkExperience="
+//				+ employeeWorkExperience + ", employeeHistoricalBaseSalary=" + employeeHistoricalBaseSalary
+//				+ ", employeeLeaveByEmployee=" + employeeLeaveByEmployee + ", employeeLeaveByManager="
+//				+ employeeLeaveByManager + ", employeeTitle=" + employeeTitle + ", getEmployeeId()=" + getEmployeeId()
+//				+ ", getEmployeeName()=" + getEmployeeName() + ", getEmployeeGender()=" + getEmployeeGender()
+//				+ ", getEmployeeBirth()=" + getEmployeeBirth() + ", getEmployeeIdNumber()=" + getEmployeeIdNumber()
+//				+ ", getEmployeePhoneNumber()=" + getEmployeePhoneNumber() + ", getEmployeeContactNumber()="
+//				+ getEmployeeContactNumber() + ", getEmployeeEmail()=" + getEmployeeEmail()
+//				+ ", getEmployeeResidenceAddress()=" + getEmployeeResidenceAddress() + ", getEmployeeContactAddress()="
+//				+ getEmployeeContactAddress() + ", getEmployeePhoto()=" + getEmployeePhoto()
+//				+ ", getEmployeeArrivalDate()=" + getEmployeeArrivalDate() + ", getEmployeeSalaryKind()="
+//				+ getEmployeeSalaryKind() + ", getEmployeeBasicSalary()=" + getEmployeeBasicSalary()
+//				+ ", getEmployeeAccount()=" + getEmployeeAccount() + ", getEmployeePassword()=" + getEmployeePassword()
+//				+ ", getSystemAuthor()=" + getSystemAuthor() + ", getEmployeeHistoricalDepartment()="
+//				+ getEmployeeHistoricalDepartment() + ", getEmployeeWorkOvertimeByEmployee()="
+//				+ getEmployeeWorkOvertimeByEmployee() + ", getEmployeeWorkOvertimeByManager()="
+//				+ getEmployeeWorkOvertimeByManager() + ", getEmployeeEducationalQualifications()="
+//				+ getEmployeeEducationalQualifications() + ", getEmergencyContactPerson()="
+//				+ getEmergencyContactPerson() + ", getEmployeeWorkExperience()=" + getEmployeeWorkExperience()
+//				+ ", getEmployeeHistoricalBaseSalary()=" + getEmployeeHistoricalBaseSalary()
+//				+ ", getEmployeeLeaveByEmployee()=" + getEmployeeLeaveByEmployee() + ", getEmployeeLeaveByManager()="
+//				+ getEmployeeLeaveByManager() + ", getEmployeeTitle()=" + getEmployeeTitle() + ", getClass()="
+//				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+//	}
 
 
 }

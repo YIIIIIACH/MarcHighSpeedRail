@@ -3,11 +3,10 @@ package com.myHighSpeedRail.peter.controller;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.myHighSpeedRail.peter.dto.CheckLoginDTO;
+import com.myHighSpeedRail.peter.dto.EmployeeAccountAndPasswordDTO;
 import com.myHighSpeedRail.peter.dto.EmployeeDetailDTO;
 import com.myHighSpeedRail.peter.dto.SessionLoginEmployeeDTO;
 import com.myHighSpeedRail.peter.handler.EmployeeSystemAuthor;
@@ -101,12 +100,10 @@ public class EmployeeController {
 	@ResponseBody
 	@PostMapping("/employee/add")
 	public ResponseEntity<?> addEmpData(@RequestBody Employee emp) {
-//		System.out.println(emp);
 
 		if (eService.checkEmpAccountIfExist(emp.getEmployeeAccount())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("員工帳號已存在");
 		}
-		System.out.println("測試emp傳入" + emp);
 		List<EmergencyContactPerson> ecList = emp.getEmergencyContactPerson();
 		ecList.forEach(emergencyContactPerson -> {
 			emergencyContactPerson.setEmployee(emp);
@@ -270,7 +267,6 @@ public class EmployeeController {
 		e.setSystemAuthor(oldE.getSystemAuthor());
 
 		e.setEmployeeId(edDTO.getEmpId());
-		System.out.println("edDTOID" + edDTO.getEmpId());
 		e.setEmployeeArrivalDate(edDTO.getEmployeeArrivalDate());
 		e.setEmployeeBasicSalary(edDTO.getEmployeeBasicSalary());
 		e.setEmployeeBirth(edDTO.getEmployeeBirth());
@@ -304,8 +300,6 @@ public class EmployeeController {
 		});
 		e.setEmployeeTitle(tList);
 
-//		System.out.println(edDTO.getEmployeeHistoricalDepartment());
-//		e.setEmployeeHistoricalDepartment(edDTO.getEmployeeHistoricalDepartment());
 
 		e.setEmployeeIdNumber(edDTO.getEmployeeIdNumber());
 		e.setEmployeePhoneNumber(edDTO.getEmployeePhoneNumber());
@@ -325,6 +319,33 @@ public class EmployeeController {
 		httpSession.removeAttribute("loginEmployee");
 
 		return ResponseEntity.status(HttpStatus.OK).body("已登出");
+	}
+
+	@ResponseBody
+	@GetMapping("/employee/account")
+	public List<EmployeeAccountAndPasswordDTO> getAllEmployeeAccount() {
+
+		List<Employee> emps = eService.EmployeefindAll();
+		List<EmployeeAccountAndPasswordDTO> eapList = new LinkedList<EmployeeAccountAndPasswordDTO>();
+
+		for (Employee emp : emps) {
+			EmployeeAccountAndPasswordDTO eapDTO = new EmployeeAccountAndPasswordDTO();
+			eapDTO.setEmpId(emp.getEmployeeId());
+			eapDTO.setEmpName(emp.getEmployeeName());
+			eapDTO.setAccount(emp.getEmployeeAccount());
+			eapList.add(eapDTO);
+		}
+
+		return eapList;
+	}
+
+	@ResponseBody
+	@PutMapping("/employee/account/update")
+	public void updateEmployeePassword(@RequestBody EmployeeAccountAndPasswordDTO eapDTO) {
+		Employee e = new Employee();
+		e.setEmployeePassword(eapDTO.getPassword());
+		e.setEmployeeId(eapDTO.getEmpId());
+		eService.updatePassword(e);
 	}
 
 }

@@ -108,5 +108,11 @@ public class EmployeeService {
 			return false;
 		}
 	}
+	
+	public void updatePassword(Employee e) {
+		
+		e.setEmployeePassword(pwdEncoder.encode(e.getEmployeePassword()));
+		eDao.updatePassword(e.getEmployeePassword(), e.getEmployeeId());
+	}
 
 }

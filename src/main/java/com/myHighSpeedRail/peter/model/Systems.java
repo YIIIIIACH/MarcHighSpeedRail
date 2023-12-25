@@ -20,6 +20,9 @@ public class Systems {
 
 	@Column(name = "system_name")
 	private String systemName;
+	
+	@Column(name = "page_name")
+	private String pageName;
 
 	public Systems() {
 	}
@@ -40,14 +43,22 @@ public class Systems {
 		this.systemName = systemName;
 	}
 
+	public String getPageName() {
+		return pageName;
+	}
+
+	public void setPageName(String pageName) {
+		this.pageName = pageName;
+	}
+
 	@Override
 	public String toString() {
-		return "Systems [systemId=" + systemId + ", systemName=" + systemName + "]";
+		return "Systems [systemId=" + systemId + ", systemName=" + systemName + ", pageName=" + pageName + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(systemName);
+		return Objects.hash(pageName, systemId, systemName);
 	}
 
 	@Override
@@ -59,9 +70,8 @@ public class Systems {
 		if (getClass() != obj.getClass())
 			return false;
 		Systems other = (Systems) obj;
-		return Objects.equals(systemName, other.systemName);
+		return Objects.equals(pageName, other.pageName) && Objects.equals(systemId, other.systemId)
+				&& Objects.equals(systemName, other.systemName);
 	}
 	
-	
-
 }
