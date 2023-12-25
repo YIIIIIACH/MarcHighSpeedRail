@@ -10,7 +10,6 @@ import java.util.UUID;
 public class UpdateResponseModel {
     private UUID member_id;
     private String member_name;
-    private String member_password;
     private String member_email;
     private String member_phone;
 }
