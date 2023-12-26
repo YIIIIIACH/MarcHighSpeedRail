@@ -99,9 +99,10 @@ public class ShoppingOrderService {
 		sod.setOrderStatus("已付款");
 		sod.setOrderCompletionDate(new Date());
 		orderDao.save(sod);
-		return true;
-		
+		return true;	
 	}
+	
+//	public ShoppingOrder 
 
 	
 }
