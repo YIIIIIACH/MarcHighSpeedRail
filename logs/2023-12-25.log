@@ -57,6 +57,7 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2023-12-25T13:01:13.501+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
 2023-12-25T13:02:20.358+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown initiated...
 2023-12-25T13:02:20.362+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-2 - Shutdown completed.
+<<<<<<< HEAD
 2023-12-25T13:05:40.903+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 18359 (/home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail/target/classes started by yiiiiiach in /home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail)
 2023-12-25T13:05:40.905+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
 2023-12-25T13:05:42.454+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...

@@ -35,4 +35,4 @@ build/
 ### .properties ###
 *.properties
 
-.metadata/*
+.metadata

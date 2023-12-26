@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CreateUnpaidShoppingOrderRequestDto {
 	
-	public  String memberId;
+	public String memberId;
 	public List<Integer> cartItemIds;
 	public Integer totalPrice;
 	
