@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myHighSpeedRail.derekwu.dto.LostPropertyGuestDTO;
+import com.myHighSpeedRail.derekwu.model.FindLost;
 import com.myHighSpeedRail.derekwu.model.LostProperty;
 import com.myHighSpeedRail.derekwu.repository.LostPropertyRepository;
 import com.myHighSpeedRail.derekwu.service.FindLostService;
@@ -116,6 +117,11 @@ public class LostPropertyController {
 	@GetMapping("/LostProperty/backend/findAll")
 	public Page<LostProperty> findAll(){
 		return lpServ.findByPage(1);
+	}
+	
+	@GetMapping("/FindLost/backend/findAll")
+	public List<FindLost> findLost(){
+		return flServ.findAll();
 	}
 	
 	//換頁數(員工)
