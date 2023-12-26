@@ -331,7 +331,3 @@ Caused by: java.lang.IllegalStateException: Using named parameters for method pu
 2023-12-26T12:55:34.750+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-5 - Added connection ConnectionID:91 ClientConnectionId: 44379b50-c55d-4ba9-bf23-96138a0b2837
 2023-12-26T12:55:34.750+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Start completed.
 2023-12-26T12:55:34.759+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2023-12-26T12:55:35.507+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-12-26T12:55:35.666+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 2.723 seconds (process running for 11040.208)
-2023-12-26T13:17:29.026+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Shutdown initiated...
-2023-12-26T13:17:29.028+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Shutdown completed.
