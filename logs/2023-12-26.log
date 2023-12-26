@@ -12752,3 +12752,14 @@ java.lang.StackOverflowError: null
 2023-12-26T22:09:01.477+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
 2023-12-26T22:09:02.526+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2023-12-26T22:09:02.690+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 1.695 seconds (process running for 13439.636)
+2023-12-26T23:21:58.967+08:00 WARN  com.zaxxer.hikari.pool.HikariPool : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=12m56s570ms432µs601ns).
+2023-12-26T23:42:44.393+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Shutdown initiated...
+2023-12-26T23:42:44.397+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-5 - Shutdown completed.
+2023-12-26T23:42:44.629+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 27900 (C:\FinalProject\Homework_3Team\target\classes started by godzl in C:\FinalProject\Homework_3Team)
+2023-12-26T23:42:44.630+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-26T23:42:45.379+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-6 - Starting...
+2023-12-26T23:42:46.255+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-6 - Added connection ConnectionID:131 ClientConnectionId: 3df366dc-ce38-42bd-a6c8-8ab1de9e8ea5
+2023-12-26T23:42:46.256+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-6 - Start completed.
+2023-12-26T23:42:46.264+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-26T23:42:47.346+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-26T23:42:47.664+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 3.086 seconds (process running for 19064.61)
