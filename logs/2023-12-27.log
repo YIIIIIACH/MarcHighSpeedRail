@@ -1,1 +1,30 @@
 2023-12-27T02:57:58.158+08:00 WARN  com.zaxxer.hikari.pool.HikariPool : HikariPool-6 - Thread starvation or clock leap detected (housekeeper delta=20m39s88ms787µs800ns).
+2023-12-27T07:55:00.584+08:00 INFO  c.m.MarcHighSpeedRailApplication : Starting MarcHighSpeedRailApplication using Java 17.0.8.1 with PID 8404 (/home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail/target/classes started by yiiiiiach in /home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail)
+2023-12-27T07:55:00.585+08:00 INFO  c.m.MarcHighSpeedRailApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-27T07:55:01.730+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-27T07:55:01.950+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 200460c3-fb32-483f-bde5-b82411e3b8c5
+2023-12-27T07:55:01.951+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-27T07:55:02.235+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-27T07:55:04.175+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-27T07:55:04.520+08:00 INFO  c.m.MarcHighSpeedRailApplication : Started MarcHighSpeedRailApplication in 4.225 seconds (process running for 4.709)
+2023-12-27T07:55:07.411+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-27T07:55:07.414+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2023-12-27T07:55:20.027+08:00 WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/home/yiiiiiach/.m2/repository/org/json/json/20220924/json-20220924.jar!/org/json/JSONObject.class
+	jar:file:/home/yiiiiiach/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2023-12-27T07:55:20.043+08:00 INFO  c.m.MarcHighSpeedRailApplicationTests : Starting MarcHighSpeedRailApplicationTests using Java 17.0.8.1 with PID 8714 (started by yiiiiiach in /home/yiiiiiach/WorkSpace/新期末專題工作區/MarcHighSpeedRail)
+2023-12-27T07:55:20.044+08:00 INFO  c.m.MarcHighSpeedRailApplicationTests : No active profile set, falling back to 1 default profile: "default"
+2023-12-27T07:55:21.112+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2023-12-27T07:55:21.385+08:00 INFO  com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: f0ce1e71-2929-4358-8bb9-9fcd9a91833f
+2023-12-27T07:55:21.387+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2023-12-27T07:55:21.656+08:00 WARN  org.hibernate.orm.deprecation : HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-27T07:55:24.348+08:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-27T07:55:24.828+08:00 INFO  c.m.MarcHighSpeedRailApplicationTests : Started MarcHighSpeedRailApplicationTests in 5.065 seconds (process running for 5.757)
+2023-12-27T07:55:25.349+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2023-12-27T07:55:25.354+08:00 INFO  com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
