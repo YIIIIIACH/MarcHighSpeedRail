@@ -30,18 +30,18 @@ public class LostPropertyPhotoController {
 			
 		}
 	//上傳遺失物圖片(員工)
-		@PostMapping("/LostProperty/backend/postImage/{id}")
-		public ResponseEntity<?> postImage(@PathVariable("id") Integer id,MultipartFile lostPhoto) throws IOException{
-			LostProperty lostProperty = lpRepo.findByLostPropertyId(id);
-			if (lostPhoto != null) {
-	            byte[] lostPhotoBytes = lostPhoto.getBytes();
-	            lostProperty.setLostPhoto(lostPhotoBytes);
-	        }
-	        LostProperty savedLostProperty = lpRepo.save(lostProperty);
-	        return new ResponseEntity<>(savedLostProperty, HttpStatus.CREATED);
-
-
-		}
+//		@PostMapping("/LostProperty/backend/postImage/{id}")
+//		public ResponseEntity<?> postImage(@PathVariable("id") Integer id,MultipartFile lostPhoto) throws IOException{
+//			LostProperty lostProperty = lpRepo.findByLostPropertyId(id);
+//			if (lostPhoto != null) {
+//	            byte[] lostPhotoBytes = lostPhoto.getBytes();
+//	            lostProperty.setLostPhoto(lostPhotoBytes);
+//	        }
+//	        LostProperty savedLostProperty = lpRepo.save(lostProperty);
+//	        return new ResponseEntity<>(savedLostProperty, HttpStatus.CREATED);
+//
+//
+//		}
 
 
 }
