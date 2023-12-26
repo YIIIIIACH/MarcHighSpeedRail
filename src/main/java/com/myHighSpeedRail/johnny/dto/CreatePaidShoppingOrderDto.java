@@ -7,5 +7,6 @@ public class CreatePaidShoppingOrderDto {
 	public String memberId;
 //	public List<Integer> productIds;
 	public Integer totalPrice;
+	public String orderNumber;
 	
 }

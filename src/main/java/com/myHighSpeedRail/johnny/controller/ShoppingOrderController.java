@@ -82,10 +82,12 @@ public class ShoppingOrderController {
 		}
 		ShoppingOrder createdOrder = oService.createOrder(shoppingOrder, orderDetails);
 		Integer orderId = createdOrder.getOrderId();
+		String orderNumber = createdOrder.getOrderNumber();
 		CreatePaidShoppingOrderDto temp = new CreatePaidShoppingOrderDto();
 		temp.memberId = orderRequest.memberId;
 		temp.orderId = orderId;
 		temp.totalPrice = orderRequest.totalPrice;
+		temp.orderNumber = orderNumber;
 		return createPaypalOrder(temp);
 //		return ResponseEntity.ok("訂單已建立");
 	}
@@ -124,7 +126,7 @@ public class ShoppingOrderController {
 		dto.purchase_units=purUnits;
 		AppContext actx = new AppContext();
 	//	actx.return_url = SERVER_BASE_URL+"";// your vue return url
-		actx.return_url = REMOTE_FRONT_SERVER_URL+"/orderPaymentSuccess/"+orderRequest.orderId;
+		actx.return_url = REMOTE_FRONT_SERVER_URL+"/orderPaymentSuccess/"+orderRequest.orderId + "/" + orderRequest.orderNumber + "/" + orderRequest.totalPrice;
 		actx.cancel_url = FRONT_SERVER_URL;// your payout failed return url, 
 		//會redirect client 到一隻專門接收user approve 成功資訊的controller
 		dto.application_context= actx;
