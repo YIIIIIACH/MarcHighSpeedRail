@@ -1,5 +1,6 @@
 package com.myHighSpeedRail.derekwu.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,11 +76,21 @@ public class LostPropertyController {
 	
 	//修改遺失物(員工)
 	@PostMapping("/LostProperty/backend/updateById/{lostPropertyId}")
-	public LostProperty updateLostProperty(@PathVariable("lostPropertyId")Integer lostPropertyId,@RequestBody LostProperty lostProperty) {
+	public LostProperty updateLostProperty(@PathVariable("lostPropertyId")Integer lostPropertyId,@RequestBody LostProperty lostProperty
+			) {
 		//依據ID找到遺失物資料
+
 		lostProperty.setLostPropertyId(lostPropertyId);
 		//設定所有遺失物資料
-		LostProperty lp = lpRepo.save(lostProperty);
+		LostProperty lp = lpServ.updateByLostPropertyId(lostPropertyId,
+				lostProperty.getTripId(),
+				lostProperty.getStationName(),
+				lostProperty.getFindDate(),
+				lostProperty.getStayStation(),
+				lostProperty.getSimpleOutward(),
+				lostProperty.getDetailOutward(),
+				lostProperty.getLetterCheck(),
+				lostProperty.getReceiveCheck());
 		//若找到的話
 		if(lp.getReceiveCheck()==true) {
 			flServ.addNewFindLost(lostPropertyId,lp);
@@ -106,6 +117,12 @@ public class LostPropertyController {
 	public Page<LostProperty> findAll(){
 		return lpServ.findByPage(1);
 	}
+	
+	//換頁數(員工)
+		@GetMapping("/LostProperty/backend/findAll/{pageNumber}")
+		public Page<LostProperty> findpage(@PathVariable("pageNumber")Integer pageNumber){
+			return lpServ.findByPage(pageNumber);
+		}
 	
 	
 	

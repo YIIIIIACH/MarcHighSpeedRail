@@ -1,6 +1,7 @@
 package com.myHighSpeedRail.derekwu.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,29 @@ public class LostPropertyService {
 		return page;
 	}
 	
+	//修改(Update)該ID除了圖片以外的其他值
+	public LostProperty updateByLostPropertyId(Integer lostPropertyId,
+			Integer tripId,
+			String stationName,
+			Date findDate,
+			String stayStation,
+			String simpleOutward,
+			String detailOutward,
+			Boolean letterCheck,
+			Boolean receiveCheck) {
+		LostProperty lp = LPrepo.findByLostPropertyId(lostPropertyId);
+		lp.setTripId(tripId);
+		lp.setStationName(stationName);
+		lp.setFindDate(findDate);
+		lp.setStayStation(stayStation);
+		lp.setSimpleOutward(simpleOutward);
+		lp.setDetailOutward(detailOutward);
+		lp.setLetterCheck(letterCheck);
+		lp.setReceiveCheck(receiveCheck);
+		LPrepo.save(lp);
+		return lp;
+		
+	}
 	
 	//設定以page呈現多重like的搜尋Query 冷靜，先想想
 
