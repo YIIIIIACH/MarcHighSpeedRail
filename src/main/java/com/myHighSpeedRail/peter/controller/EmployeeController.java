@@ -61,24 +61,26 @@ public class EmployeeController {
 	@ResponseBody
 	@PostMapping("/employee/login")
 	public ResponseEntity<?> employeeLogin(@RequestParam("empAccount") String loginAccount,
-			@RequestParam("psw") String loginPwd, HttpSession httpSession, HttpServletResponse res,HttpServletRequest req) {
+			@RequestParam("psw") String loginPwd, HttpSession httpSession, HttpServletResponse res,
+			HttpServletRequest req) {
 
 		SessionLoginEmployee emp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
-		
-		String id = httpSession.getId();
-		System.out.println(id);
-		
-		String currOrigin = ((HttpServletRequest)req).getHeader("Origin");
-		
-		Cookie c = new Cookie("JSESSIONID",id);
-		c.setMaxAge(3600);
-		c.setSecure(false);
-		c.setHttpOnly(true);
-		res.addCookie(c);
-		res.setHeader("Access-Control-Allow-Credentials", "true");
-		res.setHeader("Access-Control-Allow-Origin", currOrigin==null? "true":currOrigin);
-		res.setHeader("Access-Control-Allow-Headers", "access-control-allow-origin, authority, content-type,version-info, X-Request-With");
-		res.setContentType("application/json;charset=UTF-8");
+
+//		String id = httpSession.getId();
+//		System.out.println(id);
+
+//		String currOrigin = ((HttpServletRequest) req).getHeader("Origin");
+
+//		Cookie c = new Cookie("JSESSIONID", id);
+//		c.setMaxAge(3600);
+//		c.setSecure(false);
+//		c.setHttpOnly(true);
+//		res.addCookie(c);
+//		res.setHeader("Access-Control-Allow-Credentials", "true");
+//		res.setHeader("Access-Control-Allow-Origin", currOrigin == null ? "true" : currOrigin);
+//		res.setHeader("Access-Control-Allow-Headers",
+//				"access-control-allow-origin, authority, content-type,version-info, X-Request-With");
+//		res.setContentType("application/json;charset=UTF-8");
 
 		if (emp != null) {
 			httpSession.removeAttribute("loginEmployee");
@@ -317,7 +319,6 @@ public class EmployeeController {
 		});
 		e.setEmployeeTitle(tList);
 
-
 		e.setEmployeeIdNumber(edDTO.getEmployeeIdNumber());
 		e.setEmployeePhoneNumber(edDTO.getEmployeePhoneNumber());
 		e.setEmployeePhoto(edDTO.getEmployeePhoto());
@@ -334,6 +335,8 @@ public class EmployeeController {
 	public ResponseEntity<?> employeeLogout(HttpSession httpSession) {
 
 		httpSession.removeAttribute("loginEmployee");
+
+		httpSession.invalidate();
 
 		return ResponseEntity.status(HttpStatus.OK).body("已登出");
 	}
