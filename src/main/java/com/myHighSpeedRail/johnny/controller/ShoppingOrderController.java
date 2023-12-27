@@ -159,7 +159,7 @@ public class ShoppingOrderController {
 	@ResponseBody
 	public List<ShoppingOrderWithDetailResponseDto> findOrderByMemberId(HttpServletRequest req, @RequestParam("memberId") String memberId){
 		return oService.findOrderAndDetailByMemberId(memberId);
-		
+//		return new ArrayList<ShoppingOrderWithDetailResponseDto>();
 	}
 
 
