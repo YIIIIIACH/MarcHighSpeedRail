@@ -24,6 +24,9 @@ public interface EmployeeLeaveRepository extends JpaRepository<EmployeeLeave, In
 
 	@Query("from EmployeeLeave el where el.leaveAuditResultsSandingDate is not null and el.leaveCarryForwardDate is not null and el.leaveEmployeeConfirmDate is null and el.employee.employeeId =:id")
 	List<EmployeeLeave> findUnReadAuditByEmployeeId(@Param("id") Integer Id);
+	
+	@Query("from EmployeeLeave el where el.leaveAuditResultsSandingDate is not null and el.managerLeaveAudit = 'fail' and el.leaveEmployeeConfirmDate is null and el.employee.employeeId =:id")
+	List<EmployeeLeave> findUnReadFailByEmployeeId(@Param("id") Integer Id);
 
 	@Modifying
 	@Transactional
