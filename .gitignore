@@ -36,4 +36,5 @@ build/
 *.properties
 
 .metadata
+
 *.log
