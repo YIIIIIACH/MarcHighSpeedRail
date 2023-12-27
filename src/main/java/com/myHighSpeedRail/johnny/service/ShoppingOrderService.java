@@ -45,6 +45,7 @@ public class ShoppingOrderService {
 	public List<ShoppingOrderWithDetailResponseDto> findOrderAndDetailByMemberId(String memberId) {
 		// 會員訂單資訊清單
 		List<ShoppingOrder> orders = orderDao.findByMemberId(memberId);
+		System.out.println("order size"+orders.size());
 		// 要回應的Dto
 		List<ShoppingOrderWithDetailResponseDto> resList = new ArrayList<>();
 
@@ -57,34 +58,47 @@ public class ShoppingOrderService {
 			temp.member = order.getMember();
 			temp.orderNumber = order.getOrderNumber();
 			temp.orderId = order.getOrderId();
-
+//			System.out.println(temp.orderStatus);
+//			System.out.println(temp.totalPrice);
+//			System.out.println(temp.orderCreationDate);
+//			System.out.println(temp.orderCompletionDate);
+//			System.out.println(temp.member);
+//			System.out.println(temp.orderNumber);
+//			System.out.println(temp.orderId);
+			
 			// 透過訂單找到訂單細項清單
 			List<ShoppingOrderDetail> orderDetails = order.getOrderDetails();
-
+			System.out.println( orderDetails.size());
+			
 			if (orderDetails != null && !orderDetails.isEmpty()) {
 				List<Product> products = new ArrayList<>();
 				List<String> photoData = new ArrayList<>();
 				temp.quantity = new ArrayList<Integer>();
+				
 				for (int i = 0 ; i < orderDetails.size() ; i++) {
 					String pd = new String();
 					ShoppingOrderDetail detail = orderDetails.get(i);
-					
-					Product p = productDao.findById(detail.getProduct().getProductId()).orElse(null);
-					p.getPhotoSegment().sort((a,b) -> a.getSequence()-b.getSequence());
+					System.out.println("pDetail pname:"+ detail.getProduct().getProductName());
+					Optional<Product> pOpt = productDao.findById(detail.getProduct().getProductId());
+					pOpt.get().getPhotoSegment().sort((a,b) -> a.getSequence()-b.getSequence());
 					
 					StringBuilder sb = new StringBuilder();
-					for(ProductPhotoSegment pps: p.getPhotoSegment()) {
+					for(ProductPhotoSegment pps: pOpt.get().getPhotoSegment()) {
 						sb.append( new String(pps.getPhotoSegment(),0,pps.getPhotoSegment().length, StandardCharsets.UTF_8));
 					}
 					pd = sb.toString();
+					if( pOpt.isPresent()) {
+						Product pTmp =  pOpt.get();
+						products.add(new  Product(pTmp.getProductId(),pTmp.getProductName(), pTmp.getProductPrice(), pTmp.getProductDescription(),pTmp.getProductType(), pTmp.getProductInventory()));
+						temp.quantity.add(detail.getQuantity());
+					}
 					photoData.add(pd);
-					products.add(p);
-					temp.quantity.add(detail.getQuantity());
 				}
 				temp.photoData = photoData;
 				temp.products = products;
 			}
 			resList.add(temp);
+			
 		}
 		return resList;
 	};
