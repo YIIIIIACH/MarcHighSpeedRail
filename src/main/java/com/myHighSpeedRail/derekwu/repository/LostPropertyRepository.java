@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.myHighSpeedRail.derekwu.model.LostProperty;
 
 @Repository
-public interface LostPropertyRepository extends JpaRepository<LostProperty, Long> {
+public interface LostPropertyRepository extends JpaRepository<LostProperty, Integer> {
 
 	@Query(value = ":detail_outward", nativeQuery = true)
 	public List<LostProperty> ssearchLosttProperty(@Param("detail_outward") String detailOutward);

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.myHighSpeedRail.derekwu.model.FindLost;
 
 @Repository
-public interface FindLostRepository extends JpaRepository<FindLost, Long>{
+public interface FindLostRepository extends JpaRepository<FindLost, Integer>{
 
 }
