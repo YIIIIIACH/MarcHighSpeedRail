@@ -41,12 +41,12 @@ public class FindLostService {
 		List<FindLostDetailDTO> flDtoList = new ArrayList<>();
 		for(FindLost flList:fl) {
 			FindLostDetailDTO fldDto = new FindLostDetailDTO();
-			fldDto.setDetailOutward(flList.getLostProperty().getDetailOutward());
-			fldDto.setFindLostDate(flList.getFindLostDate());
 			fldDto.setFindLostId(flList.getFindLostId());
 			fldDto.setLostPropertyId(flList.getLostProperty().getLostPropertyId());
 			fldDto.setSimpleOutward(flList.getLostProperty().getSimpleOutward());
+			fldDto.setDetailOutward(flList.getLostProperty().getDetailOutward());
 			fldDto.setStayStation(flList.getLostProperty().getStayStation());
+			fldDto.setFindLostDate(flList.getFindLostDate());
 			
 			flDtoList.add(fldDto);
 		}

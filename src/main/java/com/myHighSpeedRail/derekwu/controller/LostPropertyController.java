@@ -102,8 +102,8 @@ public class LostPropertyController {
 	
 	//刪除遺失物(員工)
 	
-	@DeleteMapping("/LostProperty/backend/deleteByLostPropertyId")
-	public String deleteByLostPropertyId(Integer lostPropertyId) {
+	@DeleteMapping("/LostProperty/backend/deleteByLostPropertyId/{id}")
+	public String deleteByLostPropertyId(@PathVariable("id")Integer lostPropertyId) {
 		lpRepo.deleteByLostPropertyId(lostPropertyId);
 		return "刪除了LostPropertyId = "+lostPropertyId+" 的遺失物";
 	}
