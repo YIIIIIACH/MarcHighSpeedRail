@@ -41,6 +41,12 @@ public class LeaveAuditDTO {
 
 	@JsonProperty("employeeId")
 	private Integer employeeId;
+	
+	@JsonProperty("dis")
+	private String discription;
+	
+	@JsonProperty("count")
+	private Integer count;
 
 	public Integer getEmployeeLeaveId() {
 		return employeeLeaveId;
@@ -114,13 +120,20 @@ public class LeaveAuditDTO {
 		this.employeeLeaveKind = employeeLeaveKind;
 	}
 
-	@Override
-	public String toString() {
-		return "LeaveAuditDTO [employeeLeaveId=" + employeeLeaveId + ", employeeLeaveStartTime="
-				+ employeeLeaveStartTime + ", employeeLeaveEndTime=" + employeeLeaveEndTime + ", employeeLeaveReason="
-				+ employeeLeaveReason + ", managerLeaveAudit=" + managerLeaveAudit + ", leaveAuditResultsSandingDate="
-				+ leaveAuditResultsSandingDate + ", employeeLeaveKind=" + employeeLeaveKind + ", managerId=" + managerId
-				+ ", employeeId=" + employeeId + "]";
+	public String getDiscription() {
+		return discription;
+	}
+
+	public void setDiscription(String discription) {
+		this.discription = discription;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 	
 }

@@ -47,7 +47,7 @@ public class EmployeeLeaveService {
 	public List<EmployeeLeave> findUnReadAuditByEmployeeId(Integer id) {
 		List<EmployeeLeave> elList = elDao.findUnReadAuditByEmployeeId(id);
 		List<EmployeeLeave> failList = elDao.findUnReadFailByEmployeeId(id);
-		failList.forEach(f->{
+		failList.forEach(f -> {
 			elList.add(f);
 		});
 		return elList;
@@ -55,6 +55,10 @@ public class EmployeeLeaveService {
 
 	public void updateEmployeeReadAudit(Date date, Integer id) {
 		elDao.updateEmployeeReadAudit(date, id);
+	}
+
+	public Integer findEmployeeLeaveCountByName(String name, Integer id) {
+		return elDao.findEmployeeLeaveCountByName(name, id);
 	}
 
 }

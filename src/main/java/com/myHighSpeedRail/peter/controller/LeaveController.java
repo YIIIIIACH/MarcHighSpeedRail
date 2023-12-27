@@ -39,7 +39,6 @@ public class LeaveController {
 
 		SessionLoginEmployee sessionEmp = (SessionLoginEmployee) httpSession.getAttribute("loginEmployee");
 
-
 		if (sessionEmp == null) {
 			System.out.println("session attribute 空的");
 			return new ResponseEntity<String>("session attribute null", HttpStatus.UNAUTHORIZED); // 401
@@ -85,6 +84,10 @@ public class LeaveController {
 			la.setManagerId(el.getManager().getEmployeeId());
 			la.setManagerLeaveAudit(el.getManagerLeaveAudit());
 			la.setEmployeeLeaveKind(el.getLeave().getLeaveName());
+			la.setDiscription(el.getLeave().getAvailableLeaveDaysDescription());
+			Integer i = elService.findEmployeeLeaveCountByName(el.getLeave().getLeaveName(),
+					el.getEmployee().getEmployeeId());
+			la.setCount(i);
 			laList.add(la);
 		}
 
@@ -263,6 +266,15 @@ public class LeaveController {
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body("狀態更新成功");
+	}
+
+	@ResponseBody
+	@GetMapping("/employee/leave/count")
+	public ResponseEntity<?> findEmployeeLeaveCountByLeaveName() {
+
+		Integer i = elService.findEmployeeLeaveCountByName("普通傷病假", 1006);
+
+		return ResponseEntity.status(HttpStatus.OK).body(i);
 	}
 
 }

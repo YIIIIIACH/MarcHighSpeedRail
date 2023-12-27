@@ -32,4 +32,7 @@ public interface EmployeeLeaveRepository extends JpaRepository<EmployeeLeave, In
 	@Transactional
 	@Query("update EmployeeLeave el set el.leaveEmployeeConfirmDate =:newDate where el.employeeLeaveId = :id")
 	void updateEmployeeReadAudit(@Param("newDate") Date newDate, @Param("id") Integer leaveId);
+	
+	@Query("select count(*) from EmployeeLeave el where el.employee.employeeId =:id and el.leave.leaveName =:leaveName group by el.leave.leaveName")
+	Integer findEmployeeLeaveCountByName(@Param("leaveName") String leaveName, @Param("id") Integer leaveId);
 }
